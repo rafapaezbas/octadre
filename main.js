@@ -48,7 +48,7 @@ var lastPressedStep = 0;
 scenes.map(s => {
 	s.tracks.map(t => {
 		for(var i = 0; i < 16; i++){
-			t.pattern.push({active:false, notes:[true,false,false,false,false,false,false,false,false,false,false,false,false]});
+			t.pattern.push({active:false, notes:[true,false,false,false,false,false,false,false,false,false,false,false,false]}); // Default note is root
 		}
 	});
 });
@@ -211,6 +211,7 @@ const changeScene = (button) => {
 	}
 	resetMute();
 	resetGrid();
+	resetNotes(lastPressedStep);
 }
 
 const tick = () => {
@@ -219,8 +220,11 @@ const tick = () => {
 		resetStep((prevStep) % 16);
 		lightStep(currentStep % 16, ORANGE);
 		scenes[currentScene].tracks.map(t => {
-			if(t.pattern[currentStep % 16].active && !t.muted){
-				externalOutput.sendMessage([176,t.midiRoot,1]);
+			var step = t.pattern[currentStep % 16];
+			if(step.active && !t.muted){
+				step.notes.map((n,i) => {
+					if(n) externalOutput.sendMessage([176,t.midiRoot + i,1]);
+				});
 			}
 		});
 		currentStep++;
