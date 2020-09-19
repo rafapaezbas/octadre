@@ -25,15 +25,17 @@ const BLUE = 77;
 const ORANGE = 10;
 const PURPLE = 80;
 const WHITE = 40;
+const RED = 7;
+const GREY = 90;
 
 const scenes = [];
 
 for(var i = 0; i < 4; i++){
 	scenes[i] = {tracks:[]};
-	scenes[i].tracks[0] = { grid:bigGrid, pattern:[], midi:22, color: GREEN, muted: false };
-	scenes[i].tracks[1] = { grid:bigGrid, pattern:[], midi:23, color: PURPLE, muted: false };
-	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midi:24, color: BLUE, muted: false };
-	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midi:25, color: WHITE, muted: false };
+	scenes[i].tracks[0] = { grid:bigGrid, pattern:[], midiRoot:22, color: GREEN, muted: false  };
+	scenes[i].tracks[1] = { grid:bigGrid, pattern:[], midiRoot:34, color: PURPLE, muted: false };
+	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midiRoot:46, color: BLUE, muted: false };
+	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midiRoot:58, color: WHITE, muted: false };
 }
 
 var pressedButtons = [];
@@ -41,12 +43,15 @@ var currentStep = 0;
 var currentTrack = 0;
 var currentScene = 0;
 var speed = 150;
+var lastPressedStep = 0;
 
 scenes.map(s => {
 	s.tracks.map(t => {
 		for(var i = 0; i < 16; i++){
-			t.pattern.push(false);
+			t.pattern.push({active:false, notes:[true,false,false,false,false,false,false,false,false,false,false,false,false]});
 		}
+		//t.pattern = new Array(16).fill({active:false,notes:new Array(12).fill(false)});
+		//t.pattern.map(p => p.notes[0] = true); //by default, note is midi root
 	});
 });
 
@@ -90,18 +95,27 @@ const lightStep = (step,color) => {
 }
 
 const toogleStep = (button) => {
+	var lastPressedStep = scenes[currentScene].tracks[currentTrack].grid.indexOf(button);
 	var trackColor = scenes[currentScene].tracks[currentTrack].color;
 	var step = scenes[currentScene].tracks[currentTrack].grid.indexOf(button);
 	if(step != -1){
-		scenes[currentScene].tracks[currentTrack].pattern[step] = !scenes[currentScene].tracks[currentTrack].pattern[step]; 
-		scenes[currentScene].tracks[currentTrack].pattern[step] ? lightStep(step,YELLOW) : lightStep(step,trackColor);
+		scenes[currentScene].tracks[currentTrack].pattern[step].active = !scenes[currentScene].tracks[currentTrack].pattern[step].active; 
+		scenes[currentScene].tracks[currentTrack].pattern[step].active ? lightStep(step,YELLOW) : lightStep(step,trackColor);
 	}
+	resetNotes(step);
+}
+
+const resetNotes = (step) => {
+	innerGrid.map(b => {
+		scenes[currentScene].tracks[currentTrack].pattern[step].notes.map((n,i) => 
+			n ? lightButton(innerGrid[i],RED):lightButton(innerGrid[i],GREY));
+	});
 }
 
 
 const resetStep = (step) => {
 	var trackColor = scenes[currentScene].tracks[currentTrack].color;
-	scenes[currentScene].tracks[currentTrack].pattern[step] ? lightStep(step,YELLOW) : lightStep(step,trackColor);
+	scenes[currentScene].tracks[currentTrack].pattern[step].active ? lightStep(step,YELLOW) : lightStep(step,trackColor);
 }
 
 const resetGrid = () => {
@@ -197,11 +211,12 @@ const changeScene = (button) => {
 
 const tick = () => {
 	setTimeout(function() {
-		resetStep((currentStep - 1) % 16);
+		prevStep = currentStep != 0 ? currentStep -1 : 15;
+		resetStep((prevStep) % 16);
 		lightStep(currentStep % 16, ORANGE);
 		scenes[currentScene].tracks.map(t => {
-			if(t.pattern[currentStep % 16] && !t.muted){
-				externalOutput.sendMessage([176,t.midi,1]);
+			if(t.pattern[currentStep % 16].active && !t.muted){
+				externalOutput.sendMessage([176,t.midiRoot,1]);
 			}
 		});
 		currentStep++;
