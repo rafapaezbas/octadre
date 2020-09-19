@@ -50,8 +50,6 @@ scenes.map(s => {
 		for(var i = 0; i < 16; i++){
 			t.pattern.push({active:false, notes:[true,false,false,false,false,false,false,false,false,false,false,false,false]});
 		}
-		//t.pattern = new Array(16).fill({active:false,notes:new Array(12).fill(false)});
-		//t.pattern.map(p => p.notes[0] = true); //by default, note is midi root
 	});
 });
 
@@ -95,7 +93,7 @@ const lightStep = (step,color) => {
 }
 
 const toogleStep = (button) => {
-	var lastPressedStep = scenes[currentScene].tracks[currentTrack].grid.indexOf(button);
+	lastPressedStep = scenes[currentScene].tracks[currentTrack].grid.indexOf(button);
 	var trackColor = scenes[currentScene].tracks[currentTrack].color;
 	var step = scenes[currentScene].tracks[currentTrack].grid.indexOf(button);
 	if(step != -1){
@@ -103,6 +101,12 @@ const toogleStep = (button) => {
 		scenes[currentScene].tracks[currentTrack].pattern[step].active ? lightStep(step,YELLOW) : lightStep(step,trackColor);
 	}
 	resetNotes(step);
+}
+
+const toogleNote = (button) => {
+	var note = innerGrid.indexOf(button);
+	scenes[currentScene].tracks[currentTrack].pattern[lastPressedStep].notes[note] = !scenes[currentScene].tracks[currentTrack].pattern[lastPressedStep].notes[note];
+	scenes[currentScene].tracks[currentTrack].pattern[lastPressedStep].notes[note] ? lightButton(button,RED) : lightButton(button,GREY);
 }
 
 const resetNotes = (step) => {
@@ -238,6 +242,7 @@ controller[SCENE_1_BUTTON] = changeScene;
 controller[SCENE_2_BUTTON] = changeScene;
 controller[SCENE_3_BUTTON] = changeScene;
 bigGrid.map(e => controller[e] = toogleStep);
+innerGrid.map(e => controller[e] = toogleNote);
 
 resetAll();
 resetSpeed();
