@@ -18,6 +18,7 @@ const SCENE_0_BUTTON = 54;
 const SCENE_1_BUTTON = 55;
 const SCENE_2_BUTTON = 44;
 const SCENE_3_BUTTON = 45;
+const SHIFT_BUTTON = 18;
 
 const GREEN = 26;
 const YELLOW = 100;
@@ -69,9 +70,12 @@ input.ignoreTypes(false, false, false);
 input.on('message', (deltaTime, message) => {
 	var pressed = message[2] == 127;
 	var button = message[1];
-	if(pressed && controller[button] != undefined){
-		pressedButtons.push(button);
+	pressedButtons.push(button);
+	if(pressed && pressedButtons.length == 1 && controller[button] != undefined){
 		controller[button](button);
+	}
+	if(pressed && pressedButtons.length > 1 && secondaryController[pressedButtons[1]] != undefined){
+		secondaryController[button](pressedButtons);
 	}
 	if(!pressed){
 		pressedButtons = pressedButtons.filter(b => b != button);
@@ -80,6 +84,11 @@ input.on('message', (deltaTime, message) => {
 
 const lightButton = (button,color) => {
 	launchpadOutput.sendMessage([ 144, button, color ]);
+}
+
+const blinkButton = (button,duration,color) => {
+	launchpadOutput.sendMessage([ 144, button, color ]);
+	setTimeout(() => lightButton(button,0),duration);
 }
 
 const resetAll = () => {
@@ -120,6 +129,14 @@ const resetNotes = (step) => {
 const resetStep = (step) => {
 	var trackColor = scenes[currentScene].tracks[currentTrack].color;
 	scenes[currentScene].tracks[currentTrack].pattern[step].active ? lightStep(step,YELLOW) : lightStep(step,trackColor);
+}
+
+const showNotes = (pressedButtons) => {
+	var step = bigGrid.indexOf(pressedButtons[1]);
+	if(step != -1 && pressedButtons[0] == SHIFT_BUTTON){
+		resetNotes(step);
+		lastPressedStep = scenes[currentScene].tracks[currentTrack].grid.indexOf(pressedButtons[1]);
+	}
 }
 
 const resetGrid = () => {
@@ -214,6 +231,16 @@ const changeScene = (button) => {
 	resetNotes(lastPressedStep);
 }
 
+const copyScene = (pressedButtons) => {
+	var sceneButtons = [SCENE_0_BUTTON,SCENE_1_BUTTON,SCENE_2_BUTTON,SCENE_3_BUTTON];
+	var originScene = sceneButtons.indexOf(pressedButtons[0]);
+	var targetScene = sceneButtons.indexOf(pressedButtons[1]);
+	if(originScene != -1 && targetScene != -1){
+		scenes[targetScene] = JSON.parse(JSON.stringify(scenes[originScene])); // Dirty trick for object deep copy by value
+		blinkButton(SHIFT_BUTTON,200,RED);
+	}
+}
+
 const tick = () => {
 	setTimeout(function() {
 		prevStep = currentStep != 0 ? currentStep -1 : 15;
@@ -234,6 +261,9 @@ const tick = () => {
 
 
 var controller = [];
+var secondaryController = [];
+
+// Setup simple controller
 controller[CHANGE_TRACK_BUTTON] = changeTrack;
 controller[SPEED_DOWN_BUTTON] = changeSpeed;
 controller[SPEED_UP_BUTTON] = changeSpeed;
@@ -247,6 +277,13 @@ controller[SCENE_2_BUTTON] = changeScene;
 controller[SCENE_3_BUTTON] = changeScene;
 bigGrid.map(e => controller[e] = toogleStep);
 innerGrid.map(e => controller[e] = toogleNote);
+
+// Setup secondary controller, this controller is for multi-button presses
+secondaryController[SCENE_0_BUTTON] = copyScene;
+secondaryController[SCENE_1_BUTTON] = copyScene;
+secondaryController[SCENE_2_BUTTON] = copyScene;
+secondaryController[SCENE_3_BUTTON] = copyScene;
+bigGrid.map(e => secondaryController[e] = showNotes);
 
 resetAll();
 resetSpeed();
