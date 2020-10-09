@@ -1,7 +1,11 @@
-const async = require('async');
 const midi = require('midi');
-const easymidi = require('easymidi');
+var easymidi = require('easymidi');
+var output = new easymidi.Output('loopMIDI Port 3 5');
 
+
+const launchpadOutput = new midi.Output();
+const externalOutput = new midi.Output();
+const input = new midi.Input();
 
 const bigGrid = [14,23,32,41,51,62,73,84,85,76,67,58,48,37,26,15];
 const innerGrid = [24,33,42,52,63,74,75,66,57,47,36,25];
@@ -17,8 +21,6 @@ const SCENE_0_BUTTON = 54;
 const SCENE_1_BUTTON = 55;
 const SCENE_2_BUTTON = 44;
 const SCENE_3_BUTTON = 45;
-const SHIFT_BUTTON = 18;
-const TEMPO_BUTTON = 88;
 
 const GREEN = 26;
 const YELLOW = 100;
@@ -34,10 +36,10 @@ var clockTick = 0;
 
 for(var i = 0; i < 4; i++){
 	scenes[i] = {tracks:[]};
-	scenes[i].tracks[0] = { grid:bigGrid, pattern:[], midiRoot:22, color: GREEN, muted: false, tempoModifier: 1, channel: 0};
-	scenes[i].tracks[1] = { grid:bigGrid, pattern:[], midiRoot:34, color: PURPLE, muted: false, tempoModifier: 1, channel: 1};
-	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midiRoot:46, color: BLUE, muted: false, tempoModifier: 1, channel: 2};
-	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midiRoot:58, color: WHITE, muted: false, tempoModifier: 1, channel: 3};
+	scenes[i].tracks[0] = { grid:bigGrid, pattern:[], midiRoot:22, color: GREEN, muted: false, channel: 0 };
+	scenes[i].tracks[1] = { grid:bigGrid, pattern:[], midiRoot:34, color: PURPLE, muted: false, channel: 1 };
+	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midiRoot:46, color: BLUE, muted: false, channel: 2 };
+	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midiRoot:58, color: WHITE, muted: false, channel: 3 };
 }
 
 var pressedButtons = [];
@@ -55,42 +57,25 @@ scenes.map(s => {
 	});
 });
 
-const getLaunchpadPort = (ports) => {
-	for(var i = 0; i < ports.length; i++){
-		if(ports[i].indexOf("MK2:Launchpad") != -1){
-			return i;
-		}
-	}
-	console.log("No MK2:Launchpad midi i/o found");
-}
+externalOutput.getPortCount();
+externalOutput.getPortName(2);
+externalOutput.openPort(2);
 
-const getNormalPort = (ports) => {
-	for(var i = 0; i < ports.length; i++){
-		if(ports[i].indexOf("MK2:Launchpad") == -1){
-			console.log("Output midi port: " + ports[i]);
-			return ports[i];
-		}
-	}
-	console.log("No midi i/o found");
-}
+launchpadOutput.getPortCount();
+launchpadOutput.getPortName(1);
+launchpadOutput.openPort(1);
 
-
-const output = new easymidi.Output(getNormalPort(easymidi.getOutputs()));
-const launchpadOutput = new midi.Output();
-launchpadOutput.openPort(getLaunchpadPort(easymidi.getOutputs()));
-const input = new midi.Input();
-input.openPort(getLaunchpadPort(easymidi.getInputs()));
-input.ignoreTypes(false, false, false); //WTF is this?
+input.getPortCount();
+input.getPortName(0);
+input.openPort(0);
+input.ignoreTypes(false, false, false);
 
 input.on('message', (deltaTime, message) => {
 	var pressed = message[2] == 127;
 	var button = message[1];
-	pressedButtons.push(button);
-	if(pressed && pressedButtons.length == 1 && controller[button] != undefined){
+	if(pressed && controller[button] != undefined){
+		pressedButtons.push(button);
 		controller[button](button);
-	}
-	if(pressed && pressedButtons.length > 1 && secondaryController[pressedButtons[1]] != undefined){
-		secondaryController[button](pressedButtons);
 	}
 	if(!pressed){
 		pressedButtons = pressedButtons.filter(b => b != button);
@@ -99,12 +84,6 @@ input.on('message', (deltaTime, message) => {
 
 const lightButton = (button,color) => {
 	launchpadOutput.sendMessage([ 144, button, color ]);
-	//output.send('noteon', {note: t.midiRoot + i,velocity: 127,channel: t.channel});
-}
-
-const blinkButton = (button,duration,color) => {
-	launchpadOutput.sendMessage([ 144, button, color ]);
-	setTimeout(() => lightButton(button,0),duration);
 }
 
 const resetAll = () => {
@@ -125,7 +104,7 @@ const toogleStep = (button) => {
 		scenes[currentScene].tracks[currentTrack].pattern[step].active = !scenes[currentScene].tracks[currentTrack].pattern[step].active; 
 		scenes[currentScene].tracks[currentTrack].pattern[step].active ? lightStep(step,YELLOW) : lightStep(step,trackColor);
 	}
-	//resetNotes(step);
+	resetNotes(step);
 }
 
 const toogleNote = (button) => {
@@ -135,37 +114,16 @@ const toogleNote = (button) => {
 }
 
 const resetNotes = (step) => {
-	var tasks = [];
 	innerGrid.map(b => {
-		scenes[currentScene].tracks[currentTrack].pattern[step].notes.map((n,i) => {
-			if(n) { 
-				tasks.push((callback) => {
-					lightButton(innerGrid[i],RED);
-					callback();
-				});
-			} else { 
-				tasks.push((callback) => {
-					lightButton(innerGrid[i],GREY);
-					callback();
-				});
-			}
-		});
+		scenes[currentScene].tracks[currentTrack].pattern[step].notes.map((n,i) => 
+			n ? lightButton(innerGrid[i],RED):lightButton(innerGrid[i],GREY));
 	});
-	async.parallel(tasks,(error,results) => {});
 }
 
 
 const resetStep = (step) => {
 	var trackColor = scenes[currentScene].tracks[currentTrack].color;
 	scenes[currentScene].tracks[currentTrack].pattern[step].active ? lightStep(step,YELLOW) : lightStep(step,trackColor);
-}
-
-const showNotes = (pressedButtons) => {
-	var step = bigGrid.indexOf(pressedButtons[1]);
-	if(step != -1 && pressedButtons[0] == SHIFT_BUTTON){
-		resetNotes(step);
-		lastPressedStep = scenes[currentScene].tracks[currentTrack].grid.indexOf(pressedButtons[1]);
-	}
 }
 
 const resetGrid = () => {
@@ -189,7 +147,6 @@ const changeTrack = (button) => {
 	currentTrack = (currentTrack + 1) % scenes[currentScene].tracks.length;
 	resetGrid();
 	resetMute();
-	resetTempo();
 }
 
 const toogleMute = (button) => {
@@ -261,76 +218,34 @@ const changeScene = (button) => {
 	resetNotes(lastPressedStep);
 }
 
-const copyScene = (pressedButtons) => {
-	var sceneButtons = [SCENE_0_BUTTON,SCENE_1_BUTTON,SCENE_2_BUTTON,SCENE_3_BUTTON];
-	var originScene = sceneButtons.indexOf(pressedButtons[0]);
-	var targetScene = sceneButtons.indexOf(pressedButtons[1]);
-	if(originScene != -1 && targetScene != -1){
-		scenes[targetScene] = JSON.parse(JSON.stringify(scenes[originScene])); // Dirty trick for object deep copy by value
-		blinkButton(SHIFT_BUTTON,200,RED);
-	}
-}
-
-const changeTempo = (button) => {
-	var tempos = [0.5, 1];
-	var trackTempo = scenes[currentScene].tracks[currentTrack].tempoModifier;
-	scenes[currentScene].tracks[currentTrack].tempoModifier = tempos[(tempos.indexOf(trackTempo) + 1) % tempos.length];
-	resetTempo();
-	resetGrid();
-}
-
-const resetTempo = () => {
-	var tempos = [0.5, 1];
-	var colors = [YELLOW,BLUE, ORANGE, PURPLE];
-	var trackTempo = scenes[currentScene].tracks[currentTrack].tempoModifier;
-	var tempoColor = colors[tempos.indexOf(trackTempo)]
-	lightButton(TEMPO_BUTTON, tempoColor);
-}
-
-var clockInput = new easymidi.Input(getNormalPort(easymidi.getInputs()));
+var clockInput = new easymidi.Input('loopMIDI Port 3 4');
 clockInput.on('clock', function () {
-	clockTick++;
-	if(clockTick % 6 == 0){
-		// Next step of current step indicator
-		var modCurrentStep = currentStep * scenes[currentScene].tracks[currentTrack].tempoModifier;
-		prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : 15;
-		if(isInt(modCurrentStep)){
+	console.log("ee");
+		clockTick++;
+		if(clockTick % 6 == 0){
+			prevStep = currentStep != 0 ? currentStep -1 : 15;
 			resetStep((prevStep) % 16);
-			lightStep(modCurrentStep % 16, ORANGE);
-		}
-		
-		var tasks = [];
-
-		//Play sound of every track
-		scenes[currentScene].tracks.map(t => {
-			var trackCurrentStep = (currentStep * t.tempoModifier);
-			var step = t.pattern[trackCurrentStep % 16];
-			if(step != undefined && step.active && !t.muted){
-				step.notes.map((n,i) => {
-					if(n) 
-						tasks.push((callback) => {
-						output.send('noteon', {note: t.midiRoot + i,velocity: 127,channel: t.channel});
-						callback();
+			lightStep(currentStep % 16, ORANGE);
+			scenes[currentScene].tracks.map(t => {
+				var step = t.pattern[currentStep % 16];
+				if(step.active && !t.muted){
+					step.notes.map((n,i) => {
+						//if(n) externalOutput.sendMessage([176,t.midiRoot + i,1]);
+						if(n){
+							output.send('noteon', {note: t.midiRoot + i,velocity: 127,channel: t.channel});
+						}
 					});
-				});
-			}
-		});
-		async.parallel(tasks,(error,results) => {});
-		currentStep++;
-	}
+				}
+			});
+			currentStep++;
+		}
 });
 
-const isInt = (n) => {
-	return Number(n) === n && n % 1 === 0;
-}
-
+console.log(easymidi.getOutputs());
+console.log(easymidi.getInputs());
 
 
 var controller = [];
-var secondaryController = [];
-
-// Setup simple controller
-controller[TEMPO_BUTTON] = changeTempo;
 controller[CHANGE_TRACK_BUTTON] = changeTrack;
 controller[SPEED_DOWN_BUTTON] = changeSpeed;
 controller[SPEED_UP_BUTTON] = changeSpeed;
@@ -345,15 +260,7 @@ controller[SCENE_3_BUTTON] = changeScene;
 bigGrid.map(e => controller[e] = toogleStep);
 innerGrid.map(e => controller[e] = toogleNote);
 
-// Setup secondary controller, this controller is for multi-button presses
-secondaryController[SCENE_0_BUTTON] = copyScene;
-secondaryController[SCENE_1_BUTTON] = copyScene;
-secondaryController[SCENE_2_BUTTON] = copyScene;
-secondaryController[SCENE_3_BUTTON] = copyScene;
-bigGrid.map(e => secondaryController[e] = showNotes);
-
 resetAll();
 resetSpeed();
 resetMute();
 resetGrid();
-resetTempo();
