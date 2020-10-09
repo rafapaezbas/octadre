@@ -19,6 +19,7 @@ const SCENE_1_BUTTON = 55;
 const SCENE_2_BUTTON = 44;
 const SCENE_3_BUTTON = 45;
 const SHIFT_BUTTON = 18;
+const TEMPO_BUTTON = 88;
 
 const GREEN = 26;
 const YELLOW = 100;
@@ -33,10 +34,10 @@ const scenes = [];
 
 for(var i = 0; i < 4; i++){
 	scenes[i] = {tracks:[]};
-	scenes[i].tracks[0] = { grid:bigGrid, pattern:[], midiRoot:22, color: GREEN, muted: false  };
-	scenes[i].tracks[1] = { grid:bigGrid, pattern:[], midiRoot:34, color: PURPLE, muted: false };
-	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midiRoot:46, color: BLUE, muted: false };
-	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midiRoot:58, color: WHITE, muted: false };
+	scenes[i].tracks[0] = { grid:bigGrid, pattern:[], midiRoot:22, color: GREEN, muted: false, tempoModifier: 1  };
+	scenes[i].tracks[1] = { grid:bigGrid, pattern:[], midiRoot:34, color: PURPLE, muted: false, tempoModifier: 1};
+	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midiRoot:46, color: BLUE, muted: false, tempoModifier: 1 };
+	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midiRoot:58, color: WHITE, muted: false, tempoModifier: 1 };
 }
 
 var pressedButtons = [];
@@ -160,6 +161,7 @@ const changeTrack = (button) => {
 	currentTrack = (currentTrack + 1) % scenes[currentScene].tracks.length;
 	resetGrid();
 	resetMute();
+	resetTempo();
 }
 
 const toogleMute = (button) => {
@@ -241,14 +243,37 @@ const copyScene = (pressedButtons) => {
 	}
 }
 
+const changeTempo = (button) => {
+	var tempos = [0.5, 1];
+	var trackTempo = scenes[currentScene].tracks[currentTrack].tempoModifier;
+	scenes[currentScene].tracks[currentTrack].tempoModifier = tempos[(tempos.indexOf(trackTempo) + 1) % tempos.length];
+	resetTempo();
+	resetGrid();
+}
+
+const resetTempo = () => {
+	var tempos = [0.5, 1];
+	var colors = [YELLOW,BLUE, ORANGE, PURPLE];
+	var trackTempo = scenes[currentScene].tracks[currentTrack].tempoModifier;
+	var tempoColor = colors[tempos.indexOf(trackTempo)]
+	lightButton(TEMPO_BUTTON, tempoColor);
+}
+
 const tick = () => {
 	setTimeout(function() {
-		prevStep = currentStep != 0 ? currentStep -1 : 15;
-		resetStep((prevStep) % 16);
-		lightStep(currentStep % 16, ORANGE);
+		// Next step of current step indicator
+		var modCurrentStep = currentStep * scenes[currentScene].tracks[currentTrack].tempoModifier;
+		prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : 15;
+		if(isInt(modCurrentStep)){
+			resetStep((prevStep) % 16);
+			lightStep(modCurrentStep % 16, ORANGE);
+		}
+
+		//Play sound of every track
 		scenes[currentScene].tracks.map(t => {
-			var step = t.pattern[currentStep % 16];
-			if(step.active && !t.muted){
+			var trackCurrentStep = (currentStep * t.tempoModifier);
+			var step = t.pattern[trackCurrentStep % 16];
+			if(step != undefined && step.active && !t.muted){
 				step.notes.map((n,i) => {
 					if(n) externalOutput.sendMessage([176,t.midiRoot + i,1]);
 				});
@@ -259,11 +284,17 @@ const tick = () => {
 	}, speed);
 }
 
+const isInt = (n) => {
+	return Number(n) === n && n % 1 === 0;
+}
+
+
 
 var controller = [];
 var secondaryController = [];
 
 // Setup simple controller
+controller[TEMPO_BUTTON] = changeTempo;
 controller[CHANGE_TRACK_BUTTON] = changeTrack;
 controller[SPEED_DOWN_BUTTON] = changeSpeed;
 controller[SPEED_UP_BUTTON] = changeSpeed;
@@ -289,4 +320,5 @@ resetAll();
 resetSpeed();
 resetMute();
 resetGrid();
+resetTempo();
 tick();
