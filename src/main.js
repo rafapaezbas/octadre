@@ -31,7 +31,7 @@ const RED = 7;
 const GREY = 90;
 
 const scenes = [];
-var clockTick = 0;
+var clockTick = -1;
 
 for(var i = 0; i < 4; i++){
 	scenes[i] = {tracks:[]};
@@ -40,6 +40,10 @@ for(var i = 0; i < 4; i++){
 	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midiRoot:64, color: BLUE, muted: false, tempoModifier: 1, channel: 2};
 	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midiRoot:64, color: WHITE, muted: false, tempoModifier: 1, channel: 3};
 }
+
+var scenesChain = [];
+var currentSceneInChain = -1;
+var chainMode = false;
 
 var pressedButtons = [];
 var currentStep = 0;
@@ -72,7 +76,7 @@ input.on('message', (deltaTime, message) => {
 		controller[button](button);
 	}
 	if(pressed && pressedButtons.length > 1 && secondaryController[pressedButtons[1]] != undefined){
-		secondaryController[button](pressedButtons);
+		secondaryController[button].map(f => f(pressedButtons));
 	}
 	if(!pressed){
 		pressedButtons = pressedButtons.filter(b => b != button);
@@ -99,6 +103,7 @@ const lightStep = (step,color) => {
 }
 
 const toogleStep = (button) => {
+	var prevStep = lastPressedStep;
 	lastPressedStep = scenes[currentScene].tracks[currentTrack].grid.indexOf(button);
 	var trackColor = scenes[currentScene].tracks[currentTrack].color;
 	var step = scenes[currentScene].tracks[currentTrack].grid.indexOf(button);
@@ -106,7 +111,7 @@ const toogleStep = (button) => {
 		scenes[currentScene].tracks[currentTrack].pattern[step].active = !scenes[currentScene].tracks[currentTrack].pattern[step].active; 
 		scenes[currentScene].tracks[currentTrack].pattern[step].active ? lightStep(step,YELLOW) : lightStep(step,trackColor);
 	}
-	//resetNotes(step);
+	resetNotes(scenes[currentScene].tracks[currentTrack].pattern[prevStep].notes,scenes[currentScene].tracks[currentTrack].pattern[lastPressedStep].notes);
 }
 
 const toogleNote = (button) => {
@@ -115,25 +120,26 @@ const toogleNote = (button) => {
 	scenes[currentScene].tracks[currentTrack].pattern[lastPressedStep].notes[note] ? lightButton(button,RED) : lightButton(button,GREY);
 }
 
-const resetNotes = (step) => {
+const resetNotes = (prevNotes,notes) => {
 	var tasks = [];
-	innerGrid.map(b => {
-		scenes[currentScene].tracks[currentTrack].pattern[step].notes.map((n,i) => {
-			if(n) { 
-				tasks.push((callback) => {
-					lightButton(innerGrid[i],RED);
-					callback();
-				});
-			} else { 
-				tasks.push((callback) => {
-					lightButton(innerGrid[i],GREY);
-					callback();
-				});
-			}
-		});
+	var diff = utils.substractArray(prevNotes,notes);
+	console.log(diff);
+	diff.map((e,i) => {
+		if(e == -1) { 
+			tasks.push((callback) => {
+				lightButton(innerGrid[i],RED);
+				callback();
+			});
+		}
+		if(e == 1) { 
+			tasks.push((callback) => {
+				lightButton(innerGrid[i],GREY);
+				callback();
+			});
+		}
 	});
 	async.parallel(tasks,(error,results) => {});
-}
+};
 
 
 const resetStep = (step) => {
@@ -144,9 +150,13 @@ const resetStep = (step) => {
 const showNotes = (pressedButtons) => {
 	var step = bigGrid.indexOf(pressedButtons[1]);
 	if(step != -1 && pressedButtons[0] == SHIFT_BUTTON){
-		resetNotes(step);
+		resetNotes(scenes[currentScene].tracks[currentTrack].pattern[lastPressedStep].notes,scenes[currentScene].tracks[currentTrack].pattern[step].notes);
 		lastPressedStep = scenes[currentScene].tracks[currentTrack].grid.indexOf(pressedButtons[1]);
 	}
+}
+
+const setupNotes = () => {
+	innerGrid.map((e,i) => i == 0 ? lightButton(e,RED):lightButton(e,GREY));
 }
 
 const resetGrid = () => {
@@ -216,7 +226,9 @@ const lightScenes = () => {
 }
 
 const changeScene = (button) => {
+	var prevScene = currentScene;
 	lightScenes();
+	resetSceneChain();
 	switch(button){
 		case SCENE_0_BUTTON:
 			currentScene = 0;
@@ -239,7 +251,7 @@ const changeScene = (button) => {
 	}
 	resetMute();
 	resetGrid();
-	resetNotes(lastPressedStep);
+	resetNotes(scenes[prevScene].tracks[currentTrack].pattern[lastPressedStep].notes,scenes[currentScene].tracks[currentTrack].pattern[lastPressedStep].notes);
 }
 
 const copyScene = (pressedButtons) => {
@@ -279,30 +291,65 @@ const lightNextStep = () => {
 
 const playNextStep = () => {
 	var tasks = [];
-	scenes[currentScene].tracks.map(t => {
+	var scene = getPlayingScene(clockTick);
+	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (currentStep * t.tempoModifier);
 		var step = t.pattern[trackCurrentStep % 16];
 		if(step != undefined && step.active && !t.muted){
 			step.notes.map((n,i) => {
-				  if(n) {
-              tasks.push((callback) => {
-                  output.send('noteon', {note: t.midiRoot + i,velocity: 127,channel: t.channel});
-                  callback();
-					    });
-          }
+				if(n) {
+					tasks.push((callback) => {
+						output.send('noteon', {note: t.midiRoot + i,velocity: 127,channel: t.channel});
+						callback();
+					});
+				}
 			});
 		}
 	});
 	async.parallel(tasks,(error,results) => {});
 }
 
-var clockInput = new easymidi.Input(getNormalPort(easymidi.getInputs()));
+const chainScenes = (pressedButtons) => {
+	var sceneButtons = [SCENE_0_BUTTON,SCENE_1_BUTTON,SCENE_2_BUTTON,SCENE_3_BUTTON];
+	var scene = sceneButtons.indexOf(pressedButtons[1]);
+	if(pressedButtons.length == 2 && pressedButtons[0] == SHIFT_BUTTON && scene != -1){
+		chainMode = true;
+		scenesChain.push(scene);
+	}
+}
+
+const getPlayingScene = (clockTick) => {
+	var shouldChange = clockTick % (6*16) == 0;
+	var nextScene = !shouldChange ? scenesChain[currentSceneInChain % scenesChain.length] : scenesChain[currentSceneInChain++ % scenesChain.length];
+	return chainMode ? nextScene : currentScene;
+}
+
+const resetSceneChain = () => {
+	chainMode = false;
+	currentSceneInChain = -1;
+	scenesChain = [];
+}
+
+const lightNextScene = () => {
+	var sceneButtons = [SCENE_0_BUTTON,SCENE_1_BUTTON,SCENE_2_BUTTON,SCENE_3_BUTTON];
+	var playingScene = scenesChain[currentSceneInChain % scenesChain.length];
+	var nextPlayingScene = scenesChain[(currentSceneInChain + 1) % scenesChain.length];
+	var prevScene = scenesChain[(currentSceneInChain - 1) % scenesChain.length];
+	lightButton(sceneButtons[prevScene],PURPLE);
+	lightButton(sceneButtons[nextPlayingScene],BLUE);
+	lightButton(sceneButtons[playingScene],ORANGE);
+}
+
+var clockInput = new easymidi.Input(utils.getNormalPort(easymidi.getInputs()));
 clockInput.on('clock', function () {
 	clockTick++;
 	if(clockTick % 6 == 0){
 		lightNextStep();
 		playNextStep();
 		currentStep++;
+	}
+	if(clockTick % (6*16) == 0 && chainMode){
+		lightNextScene();
 	}
 });
 
@@ -326,14 +373,16 @@ bigGrid.map(e => controller[e] = toogleStep);
 innerGrid.map(e => controller[e] = toogleNote);
 
 // Setup secondary controller, this controller is for multi-button presses
-secondaryController[SCENE_0_BUTTON] = copyScene;
-secondaryController[SCENE_1_BUTTON] = copyScene;
-secondaryController[SCENE_2_BUTTON] = copyScene;
-secondaryController[SCENE_3_BUTTON] = copyScene;
-bigGrid.map(e => secondaryController[e] = showNotes);
+secondaryController[SCENE_0_BUTTON] = [copyScene,chainScenes];
+secondaryController[SCENE_1_BUTTON] = [copyScene,chainScenes];
+secondaryController[SCENE_2_BUTTON] = [copyScene,chainScenes];
+secondaryController[SCENE_3_BUTTON] = [copyScene,chainScenes];
+bigGrid.map(e => secondaryController[e] = [showNotes]);
 
 resetAll();
 resetSpeed();
 resetMute();
 resetGrid();
+changeScene(SCENE_0_BUTTON);
+setupNotes();
 resetTempo();
