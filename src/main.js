@@ -14,6 +14,10 @@ const MUTE_0_BUTTON = 89;
 const MUTE_1_BUTTON = 79;
 const MUTE_2_BUTTON = 69;
 const MUTE_3_BUTTON = 59;
+const MUTE_4_BUTTON = 49;
+const MUTE_5_BUTTON = 39;
+const MUTE_6_BUTTON = 29;
+const MUTE_7_BUTTON = 19;
 const SCENE_0_BUTTON = 54;
 const SCENE_1_BUTTON = 55;
 const SCENE_2_BUTTON = 44;
@@ -29,6 +33,10 @@ const PURPLE = 80;
 const WHITE = 40;
 const RED = 7;
 const GREY = 90;
+const PINK = 4;
+const LIGHT_ORANGE = 8;
+const DARK_GREEN = 19;
+const LIGHT_GREEN = 20;
 
 const scenes = [];
 var clockTick = -1;
@@ -39,6 +47,10 @@ for(var i = 0; i < 4; i++){
 	scenes[i].tracks[1] = { grid:bigGrid, pattern:[], midiRoot:64, color: PURPLE, muted: false, tempoModifier: 1, channel: 1};
 	scenes[i].tracks[2] = { grid:bigGrid, pattern:[], midiRoot:64, color: BLUE, muted: false, tempoModifier: 1, channel: 2};
 	scenes[i].tracks[3] = { grid:bigGrid, pattern:[], midiRoot:64, color: WHITE, muted: false, tempoModifier: 1, channel: 3};
+	scenes[i].tracks[4] = { grid:bigGrid, pattern:[], midiRoot:64, color: LIGHT_ORANGE, muted: false, tempoModifier: 1, channel: 4};
+	scenes[i].tracks[5] = { grid:bigGrid, pattern:[], midiRoot:64, color: DARK_GREEN, muted: false, tempoModifier: 1, channel: 5};
+	scenes[i].tracks[6] = { grid:bigGrid, pattern:[], midiRoot:64, color: LIGHT_GREEN, muted: false, tempoModifier: 1, channel: 6};
+	scenes[i].tracks[7] = { grid:bigGrid, pattern:[], midiRoot:64, color: PINK, muted: false, tempoModifier: 1, channel: 7};
 }
 
 var scenesChain = [];
@@ -166,7 +178,7 @@ const resetGrid = () => {
 }
 
 const resetMute = () => {
-	var muteButtons = [MUTE_0_BUTTON,MUTE_1_BUTTON,MUTE_2_BUTTON,MUTE_3_BUTTON];
+	var muteButtons = [MUTE_0_BUTTON,MUTE_1_BUTTON,MUTE_2_BUTTON,MUTE_3_BUTTON,MUTE_4_BUTTON,MUTE_5_BUTTON,MUTE_6_BUTTON,MUTE_7_BUTTON];
 	for(var i = 0; i < muteButtons.length; i++){
 		if(scenes[currentScene].tracks[i].muted){
 			lightButton(muteButtons[i],0);
@@ -184,21 +196,10 @@ const changeTrack = (button) => {
 }
 
 const toogleMute = (button) => {
-	switch(button){
-		case MUTE_0_BUTTON:
-			scenes[currentScene].tracks[0].muted = !scenes[currentScene].tracks[0].muted;
-			break;
-		case MUTE_1_BUTTON:
-			scenes[currentScene].tracks[1].muted = !scenes[currentScene].tracks[1].muted;
-			break;
-		case MUTE_2_BUTTON:
-			scenes[currentScene].tracks[2].muted = !scenes[currentScene].tracks[2].muted;
-			break;
-		case MUTE_3_BUTTON:
-			scenes[currentScene].tracks[3].muted = !scenes[currentScene].tracks[3].muted;
-			break;
-		default:
-			break;
+	var muteButtons = [MUTE_0_BUTTON,MUTE_1_BUTTON,MUTE_2_BUTTON,MUTE_3_BUTTON,MUTE_4_BUTTON,MUTE_5_BUTTON,MUTE_6_BUTTON,MUTE_7_BUTTON];
+	var track = muteButtons.indexOf(button);
+	if(track != -1){
+			scenes[currentScene].tracks[track].muted = !scenes[currentScene].tracks[track].muted;
 	}
 	resetMute();
 }
@@ -365,6 +366,10 @@ controller[MUTE_0_BUTTON] = toogleMute;
 controller[MUTE_1_BUTTON] = toogleMute;
 controller[MUTE_2_BUTTON] = toogleMute;
 controller[MUTE_3_BUTTON] = toogleMute;
+controller[MUTE_4_BUTTON] = toogleMute;
+controller[MUTE_5_BUTTON] = toogleMute;
+controller[MUTE_6_BUTTON] = toogleMute;
+controller[MUTE_7_BUTTON] = toogleMute;
 controller[SCENE_0_BUTTON] = changeScene;
 controller[SCENE_1_BUTTON] = changeScene;
 controller[SCENE_2_BUTTON] = changeScene;
