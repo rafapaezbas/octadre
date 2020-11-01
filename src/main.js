@@ -377,7 +377,7 @@ controller[SCENE_3_BUTTON] = changeScene;
 bigGrid.map(e => controller[e] = toogleStep);
 innerGrid.map(e => controller[e] = toogleNote);
 
-// Setup secondary controller, this controller is for multi-button presses
+//Setup secondary controller, this controller is for multi-button presses
 secondaryController[SCENE_0_BUTTON] = [copyScene,chainScenes];
 secondaryController[SCENE_1_BUTTON] = [copyScene,chainScenes];
 secondaryController[SCENE_2_BUTTON] = [copyScene,chainScenes];
