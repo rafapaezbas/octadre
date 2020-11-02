@@ -64,6 +64,8 @@ var currentScene = 0;
 var speed = 150;
 var lastPressedStep = 0;
 
+var resetClockTimeout;
+
 scenes.map(s => {
 	s.tracks.map(t => {
 		for(var i = 0; i < 16; i++){
@@ -135,7 +137,6 @@ const toogleNote = (button) => {
 const resetNotes = (prevNotes,notes) => {
 	var tasks = [];
 	var diff = utils.substractArray(prevNotes,notes);
-	console.log(diff);
 	diff.map((e,i) => {
 		if(e == -1) { 
 			tasks.push((callback) => {
@@ -344,6 +345,7 @@ const lightNextScene = () => {
 var clockInput = new easymidi.Input(utils.getNormalPort(easymidi.getInputs()));
 clockInput.on('clock', function () {
 	clockTick++;
+	resetClock();
 	if(clockTick % 6 == 0){
 		lightNextStep();
 		playNextStep();
@@ -353,6 +355,19 @@ clockInput.on('clock', function () {
 		lightNextScene();
 	}
 });
+
+var resetClock = () => {
+	if(resetClockTimeout != undefined){
+		clearTimeout(resetClockTimeout);
+	}
+	resetClockTimeout = setTimeout(resetClockTick ,500);
+	
+}
+
+var resetClockTick = () => {
+	clockTick = -1;
+	currentStep = 0;
+}
 
 var controller = [];
 var secondaryController = [];

@@ -9,7 +9,7 @@ exports.getLaunchpadPort = (ports) => {
 
 exports.getNormalPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
-		if(ports[i].indexOf("Launchpad") == -1){
+		if(ports[i].indexOf("Launchpad") == -1 && ports[i].indexOf("Microsoft") == -1){
 			console.log("Output midi port: " + ports[i]);
 			return ports[i];
 		}
