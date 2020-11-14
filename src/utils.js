@@ -25,5 +25,25 @@ exports.isInt = (n) => {
 	return Number(n) === n && n % 1 === 0;
 }
 
+exports.config = (path) => {
+	var config = initConfig(path);
+	return {
+		getString : (key) => config[key],
+		getInt : (key) => parseInt(config[key]),
+		getArray : (key) => config[key].split(','),
+	}
+}
 
-
+var initConfig = (path) => {
+	var file = require('fs').readFileSync(path, 'utf-8').split(/\r?\n/);
+	file.pop();  //Remove last item because is always undefined (last line break)
+	var config = [];
+	file.map(line => {
+		if(line[0] != '#'){ // This means line is a comment
+			var key = line.split("=")[0].trim();
+			var value = line.split("=")[1].trim();
+			config[key] = value;
+		}
+	});
+	return config;
+}

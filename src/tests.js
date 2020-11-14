@@ -36,4 +36,24 @@ addTest(() => {
 	return JSON.stringify(result) == "[0,0,0]";
 },"Array substraction should work with boolean values values are equal");
 
+addTest(() => {
+	var configuration = utils.config('config.conf');
+	return configuration.getString('key1') == 'value1';
+}, "Configuration should get String element by key");
+
+addTest(() => {
+	var configuration = utils.config('config.conf');
+	return configuration.getInt('number') + 1 == 2;
+}, "Configuration should get number element by key");
+
+addTest(() => {
+	var configuration = utils.config('config.conf');
+	return configuration.getArray('array1')[0] == 1 && configuration.getArray('array1')[1] == 2;
+}, "Configuration should get array by key");
+
+addTest(() => {
+	var configuration = utils.config('config.conf');
+	return configuration.getString('comment') == undefined;
+}, "Configuration should ignore comments");
+
 run();
