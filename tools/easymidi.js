@@ -4,7 +4,6 @@
  * a single sysex message with every button and color you want in the launchpad.
  */
 var easymidi = require('easymidi');
-var midi = require('midi');
 
 var outputs = easymidi.getOutputs();
 var inputs = easymidi.getInputs();
@@ -25,22 +24,25 @@ var generateSysexMessage = (buttons) => {
 	return sysexMessage;
 }
 
-const launchpadOutput = new midi.Output();
-launchpadOutput.openPort(1);
+const launchpadOutput = new easymidi.Output('Launchpad MK2:Launchpad MK2 MIDI 1 16:0');
 
 var arr = [...Array(40)].map((item, index) => index); //[0,1,2...15];
 var randomColor = Math.floor((Math.random() * 127) + 1)
 var randomColor2 = Math.floor((Math.random() * 127) + 1)
 
 
+console.time("sysex");
 for(var i = 0; i < 20; i++){
-	console.time("sysex");
-	launchpadOutput.sendMessage(generateSysexMessage(arr.map(e => [e + 11, randomColor])));
-	console.timeEnd("sysex");
-
-	console.time("midi");
-	arr.map(e => launchpadOutput.sendMessage([144,e + 51,randomColor2]));
-	console.timeEnd("midi");
+	launchpadOutput.send('sysex',generateSysexMessage(arr.map(e => [e + 11, randomColor])));
 
 }
+console.timeEnd("sysex");
+
+
+console.time("midi");
+for(var i = 0; i < 20; i++){
+	arr.map(e => launchpadOutput.send('noteon',{note:e + 51, velocity: randomColor2, channel: 0}));
+
+}
+console.timeEnd("midi");
 
