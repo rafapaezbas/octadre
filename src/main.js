@@ -1,4 +1,3 @@
-const async = require('async');
 const easymidi = require('easymidi');
 const utils = require('./utils');
 const render = require('./render');
@@ -40,9 +39,9 @@ const DARK_GREEN = 19;
 const LIGHT_GREEN = 20;
 
 
-const output = new easymidi.Output(utils.getNormalPort(easymidi.getOutputs()));
 const launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
 const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
+const output = new easymidi.Output(utils.getNormalPort(easymidi.getOutputs()));
 const clockInput = new easymidi.Input(utils.getNormalPort(easymidi.getInputs()));
 
 const scenes = [];
@@ -86,10 +85,10 @@ var state =  {
 
 clockInput.on('clock', function () {
 	state.clockTick++;
-	resetClock();
+	midi.resetClock(state);
 	if(state.clockTick % 6 == 0){
-		lightNextStep();
-		midi.playNextStep(state,scenes);
+		//lightNextStep();
+		midi.playNextStep(state,scenes,output);
 		state.currentStep++;
 	}
 });

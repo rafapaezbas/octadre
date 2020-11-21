@@ -1,6 +1,8 @@
-exports.playNextStep = (state,scenes,clockTick) => {
+const async = require('async');
+
+exports.playNextStep = (state,scenes,output) => {
 	var tasks = [];
-	var scene = getPlayingScene(clockTick,state);
+	var scene = getPlayingScene(state);
 	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (state.currentStep * t.tempoModifier);
 		var step = t.pattern[trackCurrentStep % 16];
@@ -22,20 +24,15 @@ exports.resetClock = (state) => {
 	if(state.resetClockTimeout != undefined){
 		clearTimeout(state.resetClockTimeout);
 	}
-	state.resetClockTimeout = setTimeout(resetClockTick(state),500);
-
-}
-
-exports.resetClockTick = (state) => {
-	return () => {
+	state.resetClockTimeout = setTimeout(() => {
 		state.clockTick = -1;
 		state.currentStep = 0;
-	}
+	},500);
+
 }
 
-
-const getPlayingScene = (clockTick) => {
-	var shouldChange = clockTick % (6*16) == 0;
+const getPlayingScene = (state) => {
+	var shouldChange = state.clockTick % (6*16) == 0;
 	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[state.currentSceneInChain++ % state.scenesChain.length];
 	return state.chainMode ? nextScene : state.currentScene;
 }
