@@ -1,7 +1,7 @@
 exports.getLaunchpadPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
 		if(ports[i].indexOf("Launchpad") != -1){
-			return i;
+			return ports[i];
 		}
 	}
 	console.log("No MK2:Launchpad midi i/o found");
@@ -10,7 +10,6 @@ exports.getLaunchpadPort = (ports) => {
 exports.getNormalPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
 		if(ports[i].indexOf("Launchpad") == -1 && ports[i].indexOf("Microsoft") == -1){
-			console.log("Output midi port: " + ports[i]);
 			return ports[i];
 		}
 	}

@@ -1,5 +1,4 @@
 const async = require('async');
-const midi = require('midi');
 const easymidi = require('easymidi');
 const utils = require('./utils');
 
@@ -75,17 +74,13 @@ scenes.map(s => {
 	});
 });
 
-
 const output = new easymidi.Output(utils.getNormalPort(easymidi.getOutputs()));
-const launchpadOutput = new midi.Output();
-launchpadOutput.openPort(utils.getLaunchpadPort(easymidi.getOutputs()));
-const input = new midi.Input();
-input.openPort(utils.getLaunchpadPort(easymidi.getInputs()));
-input.ignoreTypes(false, false, false); //WTF is this?
+const launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
+const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 
-input.on('message', (deltaTime, message) => {
-	var pressed = message[2] == 127;
-	var button = message[1];
+input.on('noteon', (message) => {
+	var pressed = message.velocity == 127;
+	var button = message.note;
 	pressedButtons.push(button);
 	if(pressed && pressedButtons.length == 1 && controller[button] != undefined){
 		controller[button](button);
@@ -99,11 +94,11 @@ input.on('message', (deltaTime, message) => {
 });
 
 const lightButton = (button,color) => {
-	launchpadOutput.sendMessage([ 144, button, color ]);
+	launchpadOutput.send('noteon',{note: button, velocity: color, channel: 0});
 }
 
 const blinkButton = (button,duration,color) => {
-	launchpadOutput.sendMessage([ 144, button, color ]);
+	launchpadOutput.send('noteon',{note: button, velocity: color, channel: 0});
 	setTimeout(() => lightButton(button,0),duration);
 }
 
