@@ -31,6 +31,7 @@ exports.config = (path) => {
 		getString : (key) => config[key],
 		getInt : (key) => parseInt(config[key]),
 		getArray : (key) => config[key].split(','),
+		getIntOrDefault : (key,defaultValue) => isNaN(parseInt(config[key])) ? defaultValue : parseInt(config[key]),
 	}
 }
 
@@ -39,7 +40,7 @@ var initConfig = (path) => {
 	file.pop();  //Remove last item because is always undefined (last line break)
 	var config = [];
 	file.map(line => {
-		if(line[0] != '#'){ // This means line is a comment
+		if(line[0] != '#' && line.length > 0){ // This means line is a comment or blank
 			var key = line.split("=")[0].trim();
 			var value = line.split("=")[1].trim();
 			config[key] = value;

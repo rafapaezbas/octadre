@@ -56,4 +56,9 @@ addTest(() => {
 	return configuration.getString('comment') == undefined;
 }, "Configuration should ignore comments");
 
+addTest(() => {
+	var configuration = utils.config('config.conf');
+	return configuration.getIntOrDefault('non-existing-key', 22) + 1 == 23;
+}, "Configuration should get default number");
+
 run();

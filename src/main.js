@@ -3,27 +3,28 @@ const midi = require('midi');
 const easymidi = require('easymidi');
 const utils = require('./utils');
 
+const configuration = utils.config('config.conf');
 
 const bigGrid = [14,23,32,41,51,62,73,84,85,76,67,58,48,37,26,15];
 const innerGrid = [24,33,42,52,63,74,75,66,57,47,36,25];
 
-const CHANGE_TRACK_BUTTON = 11;
-const SPEED_UP_BUTTON = 104;
-const SPEED_DOWN_BUTTON = 105;
-const MUTE_0_BUTTON = 89;
-const MUTE_1_BUTTON = 79;
-const MUTE_2_BUTTON = 69;
-const MUTE_3_BUTTON = 59;
-const MUTE_4_BUTTON = 49;
-const MUTE_5_BUTTON = 39;
-const MUTE_6_BUTTON = 29;
-const MUTE_7_BUTTON = 19;
-const SCENE_0_BUTTON = 54;
-const SCENE_1_BUTTON = 55;
-const SCENE_2_BUTTON = 44;
-const SCENE_3_BUTTON = 45;
-const SHIFT_BUTTON = 18;
-const TEMPO_BUTTON = 88;
+const CHANGE_TRACK_BUTTON = configuration.getIntOrDefault("CHANGE_TRACK_BUTTON",11);
+const SPEED_UP_BUTTON = configuration.getIntOrDefault("SPEED_UP_BUTTON",104);
+const SPEED_DOWN_BUTTON = configuration.getIntOrDefault("SPEED_DOWN_BUTTON",105);
+const MUTE_0_BUTTON = configuration.getIntOrDefault("MUTE_0_BUTTON",89); 
+const MUTE_1_BUTTON = configuration.getIntOrDefault("MUTE_1_BUTTON",79); 
+const MUTE_2_BUTTON = configuration.getIntOrDefault("MUTE_2_BUTTON",69); 
+const MUTE_3_BUTTON = configuration.getIntOrDefault("MUTE_3_BUTTON",59); 
+const MUTE_4_BUTTON = configuration.getIntOrDefault("MUTE_4_BUTTON",49); 
+const MUTE_5_BUTTON = configuration.getIntOrDefault("MUTE_5_BUTTON",39); 
+const MUTE_6_BUTTON = configuration.getIntOrDefault("MUTE_6_BUTTON",29); 
+const MUTE_7_BUTTON = configuration.getIntOrDefault("MUTE_7_BUTTON",19); 
+const SCENE_0_BUTTON = configuration.getIntOrDefault("SCENE_0_BUTTON",54); 
+const SCENE_1_BUTTON = configuration.getIntOrDefault("SCENE_1_BUTTON",55); 
+const SCENE_2_BUTTON = configuration.getIntOrDefault("SCENE_2_BUTTON",44); 
+const SCENE_3_BUTTON = configuration.getIntOrDefault("SCENE_3_BUTTON",45); 
+const SHIFT_BUTTON = configuration.getIntOrDefault("SHIFT_BUTTON",18); 
+const TEMPO_BUTTON = configuration.getIntOrDefault("TEMPO_BUTTON",88); 
 
 const GREEN = 26;
 const YELLOW = 100;
