@@ -87,8 +87,8 @@ clockInput.on('clock', function () {
 	state.clockTick++;
 	midi.resetClock(state);
 	if(state.clockTick % 6 == 0){
-		//lightNextStep();
 		midi.playNextStep(state,scenes,output);
+		render.lightCurrentStep(launchpadOutput,state,scenes);
 		state.currentStep++;
 	}
 });
