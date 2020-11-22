@@ -105,8 +105,9 @@ input.on('noteon', (message) => {
 	}
 	if(!pressed){
 		state.pressedButtons = state.pressedButtons.filter(b => b != button);
+	}else{
+		render.render(launchpadOutput,scenes,state);
 	}
-	render.render(launchpadOutput,scenes,state);
 });
 
 // Setup simple controller

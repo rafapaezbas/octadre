@@ -5,9 +5,7 @@ exports.render = (output,scenes,state) => {
 	var mutesMessage = generateMutesMessage(scenes,state);
 	var notesMessage = generateNotesMessage(scenes,state);
 	var scenesMessage = generateScenesMessage(scenes,state);
-	console.log(scenesMessage);
 	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(notesMessage).concat([247]);
-	console.log(message);
 	output.send('sysex',message);
 	return message;
 };
