@@ -13,14 +13,14 @@ const scenes = [];
 
 for(var i = 0; i < 4; i++){
 	scenes[i] = {tracks:[]};
-	scenes[i].tracks[0] = { pattern:[], midiRoot:64, color: cons.COLOR_1, muted: false, tempoModifier: 1, channel: 0};
-	scenes[i].tracks[1] = { pattern:[], midiRoot:64, color: cons.COLOR_5, muted: false, tempoModifier: 1, channel: 1};
-	scenes[i].tracks[2] = { pattern:[], midiRoot:64, color: cons.COLOR_3, muted: false, tempoModifier: 1, channel: 2};
-	scenes[i].tracks[3] = { pattern:[], midiRoot:64, color: cons.COLOR_6, muted: false, tempoModifier: 1, channel: 3};
-	scenes[i].tracks[4] = { pattern:[], midiRoot:64, color: cons.COLOR_10, muted: false, tempoModifier: 1, channel: 4};
-	scenes[i].tracks[5] = { pattern:[], midiRoot:64, color: cons.COLOR_11, muted: false, tempoModifier: 1, channel: 5};
-	scenes[i].tracks[6] = { pattern:[], midiRoot:64, color: cons.COLOR_12, muted: false, tempoModifier: 1, channel: 6};
-	scenes[i].tracks[7] = { pattern:[], midiRoot:64, color: cons.COLOR_9, muted: false, tempoModifier: 1, channel: 7};
+	scenes[i].tracks[0] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_1, muted: false, tempoModifier: 1, channel: 0};
+	scenes[i].tracks[1] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_5, muted: false, tempoModifier: 1, channel: 1};
+	scenes[i].tracks[2] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_3, muted: false, tempoModifier: 1, channel: 2};
+	scenes[i].tracks[3] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_6, muted: false, tempoModifier: 1, channel: 3};
+	scenes[i].tracks[4] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_10, muted: false, tempoModifier: 1, channel: 4};
+	scenes[i].tracks[5] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_11, muted: false, tempoModifier: 1, channel: 5};
+	scenes[i].tracks[6] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_12, muted: false, tempoModifier: 1, channel: 6};
+	scenes[i].tracks[7] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_9, muted: false, tempoModifier: 1, channel: 7};
 }
 
 scenes.map(s => {
@@ -83,7 +83,7 @@ cons.SCENE_BUTTONS.map(e => controller[e] = lib.changeScene);
 //Setup secondary controller, this controller is for multi-button presses
 var secondaryController = [];
 cons.SCENE_BUTTONS.map(e => secondaryController[e] = [lib.copyScene,lib.chainScenes]);
-cons.BIG_GRID.map(e => secondaryController[e] = [lib.showNotes]);
+cons.BIG_GRID.map(e => secondaryController[e] = [lib.showNotes,lib.changeTrackLength]);
 cons.MUTE_BUTTONS.map(e => secondaryController[e] = [lib.changeTrack]);
 
 //Initial render

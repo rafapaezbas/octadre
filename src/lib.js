@@ -64,6 +64,12 @@ exports.chainScenes = (state,scenes) => {
 	}
 }
 
+exports.changeTrackLength = (state,scenes) => {
+	if(state.pressedButtons[0] == cons.SHIFT_2_BUTTON){
+		scenes[state.currentScene].tracks[state.currentTrack].trackLength = cons.BIG_GRID.indexOf(state.pressedButtons[1]) + 1;
+	}
+}
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = -1;

@@ -5,7 +5,7 @@ exports.playNextStep = (state,scenes,output) => {
 	var scene = getPlayingScene(state);
 	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (state.currentStep * t.tempoModifier);
-		var step = t.pattern[trackCurrentStep % 16];
+		var step = t.pattern[trackCurrentStep % t.trackLength];
 		if(step != undefined && step.active && !t.muted){
 			step.notes.map((n,i) => {
 				if(n) {

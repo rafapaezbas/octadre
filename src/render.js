@@ -16,11 +16,12 @@ exports.render = (output,scenes,state) => {
 
 // TODO improve this, please.
 exports.lightCurrentStep = (output,state,scenes) => { 
+	var trackLength = scenes[state.currentScene].tracks[state.currentTrack].trackLength;
 	var modCurrentStep = state.currentStep * scenes[state.currentScene].tracks[state.currentTrack].tempoModifier;
-	var prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : 15;
+	var prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : trackLength - 1;
 	if(utils.isInt(modCurrentStep)){
 		var sysex = [];
-		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % 16,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % 16],cons.COLOR_4]).concat([247]);
+		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_4]).concat([247]);
 		output.send('sysex',message);
 		return message;
 	}
@@ -30,7 +31,11 @@ exports.lightCurrentStep = (output,state,scenes) => {
 const generateStepsMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern.reduce((acc,e,i) => {
 		acc.push(cons.BIG_GRID[i]);
-		e.active ? acc.push(cons.COLOR_2) : acc.push(scenes[state.currentScene].tracks[state.currentTrack].color);
+		if(i < scenes[state.currentScene].tracks[state.currentTrack].trackLength){
+			e.active ? acc.push(cons.COLOR_2) : acc.push(scenes[state.currentScene].tracks[state.currentTrack].color);
+		} else {
+			acc.push(0);
+		}
 		return acc;
 	},[]);
 };
