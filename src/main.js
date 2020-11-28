@@ -75,7 +75,6 @@ input.on('noteon', (message) => {
 // Setup simple controller
 var controller = [];
 controller[cons.TEMPO_BUTTON] = lib.changeTempo;
-controller[cons.CHANGE_TRACK_BUTTON] = lib.changeTrack;
 cons.BIG_GRID.map(e => controller[e] = lib.toogleStep);
 cons.INNER_GRID.map(e => controller[e] = lib.toogleNote);
 cons.MUTE_BUTTONS.map(e => controller[e] = lib.toogleMute);
@@ -85,6 +84,7 @@ cons.SCENE_BUTTONS.map(e => controller[e] = lib.changeScene);
 var secondaryController = [];
 cons.SCENE_BUTTONS.map(e => secondaryController[e] = [lib.copyScene,lib.chainScenes]);
 cons.BIG_GRID.map(e => secondaryController[e] = [lib.showNotes]);
+cons.MUTE_BUTTONS.map(e => secondaryController[e] = [lib.changeTrack]);
 
 //Initial render
 render.render(launchpadOutput,scenes,state);

@@ -3,7 +3,7 @@ Bank of tests with timestamps for sysex vs midi message //DONE
 only easy midi in main //DONE
 if sysex is fast enough chang architecture to "full render" //DONE
 fix chain scenes
-fix cursor
+fix cursor //DONE
 change of scene by shift+mute
 midi note off
 polyrythm (SHIFT2+note)

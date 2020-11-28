@@ -20,7 +20,7 @@ exports.lightCurrentStep = (output,state,scenes) => {
 	var prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : 15;
 	if(utils.isInt(modCurrentStep)){
 		var sysex = [];
-		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % 16,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % 16],10]).concat([247]);
+		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % 16,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % 16],cons.COLOR_4]).concat([247]);
 		output.send('sysex',message);
 		return message;
 	}

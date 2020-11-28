@@ -20,8 +20,11 @@ exports.showNotes = (state,scenes) => {
 	}
 }
 
-exports.changeTrack = (button,state,scenes) => {
-	state.currentTrack = (state.currentTrack + 1) % scenes[state.currentScene].tracks.length;
+exports.changeTrack = (state,scenes) => {
+	if(state.pressedButtons[0] = cons.SHIFT_BUTTON){
+		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
+		state.currentTrack = track;
+	}
 }
 
 exports.toogleMute = (button,state,scenes) => {

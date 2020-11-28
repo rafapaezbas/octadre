@@ -1,9 +1,9 @@
 const utils = require('./utils');
 const configuration = utils.config('config.conf');
 
-exports.CHANGE_TRACK_BUTTON = configuration.getIntOrDefault("CHANGE_TRACK_BUTTON",11);
 exports.TEMPO_BUTTON = configuration.getIntOrDefault("TEMPO_BUTTON",11);
 exports.SHIFT_BUTTON = configuration.getIntOrDefault("SHIFT_BUTTON",18);
+exports.SHIFT_2_BUTTON = configuration.getIntOrDefault("SHIFT_2_BUTTON",11);
 
 exports.COLOR_1 = configuration.getIntOrDefault("COLOR_1",26);
 exports.COLOR_2 = configuration.getIntOrDefault("COLOR_2", 100);
