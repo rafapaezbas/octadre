@@ -55,13 +55,13 @@ exports.changeTempo = (button,state,scenes) => {
 }
 
 exports.chainScenes = (state,scenes) => {
-	/*
-	var scene = state.sceneButtons.indexOf(state.pressedButtons[1]);
-	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == SHIFT_BUTTON && scene != -1){
-		state.chainMode = true;
-		state.scenesChain.push(scene);
+	if(state.pressedButtons[0] == cons.SHIFT_BUTTON){
+		var scene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[1]);
+		if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && scene != -1){
+			state.chainMode = true;
+			state.scenesChain.push(scene);
+		}
 	}
-	*/
 }
 
 const resetSceneChain = (state) => {

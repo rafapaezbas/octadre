@@ -2,8 +2,8 @@ Test sysex message //DONE
 Bank of tests with timestamps for sysex vs midi message //DONE
 only easy midi in main //DONE
 if sysex is fast enough chang architecture to "full render" //DONE
-fix chain scenes
+fix chain scenes //DONE
 fix cursor //DONE
-change of scene by shift+mute
+change of scene by shift+mute //DONE
 midi note off
 polyrythm (SHIFT2+note)
