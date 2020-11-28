@@ -1,20 +1,22 @@
+const cons = require('./constants');
+
 exports.toogleStep = (button,state,scenes) => {
-	state.lastPressedStep = scenes[state.currentScene].tracks[state.currentTrack].grid.indexOf(button);
-	var step = scenes[state.currentScene].tracks[state.currentTrack].grid.indexOf(button);
+	var step = cons.BIG_GRID.indexOf(button);
 	if(step != -1){
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active ^= true;
+		state.lastPressedStep = step;
 	}
 }
 
 exports.toogleNote = (button,state,scenes) => {
-	var note = state.innerGrid.indexOf(button);
+	var note = cons.INNER_GRID.indexOf(button);
 	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes[note] ^= true;
 }
 
-exports.showNotes = (pressedButtons,state,scenes) => {
-	var step = bigGrid.indexOf(pressedButtons[1]);
-	if(step != -1 && pressedButtons[0] == SHIFT_BUTTON){
-		state.lastPressedStep = scenes[state.currentScene].tracks[state.currentTrack].grid.indexOf(pressedButtons[1]);
+exports.showNotes = (state,scenes) => {
+	var step = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
+	if(step != -1 && state.pressedButtons[0] == cons.SHIFT_BUTTON){
+		state.lastPressedStep = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
 	}
 }
 
@@ -23,21 +25,21 @@ exports.changeTrack = (button,state,scenes) => {
 }
 
 exports.toogleMute = (button,state,scenes) => {
-	var track = state.muteButtons.indexOf(button);
+	var track = cons.MUTE_BUTTONS.indexOf(button);
 	if(track != -1){
-		scenes[state.currentScene].tracks[track].muted = !scenes[state.currentScene].tracks[track].muted;
+		scenes[state.currentScene].tracks[track].muted ^= true;
 	}
 }
 
 exports.changeScene = (button,state,scenes) => {
 	var prevScene = state.currentScene;
-	state.currentScene = state.sceneButtons.indexOf(button);
+	state.currentScene = cons.SCENE_BUTTONS.indexOf(button);
 	resetSceneChain(state);
 }
 
 exports.copyScene = (state,scenes) => {
-	var originScene = state.sceneButtons.indexOf(state.pressedButtons[0]);
-	var targetScene = state.sceneButtons.indexOf(state.pressedButtons[1]);
+	var originScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[0]);
+	var targetScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[1]);
 	if(originScene != -1 && targetScene != -1){
 		scenes[targetScene] = JSON.parse(JSON.stringify(scenes[originScene])); // Dirty trick for object deep copy by value
 	}

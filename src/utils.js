@@ -31,6 +31,7 @@ exports.config = (path) => {
 		getInt : (key) => parseInt(config[key]),
 		getArray : (key) => config[key].split(','),
 		getIntOrDefault : (key,defaultValue) => isNaN(parseInt(config[key])) ? defaultValue : parseInt(config[key]),
+		getArrayOrDefault : (key,length,defaultValue) => config[key].split(',').length != length ? defaultValue : config[key].split(',').map(e => parseInt(e,10)),
 	}
 }
 
