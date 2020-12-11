@@ -3,7 +3,6 @@ const async = require('async');
 
 exports.playNextStep = (state,scenes,output) => {
 	var tasks = [];
-	var scene = getPlayingScene(state);
 	sendNoteOn(state,scenes,output,tasks);
 	sendNoteOff(state,output,tasks);
 	async.parallel(tasks,(error,results) => {});
@@ -21,6 +20,7 @@ exports.resetClock = (state) => {
 };
 
 const sendNoteOn = (state,scenes,output, tasks) => {
+	var scene = getPlayingScene(state);
 	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (state.currentStep * t.tempoModifier);
 		var step = t.pattern[trackCurrentStep % t.trackLength];
@@ -47,7 +47,7 @@ const sendNoteOff = (state,output,tasks) => {
 			});
 		}
 	});
-	state.midiNotesQueue = state.midiNotesQueue.filter(e => e.state.clockTick - e.clockTick < e.length * state.clockResolution);
+	state.midiNotesQueue = state.midiNotesQueue.filter(e => state.clockTick - e.clockTick < e.length * state.clockResolution);
 };
 
 const getPlayingScene = (state) => {
