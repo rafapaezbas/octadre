@@ -12,7 +12,6 @@
   "dependencies": {
     "async": "^3.2.0",
     "easymidi": "^2.0.1",
-    "midi": "^1.0.0",
     "pkg": "^4.4.9"
   }
 }

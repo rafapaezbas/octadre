@@ -42,7 +42,9 @@ var state =  {
 	currentSceneInChain:-1,
 	chainMode:false,
 	clockTick : -1,
+	clockResolution : 6, //Number of ticks per step
 	resetClockTimeout : undefined,
+	midiNotesQueue:[],
 };
 
 clockInput.on('clock', function () {
