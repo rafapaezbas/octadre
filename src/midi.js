@@ -2,10 +2,8 @@ const async = require('async');
 
 
 exports.playNextStep = (state,scenes,output) => {
-	var tasks = [];
-	sendNoteOn(state,scenes,output,tasks);
-	sendNoteOff(state,output,tasks);
-	async.parallel(tasks,(error,results) => {});
+	sendNoteOff(state,output);
+	sendNoteOn(state,scenes,output);
 }
 
 exports.resetClock = (state) => {
@@ -19,7 +17,8 @@ exports.resetClock = (state) => {
 
 };
 
-const sendNoteOn = (state,scenes,output, tasks) => {
+const sendNoteOn = (state,scenes,output) => {
+	var tasks = [];
 	var scene = getPlayingScene(state);
 	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (state.currentStep * t.tempoModifier);
@@ -36,9 +35,11 @@ const sendNoteOn = (state,scenes,output, tasks) => {
 			});
 		}
 	});
+	async.parallel(tasks,(error,results) => {});
 };
 
-const sendNoteOff = (state,output,tasks) => {
+const sendNoteOff = (state,output) => {
+	var tasks = [];
 	state.midiNotesQueue.map((e) => {
 		if(state.clockTick - e.clockTick >= e.length * state.clockResolution) {
 			tasks.push((callback) => {
@@ -48,6 +49,7 @@ const sendNoteOff = (state,output,tasks) => {
 		}
 	});
 	state.midiNotesQueue = state.midiNotesQueue.filter(e => state.clockTick - e.clockTick < e.length * state.clockResolution);
+	async.parallel(tasks,(error,results) => {});
 };
 
 const getPlayingScene = (state) => {
