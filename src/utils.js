@@ -33,7 +33,7 @@ exports.config = (path) => {
 		getIntOrDefault : (key,defaultValue) => isNaN(parseInt(config[key])) ? defaultValue : parseInt(config[key]),
 		getArrayOrDefault : (key,length,defaultValue) => config[key].split(',').length != length ? defaultValue : config[key].split(',').map(e => parseInt(e,10)),
 	}
-}
+};
 
 var initConfig = (path) => {
 	var file = require('fs').readFileSync(path, 'utf-8').split(/\r?\n/);

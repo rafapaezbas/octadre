@@ -1,7 +1,7 @@
 const utils = require('./utils');
 const configuration = utils.config('config.conf');
 
-exports.TEMPO_BUTTON = configuration.getIntOrDefault("TEMPO_BUTTON",11);
+exports.TEMPO_BUTTON = configuration.getIntOrDefault("TEMPO_BUTTON",88);
 exports.SHIFT_BUTTON = configuration.getIntOrDefault("SHIFT_BUTTON",18);
 exports.SHIFT_2_BUTTON = configuration.getIntOrDefault("SHIFT_2_BUTTON",11);
 

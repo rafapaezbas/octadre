@@ -1,7 +1,8 @@
 const utils = require('./utils');
 const cons = require('./constants');
 
-const header = [ 240, 00, 32, 41, 2, 24,10 ];
+const header = [ 240, 00, 32, 41, 2, 24, 10 ];
+const flashHeader = [ 240, 00, 32, 41, 2, 24, 40 , 0 ];
 
 exports.render = (output,scenes,state) => {
 	var sysex = []
@@ -9,8 +10,10 @@ exports.render = (output,scenes,state) => {
 	var mutesMessage = generateMutesMessage(scenes,state);
 	var notesMessage = generateNotesMessage(scenes,state);
 	var scenesMessage = generateScenesMessage(scenes,state);
+	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
 	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(notesMessage).concat([247]);
 	output.send('sysex',message);
+	output.send('sysex',flashLastPressedStepMessage);
 	return message;
 };
 
@@ -64,9 +67,16 @@ const generateScenesMessage = (scenes,state) => {
 	},[]);
 };
 
+const flashLastPressedStep = (scenes, state) => {
+	var sysex = [];
+	var stepButton = cons.BIG_GRID[state.lastPressedStep];
+	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
+	var color = currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_2 : currentTrack.color;
+	return sysex.concat(flashHeader).concat([stepButton, color]).concat([247]);
+};
+
 const resetStepMessage = (step,state,scenes) => {
 	var trackColor = scenes[state.currentScene].tracks[state.currentTrack].color;
 	var color = scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active ? cons.COLOR_2 : trackColor;
 	return [cons.BIG_GRID[step], color];
 }
-

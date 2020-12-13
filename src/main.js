@@ -61,11 +61,8 @@ input.on('noteon', (message) => {
 	var pressed = message.velocity == 127;
 	var button = message.note;
 	state.pressedButtons.push(button);
-	if(pressed && state.pressedButtons.length == 1 && controller[button] != undefined){
-		controller[button](button,state,scenes);
-	}
-	if(pressed && state.pressedButtons.length > 1 && secondaryController[state.pressedButtons[1]] != undefined){
-		secondaryController[button].map(f => f(state,scenes));
+	if(pressed && controller[button] != undefined){
+		controller[button].map(f => f(state,scenes));
 	}
 	if(!pressed){
 		state.pressedButtons = state.pressedButtons.filter(b => b != button);
@@ -76,17 +73,11 @@ input.on('noteon', (message) => {
 
 // Setup simple controller
 var controller = [];
-controller[cons.TEMPO_BUTTON] = lib.changeTempo;
-cons.BIG_GRID.map(e => controller[e] = lib.toogleStep);
-cons.INNER_GRID.map(e => controller[e] = lib.toogleNote);
-cons.MUTE_BUTTONS.map(e => controller[e] = lib.toogleMute);
-cons.SCENE_BUTTONS.map(e => controller[e] = lib.changeScene);
-
-//Setup secondary controller, this controller is for multi-button presses
-var secondaryController = [];
-cons.SCENE_BUTTONS.map(e => secondaryController[e] = [lib.copyScene,lib.chainScenes]);
-cons.BIG_GRID.map(e => secondaryController[e] = [lib.showNotes,lib.changeTrackLength]);
-cons.MUTE_BUTTONS.map(e => secondaryController[e] = [lib.changeTrack]);
+controller[cons.TEMPO_BUTTON] = [lib.changeTempo];
+cons.INNER_GRID.map(e => controller[e] = [lib.toogleNote]);
+cons.SCENE_BUTTONS.map(e => controller[e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
+cons.BIG_GRID.map(e => controller[e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
+cons.MUTE_BUTTONS.map(e => controller[e] = [lib.toogleMute,lib.changeTrack]);
 
 //Initial render
 render.render(launchpadOutput,scenes,state);
