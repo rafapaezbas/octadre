@@ -74,11 +74,30 @@ exports.changeTrackLength = (state,scenes) => {
 	}
 };
 
+exports.undo = (state,scenes) => {
+	if(state.pressedButtons.length == 2 && isUndo(state.pressedButtons) && state.scenesStack.length > 0){
+		prevScenes = state.scenesStack.shift();
+		for(var i = 0; i < scenes.length; i++){
+			scenes[i] = prevScenes[i];
+		}
+	}
+};
+
+exports.addScenesToStack = (button, state, scenes) =>  {
+	if(button != cons.SHIFT_2_BUTTON && button != cons.SHIFT_BUTTON && !isSceneButton(button) && !isTrackChange(state.pressedButtons)
+	   || isSceneCopy(state.pressedButtons)){
+		state.scenesStack.unshift(JSON.parse(JSON.stringify(scenes))); //Push scenes in the first place of the stack
+		if(state.scenesStack.length > cons.SCENE_STACK_LIMIT){
+			state.scenesStack.pop(); //Remove last element
+		}
+	}
+};
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = -1;
 	state.scenesChain = [];
-}
+};
 
 const isBigGrid = (button) => {
 	return cons.BIG_GRID.indexOf(button) != -1;
@@ -91,3 +110,16 @@ const isMuteButton = (button) => {
 const isSceneButton = (button) => {
 	return cons.SCENE_BUTTONS.indexOf(button) != -1;
 };
+
+const isUndo = (pressedButtons) => {
+	return (pressedButtons[0] == cons.SHIFT_BUTTON || pressedButtons[1] == cons.SHIFT_BUTTON) &&
+		(pressedButtons[0] == cons.SHIFT_2_BUTTON || pressedButtons[1] == cons.SHIFT_2_BUTTON);
+};
+
+const isSceneCopy = (pressedButtons) => {
+	return pressedButtons.length == 2 && isSceneButton(pressedButtons[0]) && isSceneButton(pressedButtons[1]);
+};
+
+const isTrackChange = (pressedButtons) => {
+	return pressedButtons.length == 2 && pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(pressedButtons[1]);
+}

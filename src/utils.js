@@ -47,5 +47,4 @@ var initConfig = (path) => {
 		}
 	});
 	return config;
-}
-
+};

@@ -45,6 +45,7 @@ var state =  {
 	clockResolution : 6, //Number of ticks per step
 	resetClockTimeout : undefined,
 	midiNotesQueue:[],
+	scenesStack: [],
 };
 
 clockInput.on('clock', function () {
@@ -62,6 +63,7 @@ input.on('noteon', (message) => {
 	var button = message.note;
 	state.pressedButtons.push(button);
 	if(pressed && controller[button] != undefined){
+		lib.addScenesToStack(button, state, scenes);
 		controller[button].map(f => f(state,scenes));
 	}
 	if(!pressed){
@@ -78,6 +80,8 @@ cons.INNER_GRID.map(e => controller[e] = [lib.toogleNote]);
 cons.SCENE_BUTTONS.map(e => controller[e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
 cons.BIG_GRID.map(e => controller[e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
 cons.MUTE_BUTTONS.map(e => controller[e] = [lib.toogleMute,lib.changeTrack]);
+controller[cons.SHIFT_BUTTON] = [lib.undo];
+controller[cons.SHIFT_2_BUTTON] = [lib.undo];
 
 //Initial render
 render.render(launchpadOutput,scenes,state);

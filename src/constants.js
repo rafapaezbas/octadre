@@ -22,3 +22,5 @@ exports.MUTE_BUTTONS = configuration.getArrayOrDefault("MUTE_BUTTONS",8,[89,79,6
 exports.SCENE_BUTTONS = configuration.getArrayOrDefault("SCENE_BUTTONS",4,[54,55,44,45]);
 exports.BIG_GRID = configuration.getArrayOrDefault("BIG_GRID",16,[14,23,32,41,51,62,73,84,85,76,67,58,48,37,26,15]);
 exports.INNER_GRID = configuration.getArrayOrDefault("INNER_GRID",12,[24,33,42,52,63,74,75,66,57,47,36,25]);
+
+exports.SCENE_STACK_LIMIT = configuration.getIntOrDefault("SCENE_STACK_LIMIT",5);
