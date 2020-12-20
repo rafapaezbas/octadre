@@ -26,9 +26,11 @@ exports.lightCurrentStep = (output,state,scenes) => {
 		var sysex = [];
 		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_4]).concat([247]);
 		output.send('sysex',message);
-		return message;
 	}
-
+	if(prevStep % trackLength == state.lastPressedStep){
+		var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
+		output.send('sysex',flashLastPressedStepMessage);
+	}
 }
 
 const generateStepsMessage = (scenes,state) => {

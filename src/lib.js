@@ -2,10 +2,11 @@ const cons = require('./constants');
 const utils = require('./utils');
 
 exports.toogleStep = (state,scenes) => {
-	if(state.pressedButtons.length == 1 && isBigGrid(state.pressedButtons[0])){
-		var step = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
+	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
+	var step = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
+	if(state.pressedButtons.length == 1 && isBigGrid(state.pressedButtons[0]) && currentTrack.trackLength > step ){
 		state.lastPressedStep = step;
-		scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active ^= true;
+		currentTrack.pattern[step].active ^= true;
 	}
 };
 
@@ -122,4 +123,4 @@ const isSceneCopy = (pressedButtons) => {
 
 const isTrackChange = (pressedButtons) => {
 	return pressedButtons.length == 2 && pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(pressedButtons[1]);
-}
+};
