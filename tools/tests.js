@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('../src/utils');
 const tests = [];
 
 const run = () => {
@@ -60,5 +60,15 @@ addTest(() => {
 	var configuration = utils.config('config.conf');
 	return configuration.getIntOrDefault('non-existing-key', 22) + 1 == 23;
 }, "Configuration should get default number");
+
+addTest(() => {
+	var result = utils.shiftPatternRight([1,2,3,4,5,6]);
+	return JSON.stringify(result) == "[6,1,2,3,4,5]";
+}, "Shift right should work");
+
+addTest(() => {
+	var result = utils.shiftPatternLeft([1,2,3,4,5,6]);
+	return JSON.stringify(result) == "[2,3,4,5,6,1]";
+}, "Shift left should work");
 
 run();

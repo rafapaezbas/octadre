@@ -94,6 +94,20 @@ exports.addScenesToStack = (button, state, scenes) =>  {
 	}
 };
 
+exports.shiftPatternRight = (state,scenes) => {
+	if(state.pressedButtons.length == 1 && state.pressedButtons[0] == cons.RIGHT_ARROW_BUTTON){
+		var shiftedPattern = utils.shiftPatternRight(scenes[state.currentScene].tracks[state.currentTrack].pattern);
+		utils.copyArray(shiftedPattern,scenes[state.currentScene].tracks[state.currentTrack].pattern);
+	}
+};
+
+exports.shiftPatternLeft = (state,scenes) => {
+	if(state.pressedButtons.length == 1 && state.pressedButtons[0] == cons.LEFT_ARROW_BUTTON){
+		var shiftedPattern = utils.shiftPatternLeft(scenes[state.currentScene].tracks[state.currentTrack].pattern);
+		utils.copyArray(shiftedPattern,scenes[state.currentScene].tracks[state.currentTrack].pattern);
+	}
+};
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = -1;

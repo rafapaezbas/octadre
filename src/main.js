@@ -61,6 +61,16 @@ clockInput.on('clock', function () {
 input.on('noteon', (message) => {
 	var pressed = message.velocity == 127;
 	var button = message.note;
+	update(pressed, button);
+});
+
+input.on('cc', (message) => {
+	var pressed = message.value == 127;
+	var button = message.controller;
+	update(pressed, button);
+});
+
+var update = (pressed, button) => {
 	state.pressedButtons.push(button);
 	if(pressed && controller[button] != undefined){
 		lib.addScenesToStack(button, state, scenes);
@@ -71,7 +81,7 @@ input.on('noteon', (message) => {
 	}else{
 		render.render(launchpadOutput,scenes,state);
 	}
-});
+};
 
 // Setup simple controller
 var controller = [];
@@ -82,6 +92,8 @@ cons.BIG_GRID.map(e => controller[e] = [lib.toogleStep,lib.showNotes,lib.changeT
 cons.MUTE_BUTTONS.map(e => controller[e] = [lib.toogleMute,lib.changeTrack]);
 controller[cons.SHIFT_BUTTON] = [lib.undo];
 controller[cons.SHIFT_2_BUTTON] = [lib.undo];
+controller[cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight];
+controller[cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft];
 
 //Initial render
 render.render(launchpadOutput,scenes,state);

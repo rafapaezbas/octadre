@@ -8,8 +8,10 @@ exports.getLaunchpadPort = (ports) => {
 }
 
 exports.getNormalPort = (ports) => {
+	console.log(ports);
 	for(var i = 0; i < ports.length; i++){
 		if(ports[i].indexOf("Launchpad") == -1 && ports[i].indexOf("Microsoft") == -1){
+			console.log("i/o: " + ports[i]);
 			return ports[i];
 		}
 	}
@@ -20,9 +22,27 @@ exports.substractArray = (a,b) => {
 	return a.map((e,i) => e - b[i]);
 }
 
+exports.copyArray = (or,dest) => {
+	for(var i = 0; i < or.length; i++){
+		dest[i] = or[i];
+	}
+}
+
 exports.isInt = (n) => {
 	return Number(n) === n && n % 1 === 0;
 }
+
+exports.shiftPatternRight = (arr) => {
+	arr.unshift(arr[arr.length - 1]); //Insert last element as first
+	arr.pop(); //Remove last
+	return arr;
+};
+
+exports.shiftPatternLeft = (arr) => {
+	arr.push(arr[0]); //Push first element in the end
+	arr.shift(); //Remove first
+	return arr;
+};
 
 exports.config = (path) => {
 	var config = initConfig(path);

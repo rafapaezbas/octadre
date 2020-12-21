@@ -10,8 +10,9 @@ exports.render = (output,scenes,state) => {
 	var mutesMessage = generateMutesMessage(scenes,state);
 	var notesMessage = generateNotesMessage(scenes,state);
 	var scenesMessage = generateScenesMessage(scenes,state);
+	var arrowMessage = generateArrowMessage();
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(notesMessage).concat([247]);
+	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(notesMessage).concat(arrowMessage).concat([247]);
 	output.send('sysex',message);
 	output.send('sysex',flashLastPressedStepMessage);
 	return message;
@@ -68,6 +69,10 @@ const generateScenesMessage = (scenes,state) => {
 		return acc;
 	},[]);
 };
+
+const generateArrowMessage = () => {
+	return [cons.LEFT_ARROW_BUTTON, cons.COLOR_6,cons.RIGHT_ARROW_BUTTON, cons.COLOR_6];
+}
 
 const flashLastPressedStep = (scenes, state) => {
 	var sysex = [];

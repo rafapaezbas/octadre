@@ -4,6 +4,8 @@ const configuration = utils.config('config.conf');
 exports.TEMPO_BUTTON = configuration.getIntOrDefault("TEMPO_BUTTON",88);
 exports.SHIFT_BUTTON = configuration.getIntOrDefault("SHIFT_BUTTON",18);
 exports.SHIFT_2_BUTTON = configuration.getIntOrDefault("SHIFT_2_BUTTON",11);
+exports.LEFT_ARROW_BUTTON = configuration.getIntOrDefault("LEFT_ARROW_BUTTON", 106);
+exports.RIGHT_ARROW_BUTTON = configuration.getIntOrDefault("RIGHT_ARROW_BUTTON", 107);
 
 exports.COLOR_1 = configuration.getIntOrDefault("COLOR_1",26);
 exports.COLOR_2 = configuration.getIntOrDefault("COLOR_2", 100);
