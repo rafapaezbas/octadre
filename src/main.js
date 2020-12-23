@@ -5,10 +5,10 @@ const lib = require('./lib');
 const midi = require('./midi');
 const cons = require('./constants');
 
+const output = new easymidi.Output(utils.getNormalPort("Select midi output: ", easymidi.getOutputs()));
+const clockInput = new easymidi.Input(utils.getNormalPort("Select midi clock input: ", easymidi.getInputs()));
 const launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
 const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
-const output = new easymidi.Output(utils.getNormalPort(easymidi.getOutputs()));
-const clockInput = new easymidi.Input(utils.getNormalPort(easymidi.getInputs()));
 const scenes = [];
 
 for(var i = 0; i < 4; i++){
@@ -92,8 +92,8 @@ cons.BIG_GRID.map(e => controller[e] = [lib.toogleStep,lib.showNotes,lib.changeT
 cons.MUTE_BUTTONS.map(e => controller[e] = [lib.toogleMute,lib.changeTrack]);
 controller[cons.SHIFT_BUTTON] = [lib.undo];
 controller[cons.SHIFT_2_BUTTON] = [lib.undo];
-controller[cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight];
-controller[cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft];
+controller[cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
+controller[cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
 
 //Initial render
 render.render(launchpadOutput,scenes,state);

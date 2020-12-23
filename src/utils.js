@@ -1,3 +1,5 @@
+const reader = require("readline-sync");
+
 exports.getLaunchpadPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
 		if(ports[i].indexOf("Launchpad") != -1){
@@ -7,15 +9,10 @@ exports.getLaunchpadPort = (ports) => {
 	console.log("No MK2:Launchpad midi i/o found");
 }
 
-exports.getNormalPort = (ports) => {
-	console.log(ports);
-	for(var i = 0; i < ports.length; i++){
-		if(ports[i].indexOf("Launchpad") == -1 && ports[i].indexOf("Microsoft") == -1){
-			console.log("i/o: " + ports[i]);
-			return ports[i];
-		}
-	}
-	console.log("No midi i/o found");
+exports.getNormalPort = (message, ports) => {
+	var io = ports.map((e,i) => i + ': ' + e + '\n' + ' ').reduce((acc,e) => acc + e, ' ');
+	var input = reader.question('\n' + io + message);
+	return ports[input];
 }
 
 exports.substractArray = (a,b) => {
@@ -42,6 +39,13 @@ exports.shiftPatternLeft = (arr) => {
 	arr.push(arr[0]); //Push first element in the end
 	arr.shift(); //Remove first
 	return arr;
+};
+
+exports.createRandomPattern = (patternLength) => {
+	var max = 2 ** patternLength - 1;
+	var pattern = Math.floor(Math.random() * max).toString(2);
+	var completePattern = "0".repeat(patternLength - pattern.length) + pattern;
+	return completePattern;
 };
 
 exports.config = (path) => {

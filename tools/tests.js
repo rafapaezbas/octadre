@@ -71,4 +71,16 @@ addTest(() => {
 	return JSON.stringify(result) == "[2,3,4,5,6,1]";
 }, "Shift left should work");
 
+addTest(() => {
+	var result = utils.createRandomPattern(16);
+	console.log(result);
+	return result.length == 16;
+}, "Random pattern must have patternLength number of characters.");
+
+addTest(() => {
+	var result = utils.createRandomPattern(6);
+	console.log(result);
+	return result.length == 6;
+}, "Random pattern must have patternLength number of characters.");
+
 run();

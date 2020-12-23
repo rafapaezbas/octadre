@@ -108,6 +108,15 @@ exports.shiftPatternLeft = (state,scenes) => {
 	}
 };
 
+exports.randomPattern = (state,scenes) => {
+	if(state.pressedButtons.length = 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && isArrowButton(state.pressedButtons[1])){
+		var trackLength = Math.floor(Math.random() * 16) + 1; //range 1-16
+		var randomPattern = utils.createRandomPattern(trackLength); //return string with binary representation of random pattern
+		scenes[state.currentScene].tracks[state.currentTrack].trackLength = trackLength;
+		randomPattern.split('').map((e,i) => scenes[state.currentScene].tracks[state.currentTrack].pattern[i].active = e == true);
+	}
+};
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = -1;
@@ -137,4 +146,7 @@ const isSceneCopy = (pressedButtons) => {
 
 const isTrackChange = (pressedButtons) => {
 	return pressedButtons.length == 2 && pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(pressedButtons[1]);
+};
+const isArrowButton = (button) => {
+	return button == cons.RIGHT_ARROW_BUTTON || button == cons.LEFT_ARROW_BUTTON;
 };
