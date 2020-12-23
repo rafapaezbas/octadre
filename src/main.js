@@ -7,6 +7,9 @@ const cons = require('./constants');
 
 const output = new easymidi.Output(utils.getNormalPort("Select midi output: ", easymidi.getOutputs()));
 const clockInput = new easymidi.Input(utils.getNormalPort("Select midi clock input: ", easymidi.getInputs()));
+
+console.log('\n Seq is ready! \n');
+
 const launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
 const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 const scenes = [];
