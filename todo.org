@@ -1,0 +1,6 @@
+* Tasks
+** TODO Random pattern
+ Branch: feature/random-pattern
+** TODO Octave up/down
+** TODO Free midi
+** TODO Notes play
