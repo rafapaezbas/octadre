@@ -4,14 +4,15 @@ const render = require('./render');
 const lib = require('./lib');
 const midi = require('./midi');
 const cons = require('./constants');
+const chords = require('./chords');
 
 const output = new easymidi.Output(utils.getNormalPort("Select midi output: ", easymidi.getOutputs()));
 const clockInput = new easymidi.Input(utils.getNormalPort("Select midi clock input: ", easymidi.getInputs()));
+const launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
+const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 
 console.log('\n Seq is ready! \n');
 
-const launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
-const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 const scenes = [];
 
 for(var i = 0; i < 4; i++){
@@ -49,7 +50,12 @@ var state =  {
 	resetClockTimeout : undefined,
 	midiNotesQueue:[],
 	scenesStack: [],
+	chords: [],
+	mode : 'seq',
+	renderReset : false,
 };
+
+state.chords = chords.createChords();
 
 clockInput.on('clock', function () {
 	state.clockTick++;
@@ -73,11 +79,24 @@ input.on('cc', (message) => {
 	update(pressed, button);
 });
 
-var update = (pressed, button) => {
+const update = (pressed, button) => {
+	switch(state.mode){
+	case 'seq':
+		updateSeqMode(pressed, button);
+		break;
+	case 'chords':
+		updateChordMode(pressed, button);
+		break;
+	default:
+		break;
+	}
+}
+
+const updateSeqMode = (pressed, button) => {
 	state.pressedButtons.push(button);
-	if(pressed && controller[button] != undefined){
+	if(pressed && controller[state.mode][button] != undefined){
 		lib.addScenesToStack(button, state, scenes);
-		controller[button].map(f => f(state,scenes));
+		controller[state.mode][button].map(f => f(state,scenes));
 	}
 	if(!pressed){
 		state.pressedButtons = state.pressedButtons.filter(b => b != button);
@@ -86,17 +105,37 @@ var update = (pressed, button) => {
 	}
 };
 
+const updateChordMode = (pressed, button) => {
+	if(pressed){
+		if(state.chords[button] != undefined){
+			state.chords[button].map(n => output.send('noteon', {note:n, velocity:127, channel:1}));
+		}
+		if(controller[state.mode][button] != undefined){
+			controller[state.mode][button].map(f => f(state,scenes));
+		}
+	}else{
+		if(state.chords[button] != undefined){
+			state.chords[button].map(n => output.send('noteoff', {note:n, velocity:127, channel:1}));
+		}
+	}
+	render.render(launchpadOutput,scenes,state);
+};
+
 // Setup simple controller
 var controller = [];
-controller[cons.TEMPO_BUTTON] = [lib.changeTempo];
-cons.INNER_GRID.map(e => controller[e] = [lib.toogleNote]);
-cons.SCENE_BUTTONS.map(e => controller[e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
-cons.BIG_GRID.map(e => controller[e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
-cons.MUTE_BUTTONS.map(e => controller[e] = [lib.toogleMute,lib.changeTrack]);
-controller[cons.SHIFT_BUTTON] = [lib.undo];
-controller[cons.SHIFT_2_BUTTON] = [lib.undo];
-controller[cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
-controller[cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
+controller['seq'] = [];
+controller['chords'] = [];
+controller['seq'][cons.TEMPO_BUTTON] = [lib.changeTempo];
+cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
+cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
+cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
+cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);
+controller['seq'][cons.SHIFT_BUTTON] = [lib.undo];
+controller['seq'][cons.SHIFT_2_BUTTON] = [lib.undo];
+controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
+controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
+controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode]
+controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
 
 //Initial render
 render.render(launchpadOutput,scenes,state);

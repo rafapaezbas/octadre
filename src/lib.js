@@ -117,6 +117,20 @@ exports.randomPattern = (state,scenes) => {
 	}
 };
 
+exports.toogleMode = (state,scenes) => {
+	switch(state.mode){
+	case 'seq':
+		state.mode = 'chords';
+		break;
+	case 'chords':
+		state.mode = 'seq';
+		state.renderReset = true;
+		break;
+	default:
+		break;
+	}
+};
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = -1;
