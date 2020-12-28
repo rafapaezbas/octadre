@@ -1,4 +1,5 @@
 const async = require('async');
+const cons = require('./constants');
 
 
 exports.playNextStep = (state,scenes,output) => {
@@ -27,8 +28,9 @@ const sendNoteOn = (state,scenes,output) => {
 			step.notes.map((n,i) => {
 				if(n) {
 					tasks.push((callback) => {
-						output.send('noteon', {note: t.midiRoot + i,velocity: 127,channel: t.channel});
-						state.midiNotesQueue.push({clockTick: state.clockTick, length: 1, note: t.midiRoot + i, channel: t.channel});
+						var midi = midiSignal(t,i);
+						output.send('noteon', midi);
+						state.midiNotesQueue.push({clockTick: state.clockTick, length: 1, note: midi.note , channel: midi.channel});
 						callback();
 					});
 				}
@@ -58,3 +60,10 @@ const getPlayingScene = (state) => {
 	return state.chainMode ? nextScene : state.currentScene;
 }
 
+const midiSignal = (t,i) => {
+	if(!cons.MPC_MODE) {
+		return {note: t.midiRoot + i,velocity: 127,channel: t.channel};
+	}else{
+		return {note: t.midiRoot + t.channel,velocity: 127,channel: 0}; //t.midiRoot + t.channel just a way to number track number...
+	}
+}
