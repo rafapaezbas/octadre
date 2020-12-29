@@ -30,7 +30,7 @@ for(var i = 0; i < 4; i++){
 scenes.map(s => {
 	s.tracks.map(t => {
 		for(var i = 0; i < 16; i++){
-			t.pattern.push({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0]}); // Default note is root
+			t.pattern.push({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[]}); // Default note is root
 
 		}
 	})
@@ -62,8 +62,10 @@ clockInput.on('clock', function () {
 	midi.resetClock(state);
 	if(state.clockTick % 6 == 0){
 		midi.playNextStep(state,scenes,output);
-		render.lightCurrentStep(launchpadOutput,state,scenes);
 		state.currentStep++;
+		if(state.mode == 'seq') {
+			render.lightCurrentStep(launchpadOutput,state,scenes);
+		}
 	}
 });
 
@@ -94,9 +96,9 @@ const update = (pressed, button) => {
 
 const updateSeqMode = (pressed, button) => {
 	state.pressedButtons.push(button);
-	if(pressed && controller[state.mode][button] != undefined){
+	if(pressed && controller['seq'][button] != undefined){
 		lib.addScenesToStack(button, state, scenes);
-		controller[state.mode][button].map(f => f(state,scenes));
+		controller['seq'][button].map(f => f(state,scenes));
 	}
 	if(!pressed){
 		state.pressedButtons = state.pressedButtons.filter(b => b != button);
@@ -107,16 +109,18 @@ const updateSeqMode = (pressed, button) => {
 
 const updateChordMode = (pressed, button) => {
 	if(pressed){
+		state.pressedButtons.push(button);
 		if(state.chords[button] != undefined){
-			state.chords[button].map(n => output.send('noteon', {note:n, velocity:127, channel:1}));
+			state.chords[button].map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 		}
-		if(controller[state.mode][button] != undefined){
-			controller[state.mode][button].map(f => f(state,scenes));
+		if(controller['chords'][button] != undefined){
+			controller['chords'][button].map(f => f(state,scenes));
 		}
 	}else{
 		if(state.chords[button] != undefined){
-			state.chords[button].map(n => output.send('noteoff', {note:n, velocity:127, channel:1}));
+			state.chords[button].map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
 		}
+		state.pressedButtons = state.pressedButtons.filter(b => b != button);
 	}
 	render.render(launchpadOutput,scenes,state);
 };
@@ -126,16 +130,18 @@ var controller = [];
 controller['seq'] = [];
 controller['chords'] = [];
 controller['seq'][cons.TEMPO_BUTTON] = [lib.changeTempo];
-cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
-cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
-cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
-cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);
 controller['seq'][cons.SHIFT_BUTTON] = [lib.undo];
 controller['seq'][cons.SHIFT_2_BUTTON] = [lib.undo];
 controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
 controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
 controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode]
+cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
+cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
+cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
+cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);
+
 controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
+cons.GRID.map(e => controller['chords'][e] = [lib.toogleChords]);
 
 //Initial render
 render.render(launchpadOutput,scenes,state);

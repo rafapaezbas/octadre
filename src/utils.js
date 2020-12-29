@@ -48,6 +48,16 @@ exports.createRandomPattern = (patternLength) => {
 	return completePattern;
 };
 
+exports.generateGrid = () => {
+    var grid = [];
+    for(var i = 0; i < 8; i++){
+		for(var j = 0; j < 8; j++){
+			grid.push(11 + (i * 10) + j);
+        }
+    }
+    return grid;
+}
+
 exports.config = (path) => {
 	var config = initConfig(path);
 	return {

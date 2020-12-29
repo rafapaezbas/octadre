@@ -56,7 +56,9 @@ const renderChords = (output,scenes,state) => {
 	var sysex = []
 	var color = cons.COLOR_8;
 	var message = sysex.concat(setAllHeader).concat(color).concat([247]);
+	var chordsMessage = sysex.concat(header).concat(generateChordsMessage(scenes, state)).concat([247]);
 	output.send('sysex',message);
+	output.send('sysex',chordsMessage);
 	return message;
 };
 
@@ -76,6 +78,14 @@ const generateNotesMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes.reduce((acc,e,i) => {
 		acc.push(cons.INNER_GRID[i]);
 		e ? acc.push(7) : acc.push(cons.COLOR_6);
+		return acc;
+	},[]);
+};
+
+const generateChordsMessage = (scenes,state) => {
+	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords.reduce((acc,e,i) => {
+		acc.push(e);
+		acc.push(cons.COLOR_2);
 		return acc;
 	},[]);
 };

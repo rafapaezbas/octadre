@@ -131,6 +131,16 @@ exports.toogleMode = (state,scenes) => {
 	}
 };
 
+exports.toogleChords = (state,scenes) => {
+	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+	var stepChords = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords;
+	if(stepChords.indexOf(lastPressedButton) == -1){
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords.push(lastPressedButton);
+	}else{
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords = stepChords.filter(e => e != lastPressedButton);
+	}
+};
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = -1;

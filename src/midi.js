@@ -33,9 +33,18 @@ const sendNoteOn = (state,scenes,output) => {
 					});
 				}
 			});
+			step.chords.map(n => {
+				state.chords[n].map(e => {
+					tasks.push((callback) => {
+						output.send('noteon', {note: e,velocity: 127,channel: t.channel});
+						state.midiNotesQueue.push({clockTick: state.clockTick, length: 1, note: e, channel: t.channel});
+						callback();
+					});
+				});
+			});
+			async.parallel(tasks,(error,results) => {});
 		}
 	});
-	async.parallel(tasks,(error,results) => {});
 };
 
 const sendNoteOff = (state,output) => {
@@ -57,4 +66,3 @@ const getPlayingScene = (state) => {
 	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[state.currentSceneInChain++ % state.scenesChain.length];
 	return state.chainMode ? nextScene : state.currentScene;
 }
-
