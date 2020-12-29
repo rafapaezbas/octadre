@@ -9,6 +9,7 @@ exports.render = (output,scenes,state) => {
 
 	if(state.renderReset){
 		renderReset(output);
+		state.renderReset = false;
 	}
 
 	switch(state.mode){

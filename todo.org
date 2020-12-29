@@ -4,3 +4,4 @@
 ** TODO Octave up/down
 ** TODO Free midi
 ** TODO Notes play
+** TODO Improve ‘file:./src/midi.js’ - send note on could be refactored to two methods: play step, and play chord
