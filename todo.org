@@ -5,3 +5,14 @@
 ** TODO Free midi
 ** TODO Notes play
 ** TODO Improve ‘file:./src/midi.js’ - send note on could be refactored to two methods: play step, and play chord
+** TODO Chords and scales
+Major scale [x,-,x,-,x,x,-,x,-,x,-,x,x]
+Minor scale [x,-,x,x,-,x,-,x,x,-,x,-,x]
+Grades:
+I 1-3-5
+II 2-4-6
+III 7-3-5
+IV 1-4-6
+V 7-1-5
+VI 1-3-6
+VII 7-2-3

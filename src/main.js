@@ -111,6 +111,7 @@ const updateChordMode = (pressed, button) => {
 	if(pressed){
 		state.pressedButtons.push(button);
 		if(state.chords[button] != undefined){
+			console.log(state.chords[button]);
 			state.chords[button].map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 		}
 		if(controller['chords'][button] != undefined){
