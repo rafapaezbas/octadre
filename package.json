@@ -13,6 +13,7 @@
     "async": "^3.2.0",
     "easymidi": "^2.0.1",
     "pkg": "^4.4.9",
+    "random-seed": "^0.3.0",
     "readline-sync": "^1.4.10"
   }
 }

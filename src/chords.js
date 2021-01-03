@@ -1,9 +1,12 @@
+const utils = require('./utils');
+
 const root = 60;
 
 const scales = [];
 scales[0] = [1,0,1,0,1,1,0,1,0,1,0,1]; // Major scale
 scales[1] = [1,0,1,1,0,1,0,1,1,0,1,0]; // Minor scale
 scales[2] = [1,0,0,1,0,1,1,1,0,0,1,0]; // Blues scale
+scales[3] = [1,0,1,1,0,0,1,1,0,1,0,1]; // Made-up scale
 
 const grades = [];
 grades[0] = [1,3,5,7];
@@ -18,19 +21,22 @@ exports.createChords = () => {
     var chords = [];
     for(var i = 0; i < 100; i++){
         chords[i] = [];
-        var numOfNotes = Math.floor(Math.random() * 5) + 1;
+        var numOfNotes = utils.random(5) + 1;
         for(var j = 0; j < numOfNotes; j++){
-            chords[i][j] = Math.floor(Math.random() * 22) + 40;
+            chords[i][j] = utils.random(22) + 40;
         }
     }
     chords = changeChords(chords);
     return chords;
-}
+};
 
 
 const changeChords = (chords) => {
     for(var i = 0; i < 7; i++){
-        chords[11 + i] = findInScale(grades[i], scales[1], root);
+        chords[11 + i] = findInScale(grades[i], scales[0], root);
+    }
+    for(var i = 0; i < 7; i++){
+        chords[21 + i] = findInScale(grades[i], scales[1], root);
     }
     return chords;
 };
@@ -48,7 +54,7 @@ const openChord = (chord) => {
 };
 
 const randomTransponse = (note) => {
-    if(Math.random() > 0.5){
+    if(utils.random(100) > 50){
         return note + 7;
     }else{
         return note;

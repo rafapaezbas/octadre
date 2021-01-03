@@ -1,4 +1,7 @@
 const reader = require("readline-sync");
+var randomGen = require('random-seed');
+var random = randomGen.create(reader.question("\n Input random seed: "));
+//random.initState();
 
 exports.getLaunchpadPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
@@ -7,27 +10,31 @@ exports.getLaunchpadPort = (ports) => {
 		}
 	}
 	console.log("No MK2:Launchpad midi i/o found");
-}
+};
 
 exports.getNormalPort = (message, ports) => {
 	var io = ports.map((e,i) => i + ': ' + e + '\n' + ' ').reduce((acc,e) => acc + e, ' ');
 	var input = reader.question('\n' + io + message);
 	return ports[input];
-}
+};
+
+exports.random = (max) => {
+	return random(max);
+};
 
 exports.substractArray = (a,b) => {
 	return a.map((e,i) => e - b[i]);
-}
+};
 
 exports.copyArray = (or,dest) => {
 	for(var i = 0; i < or.length; i++){
 		dest[i] = or[i];
 	}
-}
+};
 
 exports.isInt = (n) => {
 	return Number(n) === n && n % 1 === 0;
-}
+};
 
 exports.shiftPatternRight = (arr) => {
 	arr.unshift(arr[arr.length - 1]); //Insert last element as first
@@ -49,14 +56,14 @@ exports.createRandomPattern = (patternLength) => {
 };
 
 exports.generateGrid = () => {
-    var grid = [];
-    for(var i = 0; i < 8; i++){
+	var grid = [];
+	for(var i = 0; i < 8; i++){
 		for(var j = 0; j < 8; j++){
 			grid.push(11 + (i * 10) + j);
-        }
-    }
-    return grid;
-}
+		}
+	}
+	return grid;
+};
 
 exports.config = (path) => {
 	var config = initConfig(path);
