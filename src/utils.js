@@ -89,3 +89,10 @@ var initConfig = (path) => {
 	});
 	return config;
 };
+
+exports.createArray = (length,fill) => {
+	var arr = [];
+	arr.length = length;
+	arr.fill(fill);
+	return arr;
+};

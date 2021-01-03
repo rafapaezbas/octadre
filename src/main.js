@@ -14,7 +14,7 @@ const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 
 
 var controller = [];
-const scenes = [];
+var scenes = [];
 var state =  {
 	pressedButtons:[],
 	currentStep:0,
@@ -110,27 +110,18 @@ const setupState = () => {
 };
 
 const setupScenes = () => {
-	for(var i = 0; i < 4; i++){
-		scenes[i] = {tracks:[]};
-		scenes[i].tracks[0] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_1, muted: false, tempoModifier: 1, channel: 0};
-		scenes[i].tracks[1] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_5, muted: false, tempoModifier: 1, channel: 1};
-		scenes[i].tracks[2] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_3, muted: false, tempoModifier: 1, channel: 2};
-		scenes[i].tracks[3] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_6, muted: false, tempoModifier: 1, channel: 3};
-		scenes[i].tracks[4] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_10, muted: false, tempoModifier: 1, channel: 4};
-		scenes[i].tracks[5] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_11, muted: false, tempoModifier: 1, channel: 5};
-		scenes[i].tracks[6] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_12, muted: false, tempoModifier: 1, channel: 6};
-		scenes[i].tracks[7] = { pattern:[], trackLength:16, midiRoot:64, color: cons.COLOR_9, muted: false, tempoModifier: 1, channel: 7};
-	}
-
-	scenes.map(s => {
-		s.tracks.map(t => {
-			for(var i = 0; i < 16; i++){
-				t.pattern.push({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[]}); // Default note is root
-
-			}
-		})
-	});
+	scenes = utils.createArray(4,{}).map(s => setupSceneTracks());
+	return scenes;
 };
+
+const setupSceneTracks = () => {
+	var trackColors = [cons.COLOR_1,cons.COLOR_3,cons.COLOR_6,cons.COLOR_10,cons.COLOR_11,cons.COLOR_12,cons.COLOR_9];
+	var tracks =  utils.createArray(7,{}).map((t,i) => {
+			const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[]}));
+			return {pattern:pattern, trackLength:16, midiRoot:64, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
+		});
+	return {tracks: tracks};
+}
 
 const setupController = () => {
 	controller['seq'] = [];
