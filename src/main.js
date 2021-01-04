@@ -70,40 +70,47 @@ const update = (pressed, button) => {
 	default:
 		break;
 	}
-}
+};
 
 const updateSeqMode = (pressed, button) => {
-	state.pressedButtons.push(button);
-	if(pressed && controller['seq'][button] != undefined){
-		lib.addScenesToStack(button, state, scenes);
-		controller['seq'][button].map(f => f(state,scenes));
-	}
-	if(!pressed){
-		state.pressedButtons = state.pressedButtons.filter(b => b != button);
+	if(pressed){
+		state.pressedButtons.push(button);
+		if(controller['seq'][button] != undefined){
+			lib.addScenesToStack(button, state, scenes);
+			controller['seq'][button].map(f => f(state,scenes));
+			render.render(launchpadOutput,scenes,state);
+		}
 	}else{
-		render.render(launchpadOutput,scenes,state);
+		state.pressedButtons = state.pressedButtons.filter(b => b != button);
 	}
 };
 
 const updateChordMode = (pressed, button) => {
 	if(pressed){
-		state.pressedButtons.push(button);
-		if(state.chords[button] != undefined){
-			console.log(state.chords[button]);
-			state.chords[button].map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
-		}
-		if(controller['chords'][button] != undefined){
-			controller['chords'][button].map(f => f(state,scenes));
-		}
+		pressedChord(button);
+		render.render(launchpadOutput,scenes,state);
 	}else{
-		if(state.chords[button] != undefined){
-			state.chords[button].map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
-		}
-		state.pressedButtons = state.pressedButtons.filter(b => b != button);
+		unpressedChord(button);
 	}
-	render.render(launchpadOutput,scenes,state);
 };
 
+const pressedChord = (button) => {
+	state.pressedButtons.push(button);
+	if(state.chords[button] != undefined){
+		console.log(state.chords[button]);
+		state.chords[button].map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
+	}
+	if(controller['chords'][button] != undefined){
+		controller['chords'][button].map(f => f(state,scenes));
+	}
+};
+
+const unpressedChord = (button) => {
+	if(state.chords[button] != undefined){
+		state.chords[button].map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
+	}
+	state.pressedButtons = state.pressedButtons.filter(b => b != button);
+};
 
 const setupState = () => {
 	state.chords = chords.createChords();
@@ -115,13 +122,13 @@ const setupScenes = () => {
 };
 
 const setupSceneTracks = () => {
-	var trackColors = [cons.COLOR_1,cons.COLOR_3,cons.COLOR_6,cons.COLOR_10,cons.COLOR_11,cons.COLOR_12,cons.COLOR_9];
-	var tracks =  utils.createArray(7,{}).map((t,i) => {
-			const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[]}));
-			return {pattern:pattern, trackLength:16, midiRoot:64, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
-		});
+	var trackColors = [cons.COLOR_1,cons.COLOR_5,cons.COLOR_3,cons.COLOR_6,cons.COLOR_10,cons.COLOR_11,cons.COLOR_12,cons.COLOR_9];
+	var tracks =  utils.createArray(8,{}).map((t,i) => {
+		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[]}));
+		return {pattern:pattern, trackLength:16, midiRoot:64, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
+	});
 	return {tracks: tracks};
-}
+};
 
 const setupController = () => {
 	controller['seq'] = [];
