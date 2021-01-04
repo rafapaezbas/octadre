@@ -32,16 +32,21 @@ exports.createChords = () => {
 
 
 const changeChords = (chords) => {
-    for(var i = 0; i < 7; i++){
-        chords[11 + i] = findInScale(grades[i], scales[0], root);
-    }
-    for(var i = 0; i < 7; i++){
-        chords[21 + i] = findInScale(grades[i], scales[1], root);
+    const scale = scales[1];
+    const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
+    const offset = 11; //First button value
+    const height = 7;
+    const width = 7;
+    for(var i = 0; i < height; i++ ){
+        for(var j = 0; j < width; j++){
+            chords[(i * 10) + j + offset] = findInScale(grades[j], scale, notes[i]);
+        }
     }
     return chords;
 };
 
 const findInScale = (chord,scale,root) => {
+    utils.randomInitState();
     scale = scale.concat(scale); //Duplicate scale
     const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
     return openChord(chord.map(e => notes[e - 1]));

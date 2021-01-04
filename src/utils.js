@@ -22,6 +22,10 @@ exports.random = (max) => {
 	return random(max);
 };
 
+exports.randomInitState = () => {
+	return random.initState();
+};
+
 exports.substractArray = (a,b) => {
 	return a.map((e,i) => e - b[i]);
 };

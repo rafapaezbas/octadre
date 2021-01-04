@@ -4,8 +4,8 @@
 ** TODO Octave up/down
 ** TODO Free midi
 ** TODO Notes play
-** TODO Improve ‘file:./src/midi.js’ - send note on could be refactored to two methods: play step, and play chord
-** TODO Chords and scales
+** DONE Improve ‘file:./src/midi.js’ - send note on could be refactored to two methods: play step, and play chord
+** DONE Chords and scales
 Major scale [x,-,x,-,x,x,-,x,-,x,-,x,x]
 Minor scale [x,-,x,x,-,x,-,x,x,-,x,-,x]
 Grades:
@@ -16,3 +16,4 @@ IV 1-4-6
 V 7-1-5
 VI 1-3-6
 VII 7-2-3
+** Place scales horizontally
