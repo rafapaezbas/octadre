@@ -1,7 +1,6 @@
 const utils = require('./utils');
 
 const root = 60;
-const chordsPlacement = [0,2,5,1,3,4,6];
 
 const scales = [];
 scales[0] = [1,0,1,0,1,1,0,1,0,1,0,1]; // Major scale
@@ -18,21 +17,10 @@ grades[4] = [5,7,2,4];
 grades[5] = [6,1,3,5];
 grades[6] = [7,2,4,6];
 
+const chordsRow = [grades[0],grades[2],grades[5],grades[1],grades[3],grades[4],grades[6]];
+
 exports.createChords = () => {
     var chords = [];
-    for(var i = 0; i < 100; i++){
-        chords[i] = [];
-        var numOfNotes = utils.random(5) + 1;
-        for(var j = 0; j < numOfNotes; j++){
-            chords[i][j] = utils.random(22) + 40;
-        }
-    }
-    chords = changeChords(chords);
-    return chords;
-};
-
-
-const changeChords = (chords) => {
     const scale = scales[1];
     const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
     const offset = 11; //First button value
@@ -40,22 +28,21 @@ const changeChords = (chords) => {
     const width = 7;
     for(var i = 0; i < height; i++ ){
         for(var j = 0; j < width; j++){
-            chords[(i * 10) + j + offset] = findInScale(grades[j], scale, notes[i]);
+            chords[(i * 10) + j + offset] = findInScale(chordsRow[j], scale, notes[i]);
         }
     }
     return chords;
 };
 
 const findInScale = (chord,scale,root) => {
-    //utils.randomInitState();
+    console.log(chord);
+    //utils.randomInitState(); TODO make a choice
     scale = scale.concat(scale); //Duplicate scale
     const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
     return openChord(chord.map(e => notes[e - 1]));
 };
 
 const openChord = (chord) => {
-    //chord.push(chord[0] - 12);
-    //chord.push(chord[chord.length - 1] - 12);
     return chord.map(randomTransponse);
 };
 
