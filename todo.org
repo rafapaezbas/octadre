@@ -16,4 +16,9 @@ IV 1-4-6
 V 7-1-5
 VI 1-3-6
 VII 7-2-3
-** Place scales horizontally
+** DONE Place scales horizontally
+** DONE Chords mode render
+** TODO chords placement
+** TODO Chords scale change (8th row)
+** TODO Chord change (8th button)
+** TODO Chords inversion change

@@ -4,6 +4,7 @@ const cons = require('./constants');
 const header = [ 240, 00, 32, 41, 2, 24, 10 ];
 const setAllHeader = [ 240, 00, 32, 41, 2, 24, 14 ];
 const flashHeader = [ 240, 00, 32, 41, 2, 24, 40 , 0 ];
+const byColumnHeader = [ 240, 00, 32, 41, 2, 24, 12 ];
 
 exports.render = (output,scenes,state) => {
 
@@ -55,12 +56,10 @@ const renderSeq = (output,scenes,state) => {
 
 const renderChords = (output,scenes,state) => {
 	var sysex = []
-	var color = cons.COLOR_8;
-	var message = sysex.concat(setAllHeader).concat(color).concat([247]);
+	var chordsByColumnMessage = sysex.concat(byColumnHeader).concat(generateColumnChordsMessage()).concat([247]);
 	var chordsMessage = sysex.concat(header).concat(generateChordsMessage(scenes, state)).concat([247]);
-	output.send('sysex',message);
+	output.send('sysex',chordsByColumnMessage);
 	output.send('sysex',chordsMessage);
-	return message;
 };
 
 const generateStepsMessage = (scenes,state) => {
@@ -87,6 +86,15 @@ const generateChordsMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords.reduce((acc,e,i) => {
 		acc.push(e);
 		acc.push(cons.COLOR_2);
+		return acc;
+	},[]);
+};
+
+const generateColumnChordsMessage = () => {
+	const chordColors = [cons.COLOR_6,cons.COLOR_6,cons.COLOR_6,cons.COLOR_5,cons.COLOR_5,cons.COLOR_7,cons.COLOR_7];
+	return chordColors.reduce((acc,e,i) => {
+		acc.push(i);
+		acc.push(e);
 		return acc;
 	},[]);
 };

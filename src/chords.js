@@ -1,6 +1,7 @@
 const utils = require('./utils');
 
 const root = 60;
+const chordsPlacement = [0,2,5,1,3,4,6];
 
 const scales = [];
 scales[0] = [1,0,1,0,1,1,0,1,0,1,0,1]; // Major scale
@@ -46,7 +47,7 @@ const changeChords = (chords) => {
 };
 
 const findInScale = (chord,scale,root) => {
-    utils.randomInitState();
+    //utils.randomInitState();
     scale = scale.concat(scale); //Duplicate scale
     const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
     return openChord(chord.map(e => notes[e - 1]));
