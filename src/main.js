@@ -21,6 +21,7 @@ var state =  {
 	currentTrack:0,
 	currentScene:0,
 	lastPressedStep:0,
+	lastChordPressed: 0,
 	scenesChain:[],
 	currentSceneInChain:-1,
 	chainMode:false,
@@ -96,9 +97,12 @@ const updateChordMode = (pressed, button) => {
 
 const pressedChord = (button) => {
 	state.pressedButtons.push(button);
-	if(state.chords[button] != undefined){
-		console.log(state.chords[button]);
-		state.chords[button].inversion.map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
+	var chord = state.chords[button];
+	if(chord != undefined){
+		state.lastChordPressed = button;
+		var finalChord =chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
+		console.log(finalChord);
+		finalChord.map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	if(controller['chords'][button] != undefined){
 		controller['chords'][button].map(f => f(state,scenes));
@@ -106,8 +110,9 @@ const pressedChord = (button) => {
 };
 
 const unpressedChord = (button) => {
+	var chord = state.chords[button];
 	if(state.chords[button] != undefined){
-		state.chords[button].inversion.map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
+		chord.inversion.map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	state.pressedButtons = state.pressedButtons.filter(b => b != button);
 };
@@ -145,6 +150,7 @@ const setupController = () => {
 	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);
 	controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
 	cons.GRID.map(e => controller['chords'][e] = [lib.toogleChords]);
+	controller['chords'][cons.CHANGE_CHORD_MODE_BUTTON] = [lib.changeChordMode];
 };
 
 setupState();

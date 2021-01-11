@@ -7,6 +7,7 @@ exports.SHIFT_2_BUTTON = configuration.getIntOrDefault("SHIFT_2_BUTTON",11);
 exports.LEFT_ARROW_BUTTON = configuration.getIntOrDefault("LEFT_ARROW_BUTTON", 106);
 exports.RIGHT_ARROW_BUTTON = configuration.getIntOrDefault("RIGHT_ARROW_BUTTON", 107);
 exports.MODE_BUTTON = configuration.getIntOrDefault("MODE_BUTTON", 111);
+exports.CHANGE_CHORD_MODE_BUTTON = configuration.getIntOrDefault("CHANGE_CHORD_MODE_BUTTON",88);
 
 exports.COLOR_1 = configuration.getIntOrDefault("COLOR_1",26);
 exports.COLOR_2 = configuration.getIntOrDefault("COLOR_2", 100);
@@ -27,5 +28,4 @@ exports.BIG_GRID = configuration.getArrayOrDefault("BIG_GRID",16,[14,23,32,41,51
 exports.INNER_GRID = configuration.getArrayOrDefault("INNER_GRID",12,[24,33,42,52,63,74,75,66,57,47,36,25]);
 
 exports.SCENE_STACK_LIMIT = configuration.getIntOrDefault("SCENE_STACK_LIMIT",5);
-
 exports.GRID = utils.generateGrid();

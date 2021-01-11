@@ -1,5 +1,6 @@
 const cons = require('./constants');
 const utils = require('./utils');
+const chords = require('./chords');
 
 exports.toogleStep = (state,scenes) => {
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
@@ -140,6 +141,11 @@ exports.toogleChords = (state,scenes) => {
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords = stepChords.filter(e => e != lastPressedButton);
 	}
 };
+
+exports.changeChordMode = (state,scenes) => {
+	state.chords[state.lastChordPressed].mode++;
+	state.chords[state.lastChordPressed].mode %= chords.modes.length;
+}
 
 const resetSceneChain = (state) => {
 	state.chainMode = false;

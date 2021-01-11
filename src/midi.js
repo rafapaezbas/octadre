@@ -44,6 +44,7 @@ const playStep = (track,step,state,output,tasks) => {
 
 const playChord = (track,step,state,output,tasks) => {
 	step.chords.map(n => {
+		var chord = state.chords[n];
 		state.chords[n].inversion.map(e => {
 			tasks.push((callback) => {
 				output.send('noteon', {note: e,velocity: 127,channel: track.channel});

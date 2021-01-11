@@ -9,15 +9,24 @@ scales[2] = [1,0,0,1,0,1,1,1,0,0,1,0]; // Blues scale
 scales[3] = [1,0,1,1,0,0,1,1,0,1,0,1]; // Made-up scale
 
 const grades = [];
-grades[0] = [1,3,5,7];
-grades[1] = [2,4,6,8];
-grades[2] = [3,5,7,9];
-grades[3] = [4,6,8,10];
-grades[4] = [5,7,9,11];
-grades[5] = [6,8,10,12];
-grades[6] = [7,9,11,13];
+grades[0] = [1,3,5,7,9];
+grades[1] = [2,4,6,8,10];
+grades[2] = [3,5,7,9,11];
+grades[3] = [4,6,8,10,12];
+grades[4] = [5,7,9,11,13];
+grades[5] = [6,8,10,12,14];
+grades[6] = [7,9,11,13,15];
+
+const modes = [];
+modes[0] = [1,1,1,1,0];
+modes[1] = [1,1,1,0,1];
+modes[2] = [1,1,1,1,1];
+modes[3] = [1,0,0,1,1];
+
+exports.modes = modes;
 
 const chordsRow = [grades[0],grades[2],grades[5],grades[1],grades[3],grades[4],grades[6]];
+
 
 exports.createChords = () => {
     var chords = [];
@@ -34,6 +43,10 @@ exports.createChords = () => {
     return chords;
 };
 
+exports.filterByMode = (index,mode) => {
+    return modes[mode][index];
+};
+
 const findInScale = (chord,scale,root) => {
     console.log(chord);
     //utils.randomInitState(); TODO make a choice
@@ -43,8 +56,7 @@ const findInScale = (chord,scale,root) => {
 };
 
 const openChord = (chord) => {
-    //return chord.map(randomTransponse);
-    return {chord:chord, inversion: chord.map(randomTransponse)};
+    return {chord:chord, inversion: chord.map(randomTransponse), mode: 0};
 };
 
 const randomTransponse = (note) => {
