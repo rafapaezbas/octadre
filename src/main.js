@@ -98,7 +98,7 @@ const pressedChord = (button) => {
 	state.pressedButtons.push(button);
 	if(state.chords[button] != undefined){
 		console.log(state.chords[button]);
-		state.chords[button].map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
+		state.chords[button].inversion.map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	if(controller['chords'][button] != undefined){
 		controller['chords'][button].map(f => f(state,scenes));
@@ -107,7 +107,7 @@ const pressedChord = (button) => {
 
 const unpressedChord = (button) => {
 	if(state.chords[button] != undefined){
-		state.chords[button].map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
+		state.chords[button].inversion.map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	state.pressedButtons = state.pressedButtons.filter(b => b != button);
 };
@@ -146,7 +146,6 @@ const setupController = () => {
 	controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
 	cons.GRID.map(e => controller['chords'][e] = [lib.toogleChords]);
 };
-
 
 setupState();
 setupScenes();

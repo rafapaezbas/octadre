@@ -44,7 +44,7 @@ const playStep = (track,step,state,output,tasks) => {
 
 const playChord = (track,step,state,output,tasks) => {
 	step.chords.map(n => {
-		state.chords[n].map(e => {
+		state.chords[n].inversion.map(e => {
 			tasks.push((callback) => {
 				output.send('noteon', {note: e,velocity: 127,channel: track.channel});
 				state.midiNotesQueue.push({clockTick: state.clockTick, length: 1, note: e, channel: track.channel});

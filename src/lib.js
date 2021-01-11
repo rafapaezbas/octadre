@@ -124,11 +124,11 @@ exports.toogleMode = (state,scenes) => {
 		break;
 	case 'chords':
 		state.mode = 'seq';
-		state.renderReset = true;
 		break;
 	default:
 		break;
 	}
+	state.renderReset = true;
 };
 
 exports.toogleChords = (state,scenes) => {

@@ -10,12 +10,12 @@ scales[3] = [1,0,1,1,0,0,1,1,0,1,0,1]; // Made-up scale
 
 const grades = [];
 grades[0] = [1,3,5,7];
-grades[1] = [2,4,6,1];
-grades[2] = [3,5,7,2];
-grades[3] = [4,6,1,3];
-grades[4] = [5,7,2,4];
-grades[5] = [6,1,3,5];
-grades[6] = [7,2,4,6];
+grades[1] = [2,4,6,8];
+grades[2] = [3,5,7,9];
+grades[3] = [4,6,8,10];
+grades[4] = [5,7,9,11];
+grades[5] = [6,8,10,12];
+grades[6] = [7,9,11,13];
 
 const chordsRow = [grades[0],grades[2],grades[5],grades[1],grades[3],grades[4],grades[6]];
 
@@ -43,12 +43,17 @@ const findInScale = (chord,scale,root) => {
 };
 
 const openChord = (chord) => {
-    return chord.map(randomTransponse);
+    //return chord.map(randomTransponse);
+    return {chord:chord, inversion: chord.map(randomTransponse)};
 };
 
 const randomTransponse = (note) => {
-    if(utils.random(100) > 50){
-        return note + 7;
+    var rand = utils.random(100);
+    if(rand < 33){
+        return note + 12;
+    }
+    else if(rand > 33 && rand < 66){
+        return note - 12;
     }else{
         return note;
     }
