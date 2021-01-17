@@ -7,6 +7,7 @@ scales[0] = [1,0,1,0,1,1,0,1,0,1,0,1]; // Major scale
 scales[1] = [1,0,1,1,0,1,0,1,1,0,1,0]; // Minor scale
 scales[2] = [1,0,0,1,0,1,1,1,0,0,1,0]; // Blues scale
 scales[3] = [1,0,1,1,0,0,1,1,0,1,0,1]; // Made-up scale
+scales[4] = [1,0,1,0,1,1,1,0,1,0,1,0]; // Minor scale
 
 const grades = [];
 grades[0] = [1,3,5,7,9];
@@ -25,7 +26,8 @@ modes[3] = [1,0,0,1,1];
 
 exports.modes = modes;
 
-const chordsRow = [grades[0],grades[2],grades[5],grades[1],grades[3],grades[4],grades[6]];
+//const chordsRow = [grades[0],grades[2],grades[5],grades[1],grades[3],grades[4],grades[6]];
+const chordsRow = [grades[0],grades[1],grades[2],grades[3],grades[4],grades[5],grades[6]];
 
 
 exports.createChords = () => {

@@ -1,4 +1,5 @@
 const async = require('async');
+const chords = require('./chords');
 
 exports.playNextStep = (state,scenes,output) => {
 	sendNoteOff(state,output);
@@ -35,7 +36,7 @@ const playStep = (track,step,state,output,tasks) => {
 		if(n) {
 			tasks.push((callback) => {
 				output.send('noteon', {note: track.midiRoot + i,velocity: 127,channel: track.channel});
-				state.midiNotesQueue.push({clockTick: state.clockTick, length: 1, note: track.midiRoot + i, channel: track.channel});
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length, note: track.midiRoot + i, channel: track.channel});
 				callback();
 			});
 		}
@@ -43,12 +44,14 @@ const playStep = (track,step,state,output,tasks) => {
 };
 
 const playChord = (track,step,state,output,tasks) => {
+		//var finalChord =chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
+		//finalChord.map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	step.chords.map(n => {
 		var chord = state.chords[n];
-		state.chords[n].inversion.map(e => {
+		state.chords[n].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(e => {
 			tasks.push((callback) => {
 				output.send('noteon', {note: e,velocity: 127,channel: track.channel});
-				state.midiNotesQueue.push({clockTick: state.clockTick, length: 1, note: e, channel: track.channel});
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length, note: e, channel: track.channel});
 				callback();
 			});
 		});

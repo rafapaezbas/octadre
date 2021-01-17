@@ -20,6 +20,9 @@ VII 7-2-3
 ** DONE Chords mode render
 ** DONE chords placement
 ** TODO Chords scale change (8th row)
-** TODO Chord change (8th button)
+** DONE Chord change (8th button)
 ** TODO Chords inversion change
 ** TODO ASCII Documentation
+** TODO chords render
+** TODO Change colors of seq mode
+** DONE Notes length

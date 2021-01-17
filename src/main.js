@@ -101,7 +101,6 @@ const pressedChord = (button) => {
 	if(chord != undefined){
 		state.lastChordPressed = button;
 		var finalChord =chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
-		console.log(finalChord);
 		finalChord.map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	if(controller['chords'][button] != undefined){
@@ -129,7 +128,7 @@ const setupScenes = () => {
 const setupSceneTracks = () => {
 	var trackColors = [cons.COLOR_1,cons.COLOR_5,cons.COLOR_3,cons.COLOR_6,cons.COLOR_10,cons.COLOR_11,cons.COLOR_12,cons.COLOR_9];
 	var tracks =  utils.createArray(8,{}).map((t,i) => {
-		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[]}));
+		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1}));
 		return {pattern:pattern, trackLength:16, midiRoot:64, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
 	});
 	return {tracks: tracks};
@@ -143,8 +142,9 @@ const setupController = () => {
 	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.undo];
 	controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
 	controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
-	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode]
+	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];
 	cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
+	cons.LENGTH_GRID.map(e => controller['seq'][e] = [lib.changeLength]);
 	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
 	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
 	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);

@@ -47,8 +47,9 @@ const renderSeq = (output,scenes,state) => {
 	var mutesMessage = generateMutesMessage(scenes,state);
 	var notesMessage = generateNotesMessage(scenes,state);
 	var scenesMessage = generateScenesMessage(scenes,state);
+	var lengthMessage = generateLengthMessage(scenes,state);
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(notesMessage).concat([247]);
+	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(lengthMessage).concat(notesMessage).concat([247]);
 	output.send('sysex',message);
 	output.send('sysex',flashLastPressedStepMessage);
 	return message;
@@ -91,7 +92,7 @@ const generateChordsMessage = (scenes,state) => {
 };
 
 const generateColumnChordsMessage = () => {
-	const chordColors = [cons.COLOR_6,cons.COLOR_6,cons.COLOR_6,cons.COLOR_5,cons.COLOR_5,cons.COLOR_7,cons.COLOR_7];
+	const chordColors = [cons.COLOR_6,cons.COLOR_5,cons.COLOR_6,cons.COLOR_5,cons.COLOR_7,cons.COLOR_6,cons.COLOR_7];
 	return chordColors.reduce((acc,e,i) => {
 		acc.push(i);
 		acc.push(e);
@@ -111,6 +112,16 @@ const generateScenesMessage = (scenes,state) => {
 	return cons.SCENE_BUTTONS.reduce((acc,e, i) => {
 		acc.push(e);
 		i == state.currentScene ? acc.push(cons.COLOR_2) : acc.push(cons.COLOR_5);
+		return acc;
+	},[]);
+};
+
+const generateLengthMessage = (scenes,state) => {
+	var length =  scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length;
+	return cons.LENGTH_GRID.reduce((acc,e, i) => {
+		acc.push(e);
+		//i == state.currentScene ? acc.push(cons.COLOR_2) : acc.push(cons.COLOR_5);
+		i  < length/2  ? acc.push(cons.COLOR_10) : acc.push(0);
 		return acc;
 	},[]);
 };

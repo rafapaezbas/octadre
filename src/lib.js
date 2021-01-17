@@ -147,6 +147,16 @@ exports.changeChordMode = (state,scenes) => {
 	state.chords[state.lastChordPressed].mode %= chords.modes.length;
 }
 
+exports.changeLength = (state,scenes) => {
+	if(state.pressedButtons.length == 1){
+		var button = state.pressedButtons[0];
+		var currentLength = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length;
+		console.log(calculateLength(button,currentLength));
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length = calculateLength(button,currentLength);
+	}
+};
+
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = -1;
@@ -179,4 +189,11 @@ const isTrackChange = (pressedButtons) => {
 };
 const isArrowButton = (button) => {
 	return button == cons.RIGHT_ARROW_BUTTON || button == cons.LEFT_ARROW_BUTTON;
+};
+
+const calculateLength = (button, currentLength) => {
+	if((cons.LENGTH_GRID.indexOf(button) + 1) * 2 - 1 == currentLength){
+		return currentLength % 2 == 1 ? currentLength + 1 : currentLength - 1;
+	}
+	return (cons.LENGTH_GRID.indexOf(button) + 1) * 2 - 1;
 };
