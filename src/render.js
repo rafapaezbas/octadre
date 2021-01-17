@@ -32,7 +32,7 @@ exports.lightCurrentStep = (output,state,scenes) => {
 	var prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : trackLength - 1;
 	if(utils.isInt(modCurrentStep)){
 		var sysex = [];
-		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_4]).concat([247]);
+		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_CURSOR]).concat([247]);
 		output.send('sysex',message);
 	}
 	if(prevStep % trackLength == state.lastPressedStep){
@@ -67,7 +67,7 @@ const generateStepsMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern.reduce((acc,e,i) => {
 		acc.push(cons.BIG_GRID[i]);
 		if(i < scenes[state.currentScene].tracks[state.currentTrack].trackLength){
-			e.active ? acc.push(cons.COLOR_2) : acc.push(scenes[state.currentScene].tracks[state.currentTrack].color);
+			e.active ? acc.push(cons.COLOR_ACTIVE_STEP) : acc.push(scenes[state.currentScene].tracks[state.currentTrack].color);
 		} else {
 			acc.push(0);
 		}
@@ -78,7 +78,7 @@ const generateStepsMessage = (scenes,state) => {
 const generateNotesMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes.reduce((acc,e,i) => {
 		acc.push(cons.INNER_GRID[i]);
-		e ? acc.push(7) : acc.push(cons.COLOR_6);
+		e ? acc.push(cons.COLOR_ACTIVE_NOTE) : acc.push(cons.COLOR_NON_ACTIVE_NOTE);
 		return acc;
 	},[]);
 };
@@ -86,13 +86,13 @@ const generateNotesMessage = (scenes,state) => {
 const generateChordsMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords.reduce((acc,e,i) => {
 		acc.push(e);
-		acc.push(cons.COLOR_2);
+		acc.push(cons.COLOR_ACTIVE_CHORD);
 		return acc;
 	},[]);
 };
 
 const generateColumnChordsMessage = () => {
-	const chordColors = [cons.COLOR_6,cons.COLOR_5,cons.COLOR_6,cons.COLOR_5,cons.COLOR_7,cons.COLOR_6,cons.COLOR_7];
+	const chordColors = [cons.COLOR_TONIC,cons.COLOR_SUBDOMINANT,cons.COLOR_TONIC,cons.COLOR_SUBDOMINANT,cons.COLOR_DOMINANT,cons.COLOR_TONIC,cons.COLOR_DOMINANT];
 	return chordColors.reduce((acc,e,i) => {
 		acc.push(i);
 		acc.push(e);
@@ -109,9 +109,10 @@ const generateMutesMessage = (scenes,state) => {
 };
 
 const generateScenesMessage = (scenes,state) => {
+	var color = scenes[state.currentScene].tracks[state.currentTrack].color;
 	return cons.SCENE_BUTTONS.reduce((acc,e, i) => {
 		acc.push(e);
-		i == state.currentScene ? acc.push(cons.COLOR_2) : acc.push(cons.COLOR_5);
+		i == state.currentScene ? acc.push(cons.COLOR_ACTIVE_SCENE) : acc.push(color);
 		return acc;
 	},[]);
 };
@@ -120,8 +121,7 @@ const generateLengthMessage = (scenes,state) => {
 	var length =  scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length;
 	return cons.LENGTH_GRID.reduce((acc,e, i) => {
 		acc.push(e);
-		//i == state.currentScene ? acc.push(cons.COLOR_2) : acc.push(cons.COLOR_5);
-		i  < length/2  ? acc.push(cons.COLOR_10) : acc.push(0);
+		i  < length/2  ? acc.push(cons.COLOR_LENGTH) : acc.push(0);
 		return acc;
 	},[]);
 };
@@ -130,13 +130,13 @@ const flashLastPressedStep = (scenes, state) => {
 	var sysex = [];
 	var stepButton = cons.BIG_GRID[state.lastPressedStep];
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
-	var color = currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_2 : currentTrack.color;
+	var color = currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_ACTIVE_STEP : currentTrack.color;
 	return sysex.concat(flashHeader).concat([stepButton, color]).concat([247]);
 };
 
 const resetStepMessage = (step,state,scenes) => {
 	var trackColor = scenes[state.currentScene].tracks[state.currentTrack].color;
-	var color = scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active ? cons.COLOR_2 : trackColor;
+	var color = scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active ? cons.ACTIVE_STEP : trackColor;
 	return [cons.BIG_GRID[step], color];
 };
 

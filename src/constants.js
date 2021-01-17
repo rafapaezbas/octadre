@@ -9,18 +9,27 @@ exports.RIGHT_ARROW_BUTTON = configuration.getIntOrDefault("RIGHT_ARROW_BUTTON",
 exports.MODE_BUTTON = configuration.getIntOrDefault("MODE_BUTTON", 111);
 exports.CHANGE_CHORD_MODE_BUTTON = configuration.getIntOrDefault("CHANGE_CHORD_MODE_BUTTON",88);
 
-exports.COLOR_1 = configuration.getIntOrDefault("COLOR_1",26);
-exports.COLOR_2 = configuration.getIntOrDefault("COLOR_2", 100);
-exports.COLOR_3 = configuration.getIntOrDefault("COLOR_3", 77);
-exports.COLOR_4 = configuration.getIntOrDefault("COLOR_4", 10);
-exports.COLOR_5 = configuration.getIntOrDefault("COLOR_5", 80);
-exports.COLOR_6 = configuration.getIntOrDefault("COLOR_6", 40);
-exports.COLOR_7 = configuration.getIntOrDefault("COLOR_7", 7);
-exports.COLOR_8 = configuration.getIntOrDefault("COLOR_8", 90);
-exports.COLOR_9 = configuration.getIntOrDefault("COLOR_9", 4);
-exports.COLOR_10 = configuration.getIntOrDefault("COLOR_10", 8);
-exports.COLOR_11 = configuration.getIntOrDefault("COLOR_11", 19);
-exports.COLOR_12 = configuration.getIntOrDefault("COLOR_12", 20);
+
+exports.COLOR_TRACK_1 = configuration.getIntOrDefault("COLOR_TRACK_1",29);
+exports.COLOR_TRACK_2 = configuration.getIntOrDefault("COLOR_TRACK_2",73);
+exports.COLOR_TRACK_3 = configuration.getIntOrDefault("COLOR_TRACK_3",81);
+exports.COLOR_TRACK_4 = configuration.getIntOrDefault("COLOR_TRACK_4",41);
+exports.COLOR_TRACK_5 = configuration.getIntOrDefault("COLOR_TRACK_5",52);
+exports.COLOR_TRACK_6 = configuration.getIntOrDefault("COLOR_TRACK_6",117);
+exports.COLOR_TRACK_7 = configuration.getIntOrDefault("COLOR_TRACK_7",112);
+exports.COLOR_TRACK_8 = configuration.getIntOrDefault("COLOR_TRACK_8",44);
+
+exports.COLOR_CURSOR = configuration.getIntOrDefault("COLOR_CURSOR",10);
+exports.COLOR_ACTIVE_STEP = configuration.getIntOrDefault("COLOR_ACTIVE_STEP",3);
+exports.COLOR_ACTIVE_CHORD = configuration.getIntOrDefault("COLOR_ACTIVE_CHORD",3);
+exports.COLOR_ACTIVE_SCENE = configuration.getIntOrDefault("COLOR_ACTIVE_SCENE",3);
+exports.COLOR_ACTIVE_NOTE = configuration.getIntOrDefault("COLOR_ACTIVE_NOTE",58);
+exports.COLOR_NON_ACTIVE_NOTE = configuration.getIntOrDefault("COLOR_NON_ACTIVE_NOTE",40);
+exports.COLOR_LENGTH = configuration.getIntOrDefault("COLOR_LENGTH",8);
+
+exports.COLOR_TONIC = configuration.getIntOrDefault("COLOR_TONIC",29);
+exports.COLOR_SUBDOMINANT = configuration.getIntOrDefault("COLOR_SUBDOMINANT",81);
+exports.COLOR_DOMINANT = configuration.getIntOrDefault("COLOR_DOMINANT",41);
 
 exports.MUTE_BUTTONS = configuration.getArrayOrDefault("MUTE_BUTTONS",8,[89,79,69,59,49,39,29,19]);
 exports.SCENE_BUTTONS = configuration.getArrayOrDefault("SCENE_BUTTONS",4,[54,55,44,45]);

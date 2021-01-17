@@ -126,7 +126,8 @@ const setupScenes = () => {
 };
 
 const setupSceneTracks = () => {
-	var trackColors = [cons.COLOR_1,cons.COLOR_5,cons.COLOR_3,cons.COLOR_6,cons.COLOR_10,cons.COLOR_11,cons.COLOR_12,cons.COLOR_9];
+	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,
+					   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
 	var tracks =  utils.createArray(8,{}).map((t,i) => {
 		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1}));
 		return {pattern:pattern, trackLength:16, midiRoot:64, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};

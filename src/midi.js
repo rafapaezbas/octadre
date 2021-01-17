@@ -44,8 +44,6 @@ const playStep = (track,step,state,output,tasks) => {
 };
 
 const playChord = (track,step,state,output,tasks) => {
-		//var finalChord =chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
-		//finalChord.map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	step.chords.map(n => {
 		var chord = state.chords[n];
 		state.chords[n].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(e => {
