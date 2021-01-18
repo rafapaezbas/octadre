@@ -24,5 +24,10 @@ VII 7-2-3
 ** TODO Chords inversion change
 ** TODO ASCII Documentation
 ** TODO chords render
-** TODO Change colors of seq mode
+** TODO arpeggio
+** DONE Change colors of seq mode
 ** DONE Notes length
+** TODO cursor on/off
+** TODO copy step
+** TODO tempo modifier 0.25 and 0.125
+** TODO note length / tempo-modifier
