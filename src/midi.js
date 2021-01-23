@@ -4,7 +4,7 @@ const chords = require('./chords');
 exports.playNextStep = (state,scenes,output) => {
 	sendNoteOff(state,output);
 	sendNoteOn(state,scenes,output);
-}
+};
 
 exports.resetClock = (state) => {
 	if(state.resetClockTimeout != undefined){
@@ -74,4 +74,4 @@ const getPlayingScene = (state) => {
 	var shouldChange = state.clockTick % (6*16) == 0;
 	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[state.currentSceneInChain++ % state.scenesChain.length];
 	return state.chainMode ? nextScene : state.currentScene;
-}
+};

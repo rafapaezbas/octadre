@@ -28,7 +28,7 @@ VII 7-2-3
 ** DONE Change colors of seq mode
 ** DONE Notes length
 ** DONE cursor on/off
-** TODO copy step
+** DONE copy step
 ** DONE tempo modifier 0.25 and 0.125
 ** TODO Tempo modifier render
 ** DONE note length / tempo-modifier

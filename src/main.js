@@ -143,7 +143,7 @@ const setupController = () => {
 	cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
 	cons.LENGTH_GRID.map(e => controller['seq'][e] = [lib.changeLength]);
 	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
-	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength]);
+	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength,lib.copyStep]);
 	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);
 	controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
 	cons.GRID.map(e => controller['chords'][e] = [lib.toogleChords]);

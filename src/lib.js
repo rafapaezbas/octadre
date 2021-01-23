@@ -56,6 +56,16 @@ exports.copyScene = (state,scenes) => {
 	}
 };
 
+exports.copyStep = (state,scenes) => {
+	if(state.pressedButtons.length == 2 && isBigGrid(state.pressedButtons[0]) && isBigGrid(state.pressedButtons[1])){
+		var originStep = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
+		var targetStep = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[targetStep] =
+			JSON.parse(JSON.stringify(scenes[state.currentScene].tracks[state.currentTrack].pattern[originStep]));
+		io.blinkButton(11,cons.COLOR_BLINK,0);
+	}
+};
+
 exports.changeTempo = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && state.pressedButtons[0] == cons.TEMPO_BUTTON){
 		var tempos = [1, 0.5, 0.25, 0.125];
@@ -204,9 +214,4 @@ const calculateLength = (button, currentLength) => {
 		return currentLength % 2 == 1 ? currentLength + 1 : currentLength - 1;
 	}
 	return (cons.LENGTH_GRID.indexOf(button) + 1) * 2 - 1;
-};
-
-const allButtonsAreShift = (buttons) => {
-	const shiftButtons = [cons.SHIFT_BUTTON, cons.SHIFT_2_BUTTON, cons.SHIFT_3_BUTTON];
-	return buttons.filter(e => shiftButtons.indexOf(e) != -1).length == 3;
 };
