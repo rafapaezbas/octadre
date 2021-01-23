@@ -27,6 +27,7 @@ exports.COLOR_ACTIVE_SCENE = configuration.getIntOrDefault("COLOR_ACTIVE_SCENE",
 exports.COLOR_ACTIVE_NOTE = configuration.getIntOrDefault("COLOR_ACTIVE_NOTE",58);
 exports.COLOR_NON_ACTIVE_NOTE = configuration.getIntOrDefault("COLOR_NON_ACTIVE_NOTE",40);
 exports.COLOR_LENGTH = configuration.getIntOrDefault("COLOR_LENGTH",8);
+exports.COLOR_BLINK = configuration.getIntOrDefault("COLOR_BLINK",58);
 
 exports.COLOR_TONIC = configuration.getIntOrDefault("COLOR_TONIC",29);
 exports.COLOR_SUBDOMINANT = configuration.getIntOrDefault("COLOR_SUBDOMINANT",81);

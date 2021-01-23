@@ -36,7 +36,7 @@ const playStep = (track,step,state,output,tasks) => {
 		if(n) {
 			tasks.push((callback) => {
 				output.send('noteon', {note: track.midiRoot + i,velocity: 127,channel: track.channel});
-				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length, note: track.midiRoot + i, channel: track.channel});
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: track.midiRoot + i, channel: track.channel});
 				callback();
 			});
 		}

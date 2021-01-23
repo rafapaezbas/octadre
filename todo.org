@@ -29,8 +29,9 @@ VII 7-2-3
 ** DONE Notes length
 ** DONE cursor on/off
 ** TODO copy step
-** TODO tempo modifier 0.25 and 0.125
+** DONE tempo modifier 0.25 and 0.125
 ** TODO Tempo modifier render
 ** DONE note length / tempo-modifier
 ** TODO auto change of scene
-** TODO Shift Render
+** DONE Shift Render //doesnt look good
+** DONE blink Shift

@@ -32,7 +32,7 @@ const chordsRow = [grades[0],grades[1],grades[2],grades[3],grades[4],grades[5],g
 
 exports.createChords = () => {
     var chords = [];
-    const scale = scales[1];
+    const scale = scales[0];
     const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
     const offset = 11; //First button value
     const height = 7;

@@ -32,7 +32,8 @@ exports.lightCurrentStep = (output,state,scenes) => {
 	var prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : trackLength - 1;
 	if(utils.isInt(modCurrentStep)){
 		var sysex = [];
-		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes)).concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_CURSOR]).concat([247]);
+		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes))
+			.concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_CURSOR]).concat([247]);
 		output.send('sysex',message);
 	}
 	if(prevStep % trackLength == state.lastPressedStep){

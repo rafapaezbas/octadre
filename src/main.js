@@ -1,17 +1,11 @@
-const easymidi = require('easymidi');
 const utils = require('./utils');
 const render = require('./render');
 const lib = require('./lib');
 const midi = require('./midi');
+const io = require('./midi-io');
 const cons = require('./constants');
 const chords = require('./chords');
 var randomGen = require('random-seed');
-
-const output = new easymidi.Output(utils.getNormalPort("Select midi output: ", easymidi.getOutputs()));
-const clockInput = new easymidi.Input(utils.getNormalPort("Select midi clock input: ", easymidi.getInputs()));
-const launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
-const input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
-
 
 var controller = [];
 var scenes = [];
@@ -37,25 +31,25 @@ var state =  {
 };
 
 
-clockInput.on('clock', function () {
+io.clockInput.on('clock', function () {
 	state.clockTick++;
 	midi.resetClock(state);
 	if(state.clockTick % 6 == 0){
-		midi.playNextStep(state,scenes,output);
+		midi.playNextStep(state,scenes,io.output);
 		state.currentStep++;
 		if(state.mode == 'seq' && state.showCursor) {
-			render.lightCurrentStep(launchpadOutput,state,scenes);
+			render.lightCurrentStep(io.launchpadOutput,state,scenes);
 		}
 	}
 });
 
-input.on('noteon', (message) => {
+io.input.on('noteon', (message) => {
 	var pressed = message.velocity == 127;
 	var button = message.note;
 	update(pressed, button);
 });
 
-input.on('cc', (message) => {
+io.input.on('cc', (message) => {
 	var pressed = message.value == 127;
 	var button = message.controller;
 	update(pressed, button);
@@ -80,7 +74,7 @@ const updateSeqMode = (pressed, button) => {
 		if(controller['seq'][button] != undefined){
 			lib.addScenesToStack(button, state, scenes);
 			controller['seq'][button].map(f => f(state,scenes));
-			render.render(launchpadOutput,scenes,state);
+			render.render(io.launchpadOutput,scenes,state);
 		}
 	}else{
 		state.pressedButtons = state.pressedButtons.filter(b => b != button);
@@ -90,7 +84,7 @@ const updateSeqMode = (pressed, button) => {
 const updateChordMode = (pressed, button) => {
 	if(pressed){
 		pressedChord(button);
-		render.render(launchpadOutput,scenes,state);
+		render.render(io.launchpadOutput,scenes,state);
 	}else{
 		unpressedChord(button);
 	}
@@ -102,7 +96,7 @@ const pressedChord = (button) => {
 	if(chord != undefined){
 		state.lastChordPressed = button;
 		var finalChord =chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
-		finalChord.map(n => output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
+		finalChord.map(n => io.output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	if(controller['chords'][button] != undefined){
 		controller['chords'][button].map(f => f(state,scenes));
@@ -112,7 +106,7 @@ const pressedChord = (button) => {
 const unpressedChord = (button) => {
 	var chord = state.chords[button];
 	if(state.chords[button] != undefined){
-		chord.inversion.map(n => output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
+		chord.inversion.map(n => io.output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	state.pressedButtons = state.pressedButtons.filter(b => b != button);
 };
@@ -131,7 +125,7 @@ const setupSceneTracks = () => {
 					   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
 	var tracks =  utils.createArray(8,{}).map((t,i) => {
 		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1}));
-		return {pattern:pattern, trackLength:16, midiRoot:64, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
+		return {pattern:pattern, trackLength:16, midiRoot:60, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
 	});
 	return {tracks: tracks};
 };
@@ -159,4 +153,4 @@ const setupController = () => {
 setupState();
 setupScenes();
 setupController();
-render.render(launchpadOutput,scenes,state);
+render.render(io.launchpadOutput,scenes,state);

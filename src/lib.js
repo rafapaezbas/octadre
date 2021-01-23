@@ -1,6 +1,7 @@
 const cons = require('./constants');
 const utils = require('./utils');
 const chords = require('./chords');
+const io = require('./midi-io');
 
 exports.toogleStep = (state,scenes) => {
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
@@ -51,14 +52,15 @@ exports.copyScene = (state,scenes) => {
 		var originScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[0]);
 		var targetScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[1]);
 		scenes[targetScene] = JSON.parse(JSON.stringify(scenes[originScene])); // Dirty trick for object deep copy by value
+		io.blinkButton(11,cons.COLOR_BLINK,0);
 	}
 };
 
 exports.changeTempo = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && state.pressedButtons[0] == cons.TEMPO_BUTTON){
-		var tempos = [0.125, 0.25, 0.5, 1];
+		var tempos = [1, 0.5, 0.25, 0.125];
 		var trackTempo = scenes[state.currentScene].tracks[state.currentTrack].tempoModifier;
-		scenes[state.currentScene].tracks[state.currentTrack].tempoModifier = tempos[(tempos.indexOf(trackTempo) - 1) % tempos.length];
+		scenes[state.currentScene].tracks[state.currentTrack].tempoModifier = tempos[(tempos.indexOf(trackTempo) + 1) % tempos.length];
 	}
 };
 
