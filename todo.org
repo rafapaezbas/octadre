@@ -33,5 +33,7 @@ VII 7-2-3
 ** TODO Tempo modifier render
 ** DONE note length / tempo-modifier
 ** TODO auto change of scene
+** TODO change of scenes by slower track
 ** DONE Shift Render //doesnt look good
 ** DONE blink Shift
+** TODO change mute-button with change track button

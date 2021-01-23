@@ -215,3 +215,8 @@ const calculateLength = (button, currentLength) => {
 	}
 	return (cons.LENGTH_GRID.indexOf(button) + 1) * 2 - 1;
 };
+
+const allButtonsAreShift = (buttons) => {
+	const shiftButtons = [cons.SHIFT_BUTTON, cons.SHIFT_2_BUTTON, cons.SHIFT_3_BUTTON];
+	return buttons.filter(e => shiftButtons.indexOf(e) != -1).length == 3;
+}
