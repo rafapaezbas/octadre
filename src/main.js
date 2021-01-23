@@ -33,6 +33,7 @@ var state =  {
 	chords: [],
 	mode : 'seq',
 	renderReset : true,
+	showCursor : true,
 };
 
 
@@ -42,7 +43,7 @@ clockInput.on('clock', function () {
 	if(state.clockTick % 6 == 0){
 		midi.playNextStep(state,scenes,output);
 		state.currentStep++;
-		if(state.mode == 'seq') {
+		if(state.mode == 'seq' && state.showCursor) {
 			render.lightCurrentStep(launchpadOutput,state,scenes);
 		}
 	}
@@ -139,8 +140,9 @@ const setupController = () => {
 	controller['seq'] = [];
 	controller['chords'] = [];
 	controller['seq'][cons.TEMPO_BUTTON] = [lib.changeTempo];
-	controller['seq'][cons.SHIFT_BUTTON] = [lib.undo];
-	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.undo];
+	controller['seq'][cons.SHIFT_BUTTON] = [lib.undo,lib.toogleCursor];
+	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.undo,lib.toogleCursor];
+	controller['seq'][cons.SHIFT_3_BUTTON] = [lib.toogleCursor];
 	controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
 	controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
 	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];

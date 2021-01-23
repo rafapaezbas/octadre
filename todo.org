@@ -27,7 +27,10 @@ VII 7-2-3
 ** TODO arpeggio
 ** DONE Change colors of seq mode
 ** DONE Notes length
-** TODO cursor on/off
+** DONE cursor on/off
 ** TODO copy step
 ** TODO tempo modifier 0.25 and 0.125
-** TODO note length / tempo-modifier
+** TODO Tempo modifier render
+** DONE note length / tempo-modifier
+** TODO auto change of scene
+** TODO Shift Render

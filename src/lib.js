@@ -56,9 +56,9 @@ exports.copyScene = (state,scenes) => {
 
 exports.changeTempo = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && state.pressedButtons[0] == cons.TEMPO_BUTTON){
-		var tempos = [0.5, 1];
+		var tempos = [0.125, 0.25, 0.5, 1];
 		var trackTempo = scenes[state.currentScene].tracks[state.currentTrack].tempoModifier;
-		scenes[state.currentScene].tracks[state.currentTrack].tempoModifier = tempos[(tempos.indexOf(trackTempo) + 1) % tempos.length];
+		scenes[state.currentScene].tracks[state.currentTrack].tempoModifier = tempos[(tempos.indexOf(trackTempo) - 1) % tempos.length];
 	}
 };
 
@@ -156,6 +156,12 @@ exports.changeLength = (state,scenes) => {
 	}
 };
 
+exports.toogleCursor = (state,scenes) => {
+	if(state.pressedButtons.length == 3 && allButtonsAreShift(state.pressedButtons)){
+		state.showCursor ^= true;
+	}
+};
+
 
 const resetSceneChain = (state) => {
 	state.chainMode = false;
@@ -196,4 +202,9 @@ const calculateLength = (button, currentLength) => {
 		return currentLength % 2 == 1 ? currentLength + 1 : currentLength - 1;
 	}
 	return (cons.LENGTH_GRID.indexOf(button) + 1) * 2 - 1;
+};
+
+const allButtonsAreShift = (buttons) => {
+	const shiftButtons = [cons.SHIFT_BUTTON, cons.SHIFT_2_BUTTON, cons.SHIFT_3_BUTTON];
+	return buttons.filter(e => shiftButtons.indexOf(e) != -1).length == 3;
 };
