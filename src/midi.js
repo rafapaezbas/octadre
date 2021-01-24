@@ -1,9 +1,12 @@
 const async = require('async');
 const chords = require('./chords');
+const render = require('./render');
+const io = require('./midi-io.js');
 
 exports.playNextStep = (state,scenes,output) => {
 	sendNoteOff(state,output);
 	sendNoteOn(state,scenes,output);
+	checkSceneChange(state,scenes);
 };
 
 exports.resetClock = (state) => {
@@ -74,4 +77,11 @@ const getPlayingScene = (state) => {
 	var shouldChange = state.clockTick % (6*16) == 0;
 	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[state.currentSceneInChain++ % state.scenesChain.length];
 	return state.chainMode && shouldChange ? nextScene : state.currentScene;
+};
+
+const checkSceneChange = (state,scenes) => {
+	if(state.chainMode && state.clockTick % (6*16) == 0){
+		state.currentScene = state.scenesChain[state.currentSceneInChain % state.scenesChain.length];
+		render.render(io.launchpadOutput,scenes,state);
+	}
 };
