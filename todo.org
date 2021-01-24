@@ -36,4 +36,4 @@ VII 7-2-3
 ** TODO change of scenes by slower track
 ** DONE Shift Render //doesnt look good
 ** DONE blink Shift
-** TODO change mute-button with change track button
+** DONE change mute-button with change track button

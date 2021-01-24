@@ -26,22 +26,21 @@ exports.showNotes = (state,scenes) => {
 };
 
 exports.changeTrack = (state,scenes) => {
-	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(state.pressedButtons[1])){
-		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
+	if(state.pressedButtons.length == 1 && isMuteButton(state.pressedButtons[0])){
+		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[0]);
 		state.currentTrack = track;
 	}
 };
 
 exports.toogleMute = (state,scenes) => {
-	if(state.pressedButtons.length == 1 && isMuteButton(state.pressedButtons[0])){
-		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[0]);
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(state.pressedButtons[1])){
+		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
 		scenes[state.currentScene].tracks[track].muted ^= true;
 	}
 };
 
 exports.changeScene = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && isSceneButton(state.pressedButtons[0])){
-		var prevScene = state.currentScene;
 		state.currentScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[0]);
 		resetSceneChain(state);
 	}
@@ -57,9 +56,10 @@ exports.copyScene = (state,scenes) => {
 };
 
 exports.copyStep = (state,scenes) => {
-	if(state.pressedButtons.length == 2 && isBigGrid(state.pressedButtons[0]) && isBigGrid(state.pressedButtons[1])){
-		var originStep = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
-		var targetStep = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
+	if(state.pressedButtons.length == 3 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON
+	   && isBigGrid(state.pressedButtons[1]) && isBigGrid(state.pressedButtons[2])){
+		var originStep = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
+		var targetStep = cons.BIG_GRID.indexOf(state.pressedButtons[2]);
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[targetStep] =
 			JSON.parse(JSON.stringify(scenes[state.currentScene].tracks[state.currentTrack].pattern[originStep]));
 		io.blinkButton(11,cons.COLOR_BLINK,0);
@@ -157,7 +157,7 @@ exports.toogleChords = (state,scenes) => {
 exports.changeChordMode = (state,scenes) => {
 	state.chords[state.lastChordPressed].mode++;
 	state.chords[state.lastChordPressed].mode %= chords.modes.length;
-}
+};
 
 exports.changeLength = (state,scenes) => {
 	if(state.pressedButtons.length == 1){
@@ -174,10 +174,9 @@ exports.toogleCursor = (state,scenes) => {
 	}
 };
 
-
 const resetSceneChain = (state) => {
 	state.chainMode = false;
-	state.currentSceneInChain = -1;
+	state.currentSceneInChain = 0;
 	state.scenesChain = [];
 };
 
@@ -205,6 +204,7 @@ const isSceneCopy = (pressedButtons) => {
 const isTrackChange = (pressedButtons) => {
 	return pressedButtons.length == 2 && pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(pressedButtons[1]);
 };
+
 const isArrowButton = (button) => {
 	return button == cons.RIGHT_ARROW_BUTTON || button == cons.LEFT_ARROW_BUTTON;
 };
@@ -219,4 +219,4 @@ const calculateLength = (button, currentLength) => {
 const allButtonsAreShift = (buttons) => {
 	const shiftButtons = [cons.SHIFT_BUTTON, cons.SHIFT_2_BUTTON, cons.SHIFT_3_BUTTON];
 	return buttons.filter(e => shiftButtons.indexOf(e) != -1).length == 3;
-}
+};
