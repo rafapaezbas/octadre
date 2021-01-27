@@ -144,6 +144,20 @@ exports.toogleMode = (state,scenes) => {
 	state.renderReset = true;
 };
 
+exports.toogleSmallGridMode = (state,scenes) => {
+	switch(state.smallGridMode){
+	case 'length':
+		state.smallGridMode = 'velocity';
+		break;
+	case 'velocity':
+		state.smallGridMode = 'length';
+		break;
+	default:
+		break;
+	}
+	state.renderReset = true;
+};
+
 exports.toogleChords = (state,scenes) => {
 	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
 	var stepChords = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords;
@@ -160,11 +174,17 @@ exports.changeChordMode = (state,scenes) => {
 };
 
 exports.changeLength = (state,scenes) => {
-	if(state.pressedButtons.length == 1){
+	if(state.smallGridMode == 'length' && state.pressedButtons.length == 1){
 		var button = state.pressedButtons[0];
 		var currentLength = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length;
-		console.log(calculateLength(button,currentLength));
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length = calculateLength(button,currentLength);
+	}
+};
+
+exports.changeVelocity = (state,scenes) => {
+	if(state.smallGridMode == 'velocity' && state.pressedButtons.length == 1){
+		var button = state.pressedButtons[0];
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].velocity = calculateVelocity(button);
 	}
 };
 
@@ -210,11 +230,15 @@ const isArrowButton = (button) => {
 };
 
 const calculateLength = (button, currentLength) => {
-	if((cons.LENGTH_GRID.indexOf(button) + 1) * 2 - 1 == currentLength){
+	if((cons.SMALL_GRID.indexOf(button) + 1) * 2 - 1 == currentLength){
 		return currentLength % 2 == 1 ? currentLength + 1 : currentLength - 1;
 	}
-	return (cons.LENGTH_GRID.indexOf(button) + 1) * 2 - 1;
+	return (cons.SMALL_GRID.indexOf(button) + 1) * 2 - 1;
 };
+
+const calculateVelocity = (button) => {
+	return (127 / 8) * (cons.SMALL_GRID.indexOf(button) + 1)
+}
 
 const allButtonsAreShift = (buttons) => {
 	const shiftButtons = [cons.SHIFT_BUTTON, cons.SHIFT_2_BUTTON, cons.SHIFT_3_BUTTON];

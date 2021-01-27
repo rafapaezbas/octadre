@@ -37,6 +37,7 @@ VII 7-2-3
 ** DONE Shift Render //doesnt look good
 ** DONE blink Shift
 ** DONE change mute-button with change track button
-** TODO add velociy
-** TODO Clean up midi-io parameters
+** DONE add velociy
+** DONE Clean up midi-io parameters
+** TODO midi queue
 ** TODO Tri-pe-lets

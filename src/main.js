@@ -28,6 +28,7 @@ var state =  {
 	mode : 'seq',
 	renderReset : true,
 	showCursor : true,
+	smallGridMode : 'length',
 };
 
 io.clockInput.on('clock', function () {
@@ -123,7 +124,7 @@ const setupSceneTracks = () => {
 	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,
 					   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
 	var tracks =  utils.createArray(8,{}).map((t,i) => {
-		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1, velocity: 127}));
+		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1, velocity: 100}));
 		return {pattern:pattern, trackLength:16, midiRoot:60, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
 	});
 	return {tracks: tracks};
@@ -138,9 +139,11 @@ const setupController = () => {
 	controller['seq'][cons.SHIFT_3_BUTTON] = [lib.toogleCursor];
 	controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
 	controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
+	controller['seq'][cons.UP_ARROW_BUTTON] = [lib.toogleSmallGridMode];
+	controller['seq'][cons.DOWN_ARROW_BUTTON] = [lib.toogleSmallGridMode];
 	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];
 	cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
-	cons.LENGTH_GRID.map(e => controller['seq'][e] = [lib.changeLength]);
+	cons.SMALL_GRID.map(e => controller['seq'][e] = [lib.changeLength, lib.changeVelocity]);
 	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
 	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength,lib.copyStep]);
 	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);

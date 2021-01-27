@@ -7,6 +7,8 @@ exports.SHIFT_2_BUTTON = configuration.getIntOrDefault("SHIFT_2_BUTTON",11);
 exports.SHIFT_3_BUTTON = configuration.getIntOrDefault("SHIFT_3_BUTTON",81);
 exports.LEFT_ARROW_BUTTON = configuration.getIntOrDefault("LEFT_ARROW_BUTTON", 106);
 exports.RIGHT_ARROW_BUTTON = configuration.getIntOrDefault("RIGHT_ARROW_BUTTON", 107);
+exports.UP_ARROW_BUTTON = configuration.getIntOrDefault("UP_ARROW_BUTTON", 104);
+exports.DOWN_ARROW_BUTTON = configuration.getIntOrDefault("DOWN_ARROW_BUTTON", 105);
 exports.MODE_BUTTON = configuration.getIntOrDefault("MODE_BUTTON", 111);
 exports.CHANGE_CHORD_MODE_BUTTON = configuration.getIntOrDefault("CHANGE_CHORD_MODE_BUTTON",88);
 
@@ -27,6 +29,7 @@ exports.COLOR_ACTIVE_SCENE = configuration.getIntOrDefault("COLOR_ACTIVE_SCENE",
 exports.COLOR_ACTIVE_NOTE = configuration.getIntOrDefault("COLOR_ACTIVE_NOTE",58);
 exports.COLOR_NON_ACTIVE_NOTE = configuration.getIntOrDefault("COLOR_NON_ACTIVE_NOTE",40);
 exports.COLOR_LENGTH = configuration.getIntOrDefault("COLOR_LENGTH",8);
+exports.COLOR_VELOCITY = configuration.getIntOrDefault("COLOR_VELOCITY",116);
 exports.COLOR_BLINK = configuration.getIntOrDefault("COLOR_BLINK",58);
 
 exports.COLOR_TONIC = configuration.getIntOrDefault("COLOR_TONIC",29);
@@ -37,7 +40,7 @@ exports.MUTE_BUTTONS = configuration.getArrayOrDefault("MUTE_BUTTONS",8,[89,79,6
 exports.SCENE_BUTTONS = configuration.getArrayOrDefault("SCENE_BUTTONS",4,[54,55,44,45]);
 exports.BIG_GRID = configuration.getArrayOrDefault("BIG_GRID",16,[14,23,32,41,51,62,73,84,85,76,67,58,48,37,26,15]);
 exports.INNER_GRID = configuration.getArrayOrDefault("INNER_GRID",12,[24,33,42,52,63,74,75,66,57,47,36,25]);
-exports.LENGTH_GRID = configuration.getArrayOrDefault("LENGTH_GRID",8,[34,43,53,64,65,56,46,35]);
+exports.SMALL_GRID = configuration.getArrayOrDefault("SMALL_GRID",8,[34,43,53,64,65,56,46,35]);
 
 exports.SCENE_STACK_LIMIT = configuration.getIntOrDefault("SCENE_STACK_LIMIT",5);
 exports.GRID = utils.generateGrid();

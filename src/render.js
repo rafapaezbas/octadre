@@ -49,9 +49,9 @@ const renderSeq = (scenes,state) => {
 	var mutesMessage = generateMutesMessage(scenes,state);
 	var notesMessage = generateNotesMessage(scenes,state);
 	var scenesMessage = generateScenesMessage(scenes,state);
-	var lengthMessage = generateLengthMessage(scenes,state);
+	var smallGridMessage = generateSmallGridMessage(scenes,state);
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(lengthMessage).concat(notesMessage).concat([247]);
+	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(smallGridMessage).concat(notesMessage).concat([247]);
 	io.launchpadOutput.send('sysex',message);
 	io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
 	return message;
@@ -119,11 +119,25 @@ const generateScenesMessage = (scenes,state) => {
 	},[]);
 };
 
+const generateSmallGridMessage = (scenes,state) => {
+	return state.smallGridMode == 'length' ? generateLengthMessage(scenes,state) : generateVelocityMessage(scenes,state);
+};
+
 const generateLengthMessage = (scenes,state) => {
 	var length =  scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length;
-	return cons.LENGTH_GRID.reduce((acc,e, i) => {
+	return cons.SMALL_GRID.reduce((acc,e, i) => {
 		acc.push(e);
 		i  < length/2  ? acc.push(cons.COLOR_LENGTH) : acc.push(0);
+		return acc;
+	},[]);
+};
+
+const generateVelocityMessage = (scenes, state) => {
+	var velocity = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].velocity;
+	var mappedVelocityValue = (velocity * cons.SMALL_GRID.length) / 127;
+	return cons.SMALL_GRID.reduce((acc,e, i) => {
+		acc.push(e);
+		i  < mappedVelocityValue  ? acc.push(cons.COLOR_VELOCITY) : acc.push(0);
 		return acc;
 	},[]);
 };
