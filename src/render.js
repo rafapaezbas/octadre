@@ -1,24 +1,25 @@
 const utils = require('./utils');
 const cons = require('./constants');
+const io = require('./midi-io');
 
 const header = [ 240, 00, 32, 41, 2, 24, 10 ];
 const setAllHeader = [ 240, 00, 32, 41, 2, 24, 14 ];
 const flashHeader = [ 240, 00, 32, 41, 2, 24, 40 , 0 ];
 const byColumnHeader = [ 240, 00, 32, 41, 2, 24, 12 ];
 
-exports.render = (output,scenes,state) => {
+exports.render = (scenes,state) => {
 
 	if(state.renderReset){
-		renderReset(output);
+		renderReset();
 		state.renderReset = false;
 	}
 
 	switch(state.mode){
 	case 'seq':
-		renderSeq(output,scenes,state);
+		renderSeq(scenes,state);
 		break;
 	case 'chords':
-		renderChords(output,scenes,state);
+		renderChords(scenes,state);
 		break;
 	default:
 		break;
@@ -26,7 +27,7 @@ exports.render = (output,scenes,state) => {
 };
 
 // TODO improve this, please.
-exports.lightCurrentStep = (output,state,scenes) => { 
+exports.lightCurrentStep = (state,scenes) => {
 	var trackLength = scenes[state.currentScene].tracks[state.currentTrack].trackLength;
 	var modCurrentStep = state.currentStep * scenes[state.currentScene].tracks[state.currentTrack].tempoModifier;
 	var prevStep = modCurrentStep != 0 ? modCurrentStep - 1 : trackLength - 1;
@@ -34,15 +35,15 @@ exports.lightCurrentStep = (output,state,scenes) => {
 		var sysex = [];
 		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes))
 			.concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_CURSOR]).concat([247]);
-		output.send('sysex',message);
+		io.launchpadOutput.send('sysex',message);
 	}
 	if(prevStep % trackLength == state.lastPressedStep){
 		var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-		output.send('sysex',flashLastPressedStepMessage);
+		io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
 	}
 }
 
-const renderSeq = (output,scenes,state) => {
+const renderSeq = (scenes,state) => {
 	var sysex = []
 	var stepsMessage = generateStepsMessage(scenes,state);
 	var mutesMessage = generateMutesMessage(scenes,state);
@@ -51,17 +52,17 @@ const renderSeq = (output,scenes,state) => {
 	var lengthMessage = generateLengthMessage(scenes,state);
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
 	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(lengthMessage).concat(notesMessage).concat([247]);
-	output.send('sysex',message);
-	output.send('sysex',flashLastPressedStepMessage);
+	io.launchpadOutput.send('sysex',message);
+	io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
 	return message;
 }
 
-const renderChords = (output,scenes,state) => {
+const renderChords = (scenes,state) => {
 	var sysex = []
 	var chordsByColumnMessage = sysex.concat(byColumnHeader).concat(generateColumnChordsMessage()).concat([247]);
 	var chordsMessage = sysex.concat(header).concat(generateChordsMessage(scenes, state)).concat([247]);
-	output.send('sysex',chordsByColumnMessage);
-	output.send('sysex',chordsMessage);
+	io.launchpadOutput.send('sysex',chordsByColumnMessage);
+	io.launchpadOutput.send('sysex',chordsMessage);
 };
 
 const generateStepsMessage = (scenes,state) => {
@@ -141,10 +142,10 @@ const resetStepMessage = (step,state,scenes) => {
 	return [cons.BIG_GRID[step], color];
 };
 
-const renderReset = (output) => {
+const renderReset = () => {
 	var sysex = []
 	var color = 0; // Note-off
 	var message = sysex.concat(setAllHeader).concat(color).concat([247]);
-	output.send('sysex',message);
+	io.launchpadOutput.send('sysex',message);
 	return message;
 };

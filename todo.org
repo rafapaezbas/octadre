@@ -32,8 +32,11 @@ VII 7-2-3
 ** DONE tempo modifier 0.25 and 0.125
 ** TODO Tempo modifier render
 ** DONE note length / tempo-modifier
-** TODO auto change of scene
+** DONE auto change of scene
 ** TODO change of scenes by slower track
 ** DONE Shift Render //doesnt look good
 ** DONE blink Shift
 ** DONE change mute-button with change track button
+** TODO add velociy
+** TODO Clean up midi-io parameters
+** TODO Tri-pe-lets

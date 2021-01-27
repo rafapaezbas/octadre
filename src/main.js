@@ -30,27 +30,26 @@ var state =  {
 	showCursor : true,
 };
 
-
 io.clockInput.on('clock', function () {
 	state.clockTick++;
 	midi.resetClock(state);
 	if(state.clockTick % 6 == 0){
-		midi.playNextStep(state,scenes,io.output);
+		midi.playNextStep(state,scenes);
 		state.currentStep++;
 		if(state.mode == 'seq' && state.showCursor) {
-			render.lightCurrentStep(io.launchpadOutput,state,scenes);
+			render.lightCurrentStep(state,scenes);
 		}
 	}
 });
 
 io.input.on('noteon', (message) => {
-	var pressed = message.velocity == 127;
+	var pressed = message.velocity > 0;
 	var button = message.note;
 	update(pressed, button);
 });
 
 io.input.on('cc', (message) => {
-	var pressed = message.value == 127;
+	var pressed = message.value > 0;
 	var button = message.controller;
 	update(pressed, button);
 });
@@ -74,7 +73,7 @@ const updateSeqMode = (pressed, button) => {
 		if(controller['seq'][button] != undefined){
 			lib.addScenesToStack(button, state, scenes);
 			controller['seq'][button].map(f => f(state,scenes));
-			render.render(io.launchpadOutput,scenes,state);
+			render.render(scenes,state);
 		}
 	}else{
 		state.pressedButtons = state.pressedButtons.filter(b => b != button);
@@ -84,7 +83,7 @@ const updateSeqMode = (pressed, button) => {
 const updateChordMode = (pressed, button) => {
 	if(pressed){
 		pressedChord(button);
-		render.render(io.launchpadOutput,scenes,state);
+		render.render(scenes,state);
 	}else{
 		unpressedChord(button);
 	}
@@ -124,7 +123,7 @@ const setupSceneTracks = () => {
 	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,
 					   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
 	var tracks =  utils.createArray(8,{}).map((t,i) => {
-		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1}));
+		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1, velocity: 127}));
 		return {pattern:pattern, trackLength:16, midiRoot:60, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
 	});
 	return {tracks: tracks};
@@ -153,4 +152,4 @@ const setupController = () => {
 setupState();
 setupScenes();
 setupController();
-render.render(io.launchpadOutput,scenes,state);
+render.render(scenes,state);
