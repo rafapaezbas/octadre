@@ -3,10 +3,14 @@ const chords = require('./chords');
 const render = require('./render');
 const io = require('./midi-io.js');
 
-exports.playNextStep = (state,scenes) => {
-	sendNoteOff(state);
-	sendNoteOn(state,scenes);
+exports.nextStep = (state,scenes) => {
+	queueMidiNotes(state,scenes);
 	checkSceneChange(state,scenes);
+};
+
+exports.sendMidi = (state) => {
+	sendNoteOff(state);
+	sendNoteOn(state);
 };
 
 exports.resetClock = (state) => {
@@ -19,51 +23,56 @@ exports.resetClock = (state) => {
 	},500);
 };
 
-const sendNoteOn = (state,scenes) => {
-	var tasks = [];
+const queueMidiNotes = (state,scenes) => {
 	var scene = getPlayingScene(state);
 	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (state.currentStep * t.tempoModifier);
 		var step = t.pattern[trackCurrentStep % t.trackLength];
 		if(step != undefined && step.active && !t.muted){
-			playStep(t,step,state,tasks);
-			playChord(t,step,state,tasks);
-			async.parallel(tasks,(error,results) => {});
+			queueStep(t,step,state);
+			queueChord(t,step,state);
 		}
 	});
 };
 
-const playStep = (track,step,state,tasks) => {
+const queueStep = (track,step,state) => {
 	step.notes.map((n,i) => {
 		if(n) {
-			tasks.push((callback) => {
-				io.output.send('noteon', {note: track.midiRoot + i,velocity: step.velocity,channel: track.channel});
-				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: track.midiRoot + i, channel: track.channel});
-				callback();
-			});
+			state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
 		}
 	});
 };
 
-const playChord = (track,step,state,tasks) => {
+const queueChord = (track,step,state) => {
 	step.chords.map(n => {
 		var chord = state.chords[n];
 		state.chords[n].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(e => {
-			tasks.push((callback) => {
-				io.output.send('noteon', {note: e, velocity: step.velocity, channel: track.channel});
-				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length, note: e, channel: track.channel});
-				callback();
-			});
+			state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
 		});
 	});
 };
+
+const sendNoteOn = (state,scenes) => {
+	var tasks = [];
+	state.midiNotesQueue.map((e) => {
+		if(state.clockTick == e.clockTick) {
+			tasks.push((callback) => {
+				io.output.send('noteon', {note: e.note ,velocity: e.velocity,channel: e.channel});
+				callback();
+			});
+		}
+	});
+	state.midiNotesQueue = state.midiNotesQueue.filter(e => state.clockTick - e.clockTick < e.length * state.clockResolution);
+	async.parallel(tasks,(error,results) => {});
+};
+
 
 const sendNoteOff = (state) => {
 	var tasks = [];
 	state.midiNotesQueue.map((e) => {
 		if(state.clockTick - e.clockTick >= e.length * state.clockResolution) {
 			tasks.push((callback) => {
-				io.output.send('noteoff', {note: e.note ,velocity: 127,channel: e.channel});
+				io.output.send('noteoff', {note: e.note ,velocity: e.velocity,channel: e.channel});
 				callback();
 			});
 		}

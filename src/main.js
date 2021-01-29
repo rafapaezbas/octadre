@@ -35,12 +35,13 @@ io.clockInput.on('clock', function () {
 	state.clockTick++;
 	midi.resetClock(state);
 	if(state.clockTick % 6 == 0){
-		midi.playNextStep(state,scenes);
+		midi.nextStep(state,scenes);
 		state.currentStep++;
 		if(state.mode == 'seq' && state.showCursor) {
 			render.lightCurrentStep(state,scenes);
 		}
 	}
+	midi.sendMidi(state);
 });
 
 io.input.on('noteon', (message) => {
