@@ -68,7 +68,6 @@ const sendNoteOn = (state,scenes) => {
 			});
 		}
 	});
-	state.midiNotesQueue = state.midiNotesQueue.filter(e => state.clockTick - e.clockTick < e.length * state.clockResolution);
 	async.parallel(tasks,(error,results) => {});
 };
 
