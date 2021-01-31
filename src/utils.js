@@ -13,11 +13,13 @@ exports.getLaunchpadPort = (ports) => {
 
 exports.getOutputPort = (port) => {
 	const ports = easymidi.getOutputs();
+	console.log("Midi output: " + ports[port]);
 	return ports[port];
 };
 
 exports.getInputPort = (port) => {
 	const ports = easymidi.getInputs();
+	console.log("Midi input: " + ports[port]);
 	return ports[port];
 };
 

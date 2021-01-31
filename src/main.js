@@ -23,7 +23,6 @@ var state =  {
 	clockResolution : 6, //Number of ticks per step
 	resetClockTimeout : undefined,
 	midiNotesQueue:[],
-	scenesStack: [],
 	chords: [],
 	mode : 'seq',
 	renderReset : true,
@@ -31,7 +30,7 @@ var state =  {
 	smallGridMode : 'length',
 };
 
-io.clockInput.on('clock', function () {
+io.clockInput.on('clock', () => {
 	state.clockTick++;
 	midi.resetClock(state);
 	if(state.clockTick % 6 == 0){
@@ -73,7 +72,6 @@ const updateSeqMode = (pressed, button) => {
 	if(pressed){
 		state.pressedButtons.push(button);
 		if(controller['seq'][button] != undefined){
-			//lib.addScenesToStack(button, state, scenes);
 			controller['seq'][button].map(f => f(state,scenes));
 			render.render(scenes,state);
 		}
@@ -135,8 +133,8 @@ const setupController = () => {
 	controller['seq'] = [];
 	controller['chords'] = [];
 	controller['seq'][cons.TEMPO_BUTTON] = [lib.changeTempo];
-	controller['seq'][cons.SHIFT_BUTTON] = [lib.undo,lib.toogleCursor];
-	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.undo,lib.toogleCursor];
+	controller['seq'][cons.SHIFT_BUTTON] = [lib.toogleCursor];
+	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.toogleCursor];
 	controller['seq'][cons.SHIFT_3_BUTTON] = [lib.toogleCursor];
 	controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
 	controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
