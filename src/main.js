@@ -73,7 +73,7 @@ const updateSeqMode = (pressed, button) => {
 	if(pressed){
 		state.pressedButtons.push(button);
 		if(controller['seq'][button] != undefined){
-			lib.addScenesToStack(button, state, scenes);
+			//lib.addScenesToStack(button, state, scenes);
 			controller['seq'][button].map(f => f(state,scenes));
 			render.render(scenes,state);
 		}

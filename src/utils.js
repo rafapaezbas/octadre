@@ -1,7 +1,5 @@
-const reader = require("readline-sync");
 var randomGen = require('random-seed');
-var random = randomGen.create(reader.question("\n Input random seed: "));
-//random.initState();
+const easymidi = require('easymidi');
 
 exports.getLaunchpadPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
@@ -12,11 +10,17 @@ exports.getLaunchpadPort = (ports) => {
 	console.log("No MK2:Launchpad midi i/o found");
 };
 
-exports.getNormalPort = (message, ports) => {
-	var io = ports.map((e,i) => i + ': ' + e + '\n' + ' ').reduce((acc,e) => acc + e, ' ');
-	var input = reader.question('\n' + io + message);
-	return ports[input];
+
+exports.getOutputPort = (port) => {
+	const ports = easymidi.getOutputs();
+	return ports[port];
 };
+
+exports.getInputPort = (port) => {
+	const ports = easymidi.getInputs();
+	return ports[port];
+};
+
 
 exports.random = (max) => {
 	return random(max);
@@ -100,3 +104,14 @@ exports.createArray = (length,fill) => {
 	arr.fill(fill);
 	return arr;
 };
+
+const arg = exports.arg = (name) => {
+	for(var i = 0; i < process.argv.length; i++){
+		if(process.argv[i] == name){
+			return process.argv[i+1];
+		}
+	}
+	return undefined;
+};
+
+var random = randomGen.create(arg("--random-seed"));
