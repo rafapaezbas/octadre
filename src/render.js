@@ -49,9 +49,11 @@ const renderSeq = (scenes,state) => {
 	var mutesMessage = generateMutesMessage(scenes,state);
 	var notesMessage = generateNotesMessage(scenes,state);
 	var scenesMessage = generateScenesMessage(scenes,state);
+	var tripletsMessage = generateTripletsMessage(scenes,state);
 	var smallGridMessage = generateSmallGridMessage(scenes,state);
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-	var message = sysex.concat(header).concat(stepsMessage).concat(mutesMessage).concat(scenesMessage).concat(smallGridMessage).concat(notesMessage).concat([247]);
+	var message = sysex.concat(header).concat(stepsMessage).concat(tripletsMessage).concat(mutesMessage).concat(scenesMessage)
+		.concat(smallGridMessage).concat(notesMessage).concat([247]);
 	io.launchpadOutput.send('sysex',message);
 	io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
 	return message;
@@ -72,6 +74,16 @@ const generateStepsMessage = (scenes,state) => {
 			e.active ? acc.push(cons.COLOR_ACTIVE_STEP) : acc.push(scenes[state.currentScene].tracks[state.currentTrack].color);
 		} else {
 			acc.push(0);
+		}
+		return acc;
+	},[]);
+};
+
+const generateTripletsMessage = (scenes,state) => {
+	return scenes[state.currentScene].tracks[state.currentTrack].pattern.reduce((acc,e,i) => {
+		if(e.triplet){
+			acc.push(cons.BIG_GRID[i]);
+			acc.push(cons.COLOR_TRIPLET);
 		}
 		return acc;
 	},[]);
@@ -146,7 +158,7 @@ const flashLastPressedStep = (scenes, state) => {
 	var sysex = [];
 	var stepButton = cons.BIG_GRID[state.lastPressedStep];
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
-	var color = currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_ACTIVE_STEP : currentTrack.color;
+	var color = currentTrack.pattern[state.lastPressedStep].triplet ? cons.COLOR_TRIPLET : currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_ACTIVE_STEP : currentTrack.color;
 	return sysex.concat(flashHeader).concat([stepButton, color]).concat([247]);
 };
 

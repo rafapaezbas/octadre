@@ -37,8 +37,14 @@ const queueMidiNotes = (state,scenes) => {
 
 const queueStep = (track,step,state) => {
 	step.notes.map((n,i) => {
-		if(n) {
-			state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+		if(n){
+			if(!step.triplet) {
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+			}else{
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: 4, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+				state.midiNotesQueue.push({clockTick: state.clockTick + 4, length: 4, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+				state.midiNotesQueue.push({clockTick: state.clockTick + 8, length: 4 , note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+			}
 		}
 	});
 };

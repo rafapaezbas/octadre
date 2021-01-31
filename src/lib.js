@@ -6,11 +6,24 @@ const io = require('./midi-io');
 exports.toogleStep = (state,scenes) => {
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
 	var step = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
-	if(state.pressedButtons.length == 1 && isBigGrid(state.pressedButtons[0]) && currentTrack.trackLength > step ){
+	if(state.pressedButtons.length == 1 && isBigGrid(state.pressedButtons[0]) && currentTrack.trackLength > step && !stepIsInTriplet(step,currentTrack)){
 		state.lastPressedStep = step;
 		currentTrack.pattern[step].active ^= true;
 	}
 };
+
+exports.toogleTriplet = (state,scenes) => {
+	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
+	if(state.pressedButtons.length == 2 && isBigGrid(state.pressedButtons[0]) && isBigGrid(state.pressedButtons[1])
+	   && buttonsAreContinousInGrid(state.pressedButtons) && stepsInSameTripletState(state.pressedButtons, currentTrack)){
+		var step = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
+		state.lastPressedStep = step;
+		currentTrack.pattern[step].triplet ^= true;
+		currentTrack.pattern[step].active = currentTrack.pattern[step].triplet;
+		currentTrack.pattern[(step + 1) % cons.BIG_GRID.length].triplet ^= true;
+		currentTrack.pattern[(step + 1) % cons.BIG_GRID.length].active = false;
+	}
+}
 
 exports.toogleNote = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && cons.INNER_GRID.indexOf(state.pressedButtons[0]) != -1){
@@ -237,10 +250,26 @@ const calculateLength = (button, currentLength) => {
 };
 
 const calculateVelocity = (button) => {
-	return (127 / 8) * (cons.SMALL_GRID.indexOf(button) + 1)
-}
+	return (127 / 8) * (cons.SMALL_GRID.indexOf(button) + 1);
+};
 
 const allButtonsAreShift = (buttons) => {
 	const shiftButtons = [cons.SHIFT_BUTTON, cons.SHIFT_2_BUTTON, cons.SHIFT_3_BUTTON];
 	return buttons.filter(e => shiftButtons.indexOf(e) != -1).length == 3;
+};
+
+const buttonsAreContinousInGrid = (pressedButtons) => {
+	const firstButton = cons.BIG_GRID.indexOf(pressedButtons[0]);
+	const secondButton = cons.BIG_GRID.indexOf(pressedButtons[1]);
+	return firstButton - secondButton == -1 || firstButton - secondButton == cons.BIG_GRID.length - 1;
+};
+
+const stepIsInTriplet = (step,track) => {
+	return track.pattern[step].triplet;
+};
+
+const stepsInSameTripletState = (pressedButtons,track) => {
+	const firstStep = cons.BIG_GRID.indexOf(pressedButtons[0]);
+	const secondStep = cons.BIG_GRID.indexOf(pressedButtons[1]);
+	return track.pattern[firstStep].triplet == track.pattern[secondStep].triplet;
 };

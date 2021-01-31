@@ -39,5 +39,7 @@ VII 7-2-3
 ** DONE change mute-button with change track button
 ** DONE add velociy
 ** DONE Clean up midi-io parameters
-** TODO midi queue
-** TODO Tri-pe-lets
+** DONE midi queue
+** DONE Tri-pe-lets
+** TODO fix triplets cursor
+** TODO fix triplets color
