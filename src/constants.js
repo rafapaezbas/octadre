@@ -11,6 +11,7 @@ exports.UP_ARROW_BUTTON = configuration.getIntOrDefault("UP_ARROW_BUTTON", 104);
 exports.DOWN_ARROW_BUTTON = configuration.getIntOrDefault("DOWN_ARROW_BUTTON", 105);
 exports.MODE_BUTTON = configuration.getIntOrDefault("MODE_BUTTON", 111);
 exports.CHANGE_CHORD_MODE_BUTTON = configuration.getIntOrDefault("CHANGE_CHORD_MODE_BUTTON",88);
+exports.CHANGE_WORKSPACE_BUTTON = configuration.getIntOrDefault("CHANGE_WORKSPACE_BUTTON",108);
 
 
 exports.COLOR_TRACK_1 = configuration.getIntOrDefault("COLOR_TRACK_1",29);

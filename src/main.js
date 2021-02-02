@@ -28,6 +28,7 @@ var state =  {
 	renderReset : true,
 	showCursor : true,
 	smallGridMode : 'length',
+	workspace : 2, // 0 : big_grid, 1 : brig_grid + notes, 2: big_grid + notes + small_grid
 };
 
 io.clockInput.on('clock', () => {
@@ -141,6 +142,7 @@ const setupController = () => {
 	controller['seq'][cons.UP_ARROW_BUTTON] = [lib.toogleSmallGridMode];
 	controller['seq'][cons.DOWN_ARROW_BUTTON] = [lib.toogleSmallGridMode];
 	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];
+	controller['seq'][cons.CHANGE_WORKSPACE_BUTTON] = [lib.changeWorkspace];
 	cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
 	cons.SMALL_GRID.map(e => controller['seq'][e] = [lib.changeLength, lib.changeVelocity]);
 	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);

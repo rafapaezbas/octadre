@@ -45,12 +45,12 @@ exports.lightCurrentStep = (state,scenes) => {
 
 const renderSeq = (scenes,state) => {
 	var sysex = []
-	var stepsMessage = generateStepsMessage(scenes,state);
 	var mutesMessage = generateMutesMessage(scenes,state);
-	var notesMessage = generateNotesMessage(scenes,state);
+	var stepsMessage = generateStepsMessage(scenes,state);
+	var notesMessage = state.workspace > 0 ? generateNotesMessage(scenes,state) : [];
+	var smallGridMessage = state.workspace > 1 ? generateSmallGridMessage(scenes,state) : [];
 	var scenesMessage = generateScenesMessage(scenes,state);
 	var tripletsMessage = generateTripletsMessage(scenes,state);
-	var smallGridMessage = generateSmallGridMessage(scenes,state);
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
 	var message = sysex.concat(header).concat(stepsMessage).concat(tripletsMessage).concat(mutesMessage).concat(scenesMessage)
 		.concat(smallGridMessage).concat(notesMessage).concat([247]);

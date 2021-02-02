@@ -43,7 +43,7 @@ VII 7-2-3
 ** DONE Tri-pe-lets
 ** DONE fix triplets cursor
 ** DONE fix triplets color
-** TODO change workspaces (visual information)
+** DONE change workspaces (visual information)
 ** DONE Node profiling
 *** Introduction
 [https://nodejs.org/en/docs/guides/simple-profiling/]

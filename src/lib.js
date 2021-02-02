@@ -26,7 +26,7 @@ exports.toogleTriplet = (state,scenes) => {
 }
 
 exports.toogleNote = (state,scenes) => {
-	if(state.pressedButtons.length == 1 && cons.INNER_GRID.indexOf(state.pressedButtons[0]) != -1){
+	if(state.pressedButtons.length == 1 && cons.INNER_GRID.indexOf(state.pressedButtons[0]) != -1 && state.workspace > 0){
 		var note = cons.INNER_GRID.indexOf(state.pressedButtons[0]);
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes[note] ^= true;
 	}
@@ -168,7 +168,7 @@ exports.changeChordMode = (state,scenes) => {
 };
 
 exports.changeLength = (state,scenes) => {
-	if(state.smallGridMode == 'length' && state.pressedButtons.length == 1){
+	if(state.smallGridMode == 'length' && state.pressedButtons.length == 1 && state.workspace > 1){
 		var button = state.pressedButtons[0];
 		var currentLength = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length;
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length = calculateLength(button,currentLength);
@@ -176,7 +176,7 @@ exports.changeLength = (state,scenes) => {
 };
 
 exports.changeVelocity = (state,scenes) => {
-	if(state.smallGridMode == 'velocity' && state.pressedButtons.length == 1){
+	if(state.smallGridMode == 'velocity' && state.pressedButtons.length == 1 && state.workspace > 1){
 		var button = state.pressedButtons[0];
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].velocity = calculateVelocity(button);
 	}
@@ -186,6 +186,11 @@ exports.toogleCursor = (state,scenes) => {
 	if(state.pressedButtons.length == 3 && allButtonsAreShift(state.pressedButtons)){
 		state.showCursor ^= true;
 	}
+};
+
+exports.changeWorkspace = (state,scenes) => {
+	state.workspace = (state.workspace + 1) % 3;
+	state.renderReset = true;
 };
 
 const resetSceneChain = (state) => {
