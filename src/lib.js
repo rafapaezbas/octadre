@@ -60,9 +60,9 @@ exports.changeScene = (state,scenes) => {
 };
 
 exports.copyScene = (state,scenes) => {
-	if(state.pressedButtons.length == 2 && isSceneButton(state.pressedButtons[0]) && isSceneButton(state.pressedButtons[1])){
-		var originScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[0]);
-		var targetScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[1]);
+	if(state.pressedButtons.length == 3 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON && isSceneButton(state.pressedButtons[1]) && isSceneButton(state.pressedButtons[2])){
+		var originScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[1]);
+		var targetScene = cons.SCENE_BUTTONS.indexOf(state.pressedButtons[2]);
 		scenes[targetScene] = JSON.parse(JSON.stringify(scenes[originScene])); // Dirty trick for object deep copy by value
 		io.blinkButton(11,cons.COLOR_BLINK,0);
 	}

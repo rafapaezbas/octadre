@@ -164,7 +164,9 @@ const flashLastPressedStep = (scenes, state) => {
 
 const resetStepMessage = (step,state,scenes) => {
 	var trackColor = scenes[state.currentScene].tracks[state.currentTrack].color;
-	var color = scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active ? cons.COLOR_ACTIVE_STEP : trackColor;
+	var isActive = scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active;
+	var isTriplet =  scenes[state.currentScene].tracks[state.currentTrack].pattern[step].triplet;
+	var color = isTriplet ?  cons.COLOR_TRIPLET : isActive ? cons.COLOR_ACTIVE_STEP : trackColor;
 	return [cons.BIG_GRID[step], color];
 };
 

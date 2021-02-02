@@ -41,8 +41,9 @@ VII 7-2-3
 ** DONE Clean up midi-io parameters
 ** DONE midi queue
 ** DONE Tri-pe-lets
-** TODO fix triplets cursor
-** TODO fix triplets color
+** DONE fix triplets cursor
+** DONE fix triplets color
+** TODO change workspaces (visual information)
 ** DONE Node profiling
 *** Introduction
 [https://nodejs.org/en/docs/guides/simple-profiling/]
@@ -50,4 +51,4 @@ VII 7-2-3
 *** Follow up
 Add scenes to stack seems to be expensive, try another way
 
-** TODO Add shift to copy scene
+** DONE Add shift to copy scene

@@ -41,9 +41,9 @@ const queueStep = (track,step,state) => {
 			if(!step.triplet) {
 				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
 			}else{
-				state.midiNotesQueue.push({clockTick: state.clockTick, length: 4, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
-				state.midiNotesQueue.push({clockTick: state.clockTick + 4, length: 4, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
-				state.midiNotesQueue.push({clockTick: state.clockTick + 8, length: 4 , note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: 4 / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+				state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 4 / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+				state.midiNotesQueue.push({clockTick: state.clockTick + (8 / track.tempoModifier), length: 4 / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
 			}
 		}
 	});
@@ -53,7 +53,13 @@ const queueChord = (track,step,state) => {
 	step.chords.map(n => {
 		var chord = state.chords[n];
 		state.chords[n].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(e => {
-			state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+			if(!step.triplet) {
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+			}else{
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: 4 / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+				state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 4 / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+				state.midiNotesQueue.push({clockTick: state.clockTick + (8 / track.tempoModifier), length: 4 / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+			}
 		});
 	});
 };
