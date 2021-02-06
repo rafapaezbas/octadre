@@ -1,9 +1,14 @@
-* Tasks
-** DONE Random pattern
- Branch: feature/random-pattern
+* TODO v 1.0
 ** TODO Octave up/down
 ** TODO Free midi
 ** TODO Notes play
+** TODO ASCII Documentation
+** TODO Tempo modifier render
+** TODO change of scenes by slower track
+** TODO Electron architecture
+** TODO chords mode configurable
+** DONE Random pattern
+ Branch: feature/random-pattern
 ** DONE Improve ‘file:./src/midi.js’ - send note on could be refactored to two methods: play step, and play chord
 ** DONE Chords and scales
 Major scale [x,-,x,-,x,x,-,x,-,x,-,x,x]
@@ -19,21 +24,14 @@ VII 7-2-3
 ** DONE Place scales horizontally
 ** DONE Chords mode render
 ** DONE chords placement
-** TODO Chords scale change (8th row)
 ** DONE Chord change (8th button)
-** TODO Chords inversion change
-** TODO ASCII Documentation
-** TODO chords render
-** TODO arpeggio
 ** DONE Change colors of seq mode
 ** DONE Notes length
 ** DONE cursor on/off
 ** DONE copy step
 ** DONE tempo modifier 0.25 and 0.125
-** TODO Tempo modifier render
 ** DONE note length / tempo-modifier
 ** DONE auto change of scene
-** TODO change of scenes by slower track
 ** DONE Shift Render //doesnt look good
 ** DONE blink Shift
 ** DONE change mute-button with change track button
@@ -52,3 +50,8 @@ VII 7-2-3
 Add scenes to stack seems to be expensive, try another way
 
 ** DONE Add shift to copy scene
+* TODO v 2.0
+** TODO Chords scale change (8th row)
+** TODO chords render
+** TODO arpeggio
+** TODO Chords inversion change
