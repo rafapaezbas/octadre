@@ -1,11 +1,18 @@
 const async = require('async');
 const cons = require('./constants');
+const chords = require('./chords');
+const render = require('./render');
+const io = require('./midi-io');
 
+exports.nextStep = (state,scenes) => {
+	queueMidiNotes(state,scenes);
+	checkSceneChange(state,scenes);
+};
 
-exports.playNextStep = (state,scenes,output) => {
-	sendNoteOff(state,output);
-	sendNoteOn(state,scenes,output);
-}
+exports.sendMidi = (state) => {
+	sendNoteOff(state);
+	sendNoteOn(state);
+};
 
 exports.resetClock = (state) => {
 	if(state.resetClockTimeout != undefined){
@@ -15,37 +22,69 @@ exports.resetClock = (state) => {
 		state.clockTick = -1;
 		state.currentStep = 0;
 	},500);
-
 };
 
-const sendNoteOn = (state,scenes,output) => {
-	var tasks = [];
+const queueMidiNotes = (state,scenes) => {
 	var scene = getPlayingScene(state);
 	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (state.currentStep * t.tempoModifier);
 		var step = t.pattern[trackCurrentStep % t.trackLength];
 		if(step != undefined && step.active && !t.muted){
-			step.notes.map((n,i) => {
-				if(n) {
-					tasks.push((callback) => {
-						var midi = midiSignal(t,i);
-						output.send('noteon', midi);
-						state.midiNotesQueue.push({clockTick: state.clockTick, length: 1, note: midi.note , channel: midi.channel});
-						callback();
-					});
-				}
+			queueStep(t,step,state);
+			queueChord(t,step,state);
+		}
+	});
+};
+
+const queueStep = (track,step,state) => {
+	step.notes.map((n,i) => {
+		if(n){
+			if(!step.triplet) {
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+			}else{
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: 4 / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+				state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 4 / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+				state.midiNotesQueue.push({clockTick: state.clockTick + (8 / track.tempoModifier), length: 4 / track.tempoModifier, note: track.midiRoot + i, channel: track.channel, velocity: step.velocity });
+			}
+		}
+	});
+};
+
+const queueChord = (track,step,state) => {
+	step.chords.map(n => {
+		var chord = state.chords[n];
+		state.chords[n].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(e => {
+			if(!step.triplet) {
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+			}else{
+				state.midiNotesQueue.push({clockTick: state.clockTick, length: 4 / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+				state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 4 / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+				state.midiNotesQueue.push({clockTick: state.clockTick + (8 / track.tempoModifier), length: 4 / track.tempoModifier, note: e, channel: track.channel, velocity: step.velocity});
+			}
+		});
+	});
+};
+
+const sendNoteOn = (state,scenes) => {
+	var tasks = [];
+	state.midiNotesQueue.map((e) => {
+		if(state.clockTick == e.clockTick) {
+			tasks.push((callback) => {
+				io.output.send('noteon', {note: e.note ,velocity: e.velocity,channel: e.channel});
+				callback();
 			});
 		}
 	});
 	async.parallel(tasks,(error,results) => {});
 };
 
-const sendNoteOff = (state,output) => {
+
+const sendNoteOff = (state) => {
 	var tasks = [];
 	state.midiNotesQueue.map((e) => {
 		if(state.clockTick - e.clockTick >= e.length * state.clockResolution) {
 			tasks.push((callback) => {
-				output.send('noteoff', {note: e.note ,velocity: 127,channel: e.channel});
+				io.output.send('noteoff', {note: e.note ,velocity: 0,channel: e.channel});
 				callback();
 			});
 		}
@@ -57,13 +96,12 @@ const sendNoteOff = (state,output) => {
 const getPlayingScene = (state) => {
 	var shouldChange = state.clockTick % (6*16) == 0;
 	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[state.currentSceneInChain++ % state.scenesChain.length];
-	return state.chainMode ? nextScene : state.currentScene;
-}
+	return state.chainMode && shouldChange ? nextScene : state.currentScene;
+};
 
-const midiSignal = (t,i) => {
-	if(!cons.MPC_MODE) {
-		return {note: t.midiRoot + i,velocity: 127,channel: t.channel};
-	}else{
-		return {note: t.midiRoot + t.channel,velocity: 127,channel: 0}; //t.midiRoot + t.channel just a way to number track number...
+const checkSceneChange = (state,scenes) => {
+	if(state.chainMode && state.clockTick % (6*16) == 0){
+		state.currentScene = state.scenesChain[state.currentSceneInChain % state.scenesChain.length];
+		render.render(scenes,state);
 	}
-}
+};

@@ -1,4 +1,5 @@
-const reader = require("readline-sync");
+var randomGen = require('random-seed');
+const easymidi = require('easymidi');
 
 exports.getLaunchpadPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
@@ -7,27 +8,43 @@ exports.getLaunchpadPort = (ports) => {
 		}
 	}
 	console.log("No MK2:Launchpad midi i/o found");
-}
+};
 
-exports.getNormalPort = (message, ports) => {
-	var io = ports.map((e,i) => i + ': ' + e + '\n' + ' ').reduce((acc,e) => acc + e, ' ');
-	var input = reader.question('\n' + io + message);
-	return ports[input];
-}
+
+exports.getOutputPort = (port) => {
+	const ports = easymidi.getOutputs();
+	console.log("Midi output: " + ports[port]);
+	return ports[port];
+};
+
+exports.getInputPort = (port) => {
+	const ports = easymidi.getInputs();
+	console.log("Midi input: " + ports[port]);
+	return ports[port];
+};
+
+
+exports.random = (max) => {
+	return random(max);
+};
+
+exports.randomInitState = () => {
+	return random.initState();
+};
 
 exports.substractArray = (a,b) => {
 	return a.map((e,i) => e - b[i]);
-}
+};
 
 exports.copyArray = (or,dest) => {
 	for(var i = 0; i < or.length; i++){
 		dest[i] = or[i];
 	}
-}
+};
 
 exports.isInt = (n) => {
 	return Number(n) === n && n % 1 === 0;
-}
+};
 
 exports.shiftPatternRight = (arr) => {
 	arr.unshift(arr[arr.length - 1]); //Insert last element as first
@@ -46,6 +63,16 @@ exports.createRandomPattern = (patternLength) => {
 	var pattern = Math.floor(Math.random() * max).toString(2);
 	var completePattern = "0".repeat(patternLength - pattern.length) + pattern;
 	return completePattern;
+};
+
+exports.generateGrid = () => {
+	var grid = [];
+	for(var i = 0; i < 8; i++){
+		for(var j = 0; j < 8; j++){
+			grid.push(11 + (i * 10) + j);
+		}
+	}
+	return grid;
 };
 
 exports.config = (path) => {
@@ -72,3 +99,21 @@ var initConfig = (path) => {
 	});
 	return config;
 };
+
+exports.createArray = (length,fill) => {
+	var arr = [];
+	arr.length = length;
+	arr.fill(fill);
+	return arr;
+};
+
+const arg = exports.arg = (name) => {
+	for(var i = 0; i < process.argv.length; i++){
+		if(process.argv[i] == name){
+			return process.argv[i+1];
+		}
+	}
+	return undefined;
+};
+
+var random = randomGen.create(arg("--random-seed"));

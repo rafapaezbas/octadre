@@ -1,6 +1,57 @@
-* Tasks
-** DONE Random pattern
- Branch: feature/random-pattern
+* TODO v 1.0
 ** TODO Octave up/down
 ** TODO Free midi
 ** TODO Notes play
+** TODO ASCII Documentation
+** TODO Tempo modifier render
+** TODO change of scenes by slower track
+** TODO Electron architecture
+** DONE chords mode configurable
+** DONE Random pattern
+ Branch: feature/random-pattern
+** DONE Improve ‘file:./src/midi.js’ - send note on could be refactored to two methods: play step, and play chord
+** DONE Chords and scales
+Major scale [x,-,x,-,x,x,-,x,-,x,-,x,x]
+Minor scale [x,-,x,x,-,x,-,x,x,-,x,-,x]
+Grades:
+I 1-3-5
+II 2-4-6
+III 7-3-5
+IV 1-4-6
+V 7-1-5
+VI 1-3-6
+VII 7-2-3
+** DONE Place scales horizontally
+** DONE Chords mode render
+** DONE chords placement
+** DONE Chord change (8th button)
+** DONE Change colors of seq mode
+** DONE Notes length
+** DONE cursor on/off
+** DONE copy step
+** DONE tempo modifier 0.25 and 0.125
+** DONE note length / tempo-modifier
+** DONE auto change of scene
+** DONE Shift Render //doesnt look good
+** DONE blink Shift
+** DONE change mute-button with change track button
+** DONE add velociy
+** DONE Clean up midi-io parameters
+** DONE midi queue
+** DONE Tri-pe-lets
+** DONE fix triplets cursor
+** DONE fix triplets color
+** DONE change workspaces (visual information)
+** DONE Node profiling
+*** Introduction
+[https://nodejs.org/en/docs/guides/simple-profiling/]
+*** Steps
+*** Follow up
+Add scenes to stack seems to be expensive, try another way
+
+** DONE Add shift to copy scene
+* TODO v 2.0
+** TODO Chords scale change (8th row)
+** TODO chords render
+** TODO arpeggio
+** TODO Chords inversion change
