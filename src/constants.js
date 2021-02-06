@@ -46,3 +46,5 @@ exports.SMALL_GRID = configuration.getArrayOrDefault("SMALL_GRID",8,[34,43,53,64
 
 exports.SCENE_STACK_LIMIT = configuration.getIntOrDefault("SCENE_STACK_LIMIT",5);
 exports.GRID = utils.generateGrid();
+
+exports.CHORDS_MODE_ENABLED = configuration.getIntOrDefault("CHORDS_MODE_ENABLED", 0);

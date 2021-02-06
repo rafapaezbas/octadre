@@ -6,7 +6,7 @@
 ** TODO Tempo modifier render
 ** TODO change of scenes by slower track
 ** TODO Electron architecture
-** TODO chords mode configurable
+** DONE chords mode configurable
 ** DONE Random pattern
  Branch: feature/random-pattern
 ** DONE Improve ‘file:./src/midi.js’ - send note on could be refactored to two methods: play step, and play chord

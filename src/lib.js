@@ -125,17 +125,19 @@ exports.randomPattern = (state,scenes) => {
 };
 
 exports.toogleMode = (state,scenes) => {
-	switch(state.mode){
-	case 'seq':
-		state.mode = 'chords';
-		break;
-	case 'chords':
-		state.mode = 'seq';
-		break;
-	default:
-		break;
+	if(cons.CHORDS_MODE_ENABLED){
+		switch(state.mode){
+		case 'seq':
+			state.mode = 'chords';
+			break;
+		case 'chords':
+			state.mode = 'seq';
+			break;
+		default:
+			break;
+		}
+		state.renderReset = true;
 	}
-	state.renderReset = true;
 };
 
 exports.toogleSmallGridMode = (state,scenes) => {
