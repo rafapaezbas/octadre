@@ -2,17 +2,34 @@
   "name": "launchpad-sq",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/main.js",
   "bin": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron . --random-seed 0 --midi-input 0 --midi-output 0"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@electron/remote": "^1.0.2",
     "async": "^3.2.0",
     "easymidi": "^2.0.1",
     "pkg": "^4.4.9",
     "random-seed": "^0.3.0"
+  },
+  "devDependencies": {
+    "electron": "^11.2.3",
+    "electron-rebuild": "^2.3.5"
+  },
+  "build": {
+    "extraResources": [
+      {
+        "from": "./config/",
+        "to": "config",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
   }
 }

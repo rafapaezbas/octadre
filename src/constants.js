@@ -1,5 +1,7 @@
 const utils = require('./utils');
-const configuration = utils.config('config.conf');
+const path = require('path');
+const configFile = path.join(path.dirname(__dirname),'config','config.conf');
+const configuration = utils.config(configFile);
 
 exports.TEMPO_BUTTON = configuration.getIntOrDefault("TEMPO_BUTTON",88);
 exports.SHIFT_BUTTON = configuration.getIntOrDefault("SHIFT_BUTTON",18);

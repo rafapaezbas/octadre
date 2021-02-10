@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Lup!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  </head>
+  <body>
+    <fieldset>
+      <legend>MIDI</legend>
+      <div class="row">
+        <label>Midi input</label>
+        <select id="midi-inputs"></select>
+      </div>
+      <div class="row">
+        <label>Midi output</label>
+        <select id="midi-outputs"></select>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Config</legend>
+      <div class="row" id="config">
+        <label>MPC Mode</label>
+      </div>
+    </fieldset>
+    <fieldset id="pattern">
+      <legend>Pattern</legend>
+      <button>Save</button>
+      <button>Load</button>
+    </fieldset>
+  </body>
+  <script src="app.js"></script>
+</html>

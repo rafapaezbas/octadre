@@ -50,8 +50,6 @@ exports.filterByMode = (index,mode) => {
 };
 
 const findInScale = (chord,scale,root) => {
-    console.log(chord);
-    //utils.randomInitState(); TODO make a choice
     scale = scale.concat(scale); //Duplicate scale
     const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
     return openChord(chord.map(e => notes[e - 1]));
