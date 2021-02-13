@@ -6,8 +6,6 @@ var clockInput = new easymidi.Input(utils.getInputPort(utils.arg("--midi-input")
 var launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
 var input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 
-exports.output = output;
-exports.clockInput = clockInput;
 exports.launchpadOutput = launchpadOutput;
 exports.input = input;
 
@@ -17,6 +15,22 @@ exports.setOutput = (port) => {
 
 exports.setClockInput = (port) => {
     clockInput = new easymidi.Input(port);
+};
+
+exports.getClockInput = () => {
+    return clockInput;
+}
+
+exports.getOutput = () => {
+    return output;
+}
+
+exports.resetClockInput = () => {
+    clockInput.close();
+};
+
+exports.resetOutput = () => {
+    output.close();
 };
 
 exports.blinkButton = (button, firstColor, secondColor) => {

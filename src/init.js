@@ -32,18 +32,23 @@ var state =  {
 	workspace : 2, // 0 : big_grid, 1 : brig_grid + notes, 2: big_grid + notes + small_grid
 };
 
-io.clockInput.on('clock', () => {
-	state.clockTick++;
-	midi.resetClock(state);
-	if(state.clockTick % 6 == 0){
-		midi.nextStep(state,scenes);
-		state.currentStep++;
-		if(state.mode == 'seq' && state.showCursor) {
-			render.lightCurrentStep(state,scenes);
-		}
+exports.setupClockInput = setupClockInput = (port) => {
+	if(port != undefined){
+		io.setClockInput(port);
 	}
-	midi.sendMidi(state);
-});
+	io.getClockInput().on('clock', () => {
+		state.clockTick++;
+		midi.resetClock(state);
+		if(state.clockTick % 6 == 0){
+			midi.nextStep(state,scenes);
+			state.currentStep++;
+			if(state.mode == 'seq' && state.showCursor) {
+				render.lightCurrentStep(state,scenes);
+			}
+		}
+		midi.sendMidi(state);
+	});
+};
 
 io.input.on('noteon', (message) => {
 	var pressed = message.velocity > 0;
@@ -97,7 +102,7 @@ const pressedChord = (button) => {
 	if(chord != undefined){
 		state.lastChordPressed = button;
 		var finalChord =chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
-		finalChord.map(n => io.output.send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
+		finalChord.map(n => io.getOutput().send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	if(controller['chords'][button] != undefined){
 		controller['chords'][button].map(f => f(state,scenes));
@@ -107,7 +112,7 @@ const pressedChord = (button) => {
 const unpressedChord = (button) => {
 	var chord = state.chords[button];
 	if(state.chords[button] != undefined){
-		chord.inversion.map(n => io.output.send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
+		chord.inversion.map(n => io.getOutput().send('noteoff', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	state.pressedButtons = state.pressedButtons.filter(b => b != button);
 };
@@ -157,4 +162,5 @@ const setupController = () => {
 setupState();
 setupScenes();
 setupController();
+setupClockInput();
 render.render(scenes,state);

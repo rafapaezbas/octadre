@@ -1,6 +1,8 @@
 const { remote } = require('electron');
 const { BrowserWindow } = remote;
 const easymidi = remote.require('easymidi');
+const init = remote.require('../src/init');
+const io = remote.require('../src/midi-io');
 
 const midiInputs = document.getElementById("midi-inputs");
 easymidi.getInputs().map(e => {
@@ -10,8 +12,18 @@ easymidi.getInputs().map(e => {
 });
 
 const midiOutputs = document.getElementById("midi-outputs");
-easymidi.getInputs().map(e => {
+easymidi.getOutputs().map(e => {
     var midiOutput = document.createElement("option");
     midiOutput.innerHTML = e;
     midiOutputs.appendChild(midiOutput);
+});
+
+midiInputs.addEventListener('change', (e) => {
+    io.resetClockInput();
+    init.setupClockInput(e.target.value);
+});
+
+midiOutputs.addEventListener('change', (e) => {
+    io.resetOutput();
+    io.setOutput(e.target.value);
 });

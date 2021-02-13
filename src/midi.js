@@ -70,7 +70,7 @@ const sendNoteOn = (state,scenes) => {
 	state.midiNotesQueue.map((e) => {
 		if(state.clockTick == e.clockTick) {
 			tasks.push((callback) => {
-				io.output.send('noteon', {note: e.note ,velocity: e.velocity,channel: e.channel});
+				io.getOutput().send('noteon', {note: e.note ,velocity: e.velocity,channel: e.channel});
 				callback();
 			});
 		}
@@ -84,7 +84,7 @@ const sendNoteOff = (state) => {
 	state.midiNotesQueue.map((e) => {
 		if(state.clockTick - e.clockTick >= e.length * state.clockResolution) {
 			tasks.push((callback) => {
-				io.output.send('noteoff', {note: e.note ,velocity: 0,channel: e.channel});
+				io.getOutput().send('noteoff', {note: e.note ,velocity: 0,channel: e.channel});
 				callback();
 			});
 		}
