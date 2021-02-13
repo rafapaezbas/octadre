@@ -7,12 +7,13 @@ exports.testF = () => {
 
 const createWindow = () => {
     const win = new BrowserWindow({
-        width: 500,
-        height: 320,
+        width: 550,
+        height: 155,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
-        }
+        },
+        frame: false
     });
     win.setMenuBarVisibility(false);
     win.loadFile('./ui/index.html');

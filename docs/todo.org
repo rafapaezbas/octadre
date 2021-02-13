@@ -5,7 +5,14 @@
 ** TODO ASCII Documentation
 ** TODO Tempo modifier render
 ** TODO change of scenes by slower track
-** TODO Electron architecture
+** TODO UI save and load functionality
+** TODO UI colors
+** TODO UI fonts
+** TODO MPC mode
+** TODO MacOS compilation
+** TODO Linux compilation
+** TODO Windows compilation
+** DONE Electron architecture
 ** DONE chords mode configurable
 ** DONE Random pattern
  Branch: feature/random-pattern
