@@ -9,13 +9,13 @@ init.render();
 
 const createWindow = () => {
     const win = new BrowserWindow({
-        width: 550,
-        height: 155,
+        width: 570,
+        height: 180,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
         },
-        frame: false
+        frame: true
     });
     win.setMenuBarVisibility(false);
     win.loadFile('./ui/index.html');

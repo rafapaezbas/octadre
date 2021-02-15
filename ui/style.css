@@ -24,13 +24,17 @@ body {
 }
 
 legend{
-    font-weight: bold;
+    background: black;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 fieldset {
     border: 0px;
     border-top: 1px solid black;
     margin: 20px;
+    margin-top: 10px;
 }
 
 label {
@@ -70,4 +74,18 @@ button {
 
 #pattern{
     margin-top: 30px;
+}
+
+#save {
+    margin: 10px;
+    margin-right: 2px;
+    margin-bottom: 5px;
+    width: 20px;
+}
+
+#load {
+    margin: 10px;
+    margin-left: 2px;
+    margin-bottom: 5px;
+    width: 20px;
 }
