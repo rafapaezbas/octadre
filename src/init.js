@@ -5,6 +5,7 @@ const midi = require('./midi');
 const io = require('./midi-io');
 const cons = require('./constants');
 const chords = require('./chords');
+const fs = require('fs');
 
 var controller = [];
 var scenes = [];
@@ -82,6 +83,10 @@ exports.setupController = () => {
 
 exports.render = () => {
 	render.render(scenes, state);
+};
+
+exports.saveState = (path) => {
+	fs.writeFileSync(path, JSON.stringify(state));
 };
 
 io.input.on('noteon', (message) => {

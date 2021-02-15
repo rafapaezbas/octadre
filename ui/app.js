@@ -27,3 +27,11 @@ midiOutputs.addEventListener('change', (e) => {
     io.resetOutput();
     io.setOutput(e.target.value);
 });
+
+document.getElementById("save").addEventListener('click', async (e) => {
+ const path = await remote.dialog.showSaveDialog({ defaultPath: "/" });
+    if(path){
+        console.log(path);
+        init.saveState(path.filePath);
+    }
+});
