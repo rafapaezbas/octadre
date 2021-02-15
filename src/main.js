@@ -1,9 +1,11 @@
-require ('./init');
-const { app,BrowserWindow  } = require('electron');
+const init = require('./init');
+const { app, BrowserWindow  } = require('electron');
 
-exports.testF = () => {
-    return "this comes from the main process";
-}
+init.setupState();
+init.setupScenes();
+init.setupController();
+init.setupClockInput();
+init.render();
 
 const createWindow = () => {
     const win = new BrowserWindow({

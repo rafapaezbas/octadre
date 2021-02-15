@@ -5,8 +5,6 @@ const midi = require('./midi');
 const io = require('./midi-io');
 const cons = require('./constants');
 const chords = require('./chords');
-var randomGen = require('random-seed');
-const easymidi = require('easymidi');
 
 var controller = [];
 var scenes = [];
@@ -32,7 +30,7 @@ var state =  {
 	workspace : 2, // 0 : big_grid, 1 : brig_grid + notes, 2: big_grid + notes + small_grid
 };
 
-exports.setupClockInput = setupClockInput = (port) => {
+exports.setupClockInput = (port) => {
 	if(port != undefined){
 		io.setClockInput(port);
 	}
@@ -48,6 +46,42 @@ exports.setupClockInput = setupClockInput = (port) => {
 		}
 		midi.sendMidi(state);
 	});
+};
+
+exports.setupState = () => {
+	state.chords = chords.createChords();
+};
+
+exports.setupScenes = () => {
+	scenes = utils.createArray(4,{}).map(s => setupSceneTracks());
+	return scenes;
+};
+
+exports.setupController = () => {
+	controller['seq'] = [];
+	controller['chords'] = [];
+	controller['seq'][cons.TEMPO_BUTTON] = [lib.changeTempo];
+	controller['seq'][cons.SHIFT_BUTTON] = [lib.toogleCursor];
+	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.toogleCursor];
+	controller['seq'][cons.SHIFT_3_BUTTON] = [lib.toogleCursor];
+	controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
+	controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
+	controller['seq'][cons.UP_ARROW_BUTTON] = [lib.toogleSmallGridMode];
+	controller['seq'][cons.DOWN_ARROW_BUTTON] = [lib.toogleSmallGridMode];
+	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];
+	controller['seq'][cons.CHANGE_WORKSPACE_BUTTON] = [lib.changeWorkspace];
+	cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
+	cons.SMALL_GRID.map(e => controller['seq'][e] = [lib.changeLength, lib.changeVelocity]);
+	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
+	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength,lib.copyStep, lib.toogleTriplet]);
+	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);
+	controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
+	cons.GRID.map(e => controller['chords'][e] = [lib.toogleChords]);
+	controller['chords'][cons.CHANGE_CHORD_MODE_BUTTON] = [lib.changeChordMode];
+};
+
+exports.render = () => {
+	render.render(scenes, state);
 };
 
 io.input.on('noteon', (message) => {
@@ -117,15 +151,6 @@ const unpressedChord = (button) => {
 	state.pressedButtons = state.pressedButtons.filter(b => b != button);
 };
 
-const setupState = () => {
-	state.chords = chords.createChords();
-};
-
-const setupScenes = () => {
-	scenes = utils.createArray(4,{}).map(s => setupSceneTracks());
-	return scenes;
-};
-
 const setupSceneTracks = () => {
 	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,
 					   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
@@ -135,32 +160,3 @@ const setupSceneTracks = () => {
 	});
 	return {tracks: tracks};
 };
-
-const setupController = () => {
-	controller['seq'] = [];
-	controller['chords'] = [];
-	controller['seq'][cons.TEMPO_BUTTON] = [lib.changeTempo];
-	controller['seq'][cons.SHIFT_BUTTON] = [lib.toogleCursor];
-	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.toogleCursor];
-	controller['seq'][cons.SHIFT_3_BUTTON] = [lib.toogleCursor];
-	controller['seq'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftPatternRight, lib.randomPattern];
-	controller['seq'][cons.LEFT_ARROW_BUTTON] = [lib.shiftPatternLeft, lib.randomPattern];
-	controller['seq'][cons.UP_ARROW_BUTTON] = [lib.toogleSmallGridMode];
-	controller['seq'][cons.DOWN_ARROW_BUTTON] = [lib.toogleSmallGridMode];
-	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];
-	controller['seq'][cons.CHANGE_WORKSPACE_BUTTON] = [lib.changeWorkspace];
-	cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
-	cons.SMALL_GRID.map(e => controller['seq'][e] = [lib.changeLength, lib.changeVelocity]);
-	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
-	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength,lib.copyStep, lib.toogleTriplet]);
-	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack]);
-	controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
-	cons.GRID.map(e => controller['chords'][e] = [lib.toogleChords]);
-	controller['chords'][cons.CHANGE_CHORD_MODE_BUTTON] = [lib.changeChordMode];
-};
-
-setupState();
-setupScenes();
-setupController();
-setupClockInput();
-render.render(scenes,state);
