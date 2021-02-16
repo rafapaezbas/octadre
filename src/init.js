@@ -85,8 +85,15 @@ exports.render = () => {
 	render.render(scenes, state);
 };
 
-exports.saveState = (path) => {
-	fs.writeFileSync(path, JSON.stringify(state));
+exports.save = (path) => {
+	fs.writeFileSync(path, JSON.stringify({scenes: scenes, state: state}));
+};
+
+exports.load = (path) => {
+	var file = fs.readFileSync(path, 'utf8');
+	scenes = JSON.parse(file).scenes;
+	state.chords = JSON.parse(file).state.chords;
+	render.render(scenes,state);
 };
 
 io.input.on('noteon', (message) => {

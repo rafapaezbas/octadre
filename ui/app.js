@@ -29,9 +29,15 @@ midiOutputs.addEventListener('change', (e) => {
 });
 
 document.getElementById("save").addEventListener('click', async (e) => {
- const path = await remote.dialog.showSaveDialog({ defaultPath: "/" });
-    if(path){
-        console.log(path);
-        init.saveState(path.filePath);
+ const file = await remote.dialog.showSaveDialog({ defaultPath: "/" });
+    if(file){
+        init.save(file.filePath);
+    }
+});
+
+document.getElementById("load").addEventListener('click', async (e) => {
+    const file = await remote.dialog.showOpenDialog({properties:['openFile']});
+    if(file){
+        init.load(file.filePaths[0]);
     }
 });
