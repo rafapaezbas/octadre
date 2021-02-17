@@ -1,6 +1,11 @@
 @font-face {
     font-family: "ff";
-    src: url("font.ttf") format("truetype");
+    src: url("gt.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "ff-black";
+    src: url("gt-black.woff2") format("woff2");
 }
 
 :root {
@@ -28,6 +33,7 @@ legend{
     color: white;
     padding-left: 10px;
     padding-right: 10px;
+    font-family: "ff-black";
 }
 
 fieldset {

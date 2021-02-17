@@ -10,7 +10,7 @@ init.render();
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 570,
-        height: 180,
+        height: 190,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true

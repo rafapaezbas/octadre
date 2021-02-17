@@ -5,6 +5,9 @@
 ** TODO ASCII Documentation
 ** TODO Tempo modifier render
 ** TODO change of scenes by slower track
+** TODO copy track
+** TODO write README.md
+** TODO Change font
 ** DONE UI save and load functionality
 ** DONE UI colors
 ** DONE UI fonts
@@ -12,7 +15,6 @@
 ** TODO MacOS compilation
 ** TODO Linux compilation
 ** TODO Windows compilation
-** TODO Icons?
 ** DONE Electron architecture
 ** DONE chords mode configurable
 ** DONE Random pattern
@@ -59,6 +61,7 @@ Add scenes to stack seems to be expensive, try another way
 
 ** DONE Add shift to copy scene
 * TODO v 2.0
+** TODO icon for random chords
 ** TODO Chords scale change (8th row)
 ** TODO chords render
 ** TODO arpeggio
