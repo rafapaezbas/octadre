@@ -15,7 +15,7 @@ const createWindow = () => {
             nodeIntegration: true,
             enableRemoteModule: true
         },
-        frame: true
+        frame: false
     });
     win.setMenuBarVisibility(false);
     win.loadFile('./ui/index.html');
