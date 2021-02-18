@@ -68,6 +68,19 @@ exports.copyScene = (state,scenes) => {
 	}
 };
 
+exports.copyTrack = (state,scenes) => {
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON && isMuteButton(state.pressedButtons[1])){
+		var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,
+						   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
+		var bufferTrack = JSON.parse(JSON.stringify(scenes[state.currentScene].tracks[state.currentTrack]));
+		var targetTrack = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
+		bufferTrack.color = trackColors[targetTrack];
+		scenes[state.currentScene].tracks[targetTrack] = bufferTrack;
+		io.blinkButton(11,cons.COLOR_BLINK,0);
+	}
+}
+
+
 exports.copyStep = (state,scenes) => {
 	if(state.pressedButtons.length == 3 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON
 	   && isBigGrid(state.pressedButtons[1]) && isBigGrid(state.pressedButtons[2])){
