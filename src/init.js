@@ -61,6 +61,7 @@ exports.setupScenes = () => {
 exports.setupController = () => {
 	controller['seq'] = [];
 	controller['chords'] = [];
+	controller['seq'] = defaultSeqController(); // lib.sendFreeMidi is the default function of every button, later on overwriten by real functions
 	controller['seq'][cons.TEMPO_BUTTON] = [lib.changeTempo];
 	controller['seq'][cons.SHIFT_BUTTON] = [lib.toogleCursor];
 	controller['seq'][cons.SHIFT_2_BUTTON] = [lib.toogleCursor];
@@ -172,3 +173,13 @@ const setupSceneTracks = () => {
 	});
 	return {tracks: tracks};
 };
+
+const defaultSeqController = () => {
+	buttons = [];
+	for(var i = 0; i < 8; i++){
+		for (var j = 0; j < 8; j++){
+			buttons[11 + i + (j * 10)] = [lib.sendFreeMidi];
+		}
+	}
+	return buttons;
+}

@@ -208,6 +208,13 @@ exports.changeWorkspace = (state,scenes) => {
 	state.renderReset = true;
 };
 
+exports.sendFreeMidi = (state,scenes) =>  {
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON){
+		io.sendMidiCC(state.pressedButtons[1]);
+		io.blinkButton(state.pressedButtons[1],cons.COLOR_BLINK,0);
+	}
+};
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = 0;

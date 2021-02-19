@@ -45,3 +45,7 @@ exports.blinkButton = (button, firstColor, secondColor) => {
         launchpadOutput.send('sysex',message);
     }, 200);
 };
+
+exports.sendMidiCC = (button) => {
+    output.send('cc', {controller: button, value: 127, channel:  0}); //Default value 127 and channel 0
+}
