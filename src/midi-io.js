@@ -43,7 +43,7 @@ exports.blinkButton = (button, firstColor, secondColor) => {
         var sysex = [];
         var message = sysex.concat(header).concat([button, secondColor]).concat([247]);
         launchpadOutput.send('sysex',message);
-    }, 200);
+    }, 100);
 };
 
 exports.sendMidiCC = (button) => {

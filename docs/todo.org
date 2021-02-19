@@ -1,11 +1,9 @@
 * TODO v 1.0
-** TODO Octave up/down
 ** DONE Free midi
-** TODO Notes play
-** TODO Tempo modifier render
-** TODO change of scenes by slower track
+** DONE Notes play
 ** DONE copy track
 ** TODO write README.md
+** DONE logs in front
 ** DONE Change font
 ** DONE UI save and load functionality
 ** DONE UI colors

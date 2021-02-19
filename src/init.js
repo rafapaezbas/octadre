@@ -113,6 +113,7 @@ const update = (pressed, button) => {
 	switch(state.mode){
 	case 'seq':
 		updateSeqMode(pressed, button);
+		playNote(pressed,button);
 		break;
 	case 'chords':
 		updateChordMode(pressed, button);
@@ -172,6 +173,15 @@ const setupSceneTracks = () => {
 		return {pattern:pattern, trackLength:16, midiRoot:60, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
 	});
 	return {tracks: tracks};
+};
+
+const playNote = (pressed, button) => {
+	if(state.pressedButtons[0] == cons.SHIFT_BUTTON && cons.INNER_GRID.indexOf(button) != -1){
+		var midiMessage = pressed ? 'noteon' : 'noteoff';
+		console.log(midiMessage);
+		io.getOutput().send(midiMessage, {note: 60 + cons.INNER_GRID.indexOf(button) ,velocity: 127,channel: state.currentTrack});
+
+	}
 };
 
 const defaultSeqController = () => {

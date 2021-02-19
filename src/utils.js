@@ -116,4 +116,6 @@ const arg = exports.arg = (name) => {
 	return undefined;
 };
 
-var random = randomGen.create(arg("--random-seed"));
+//var random = randomGen.create(arg("--random-seed"));
+const seed = Math.random().toString(36).substr(2, 5);
+var random = randomGen.create(seed);
