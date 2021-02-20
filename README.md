@@ -6,10 +6,10 @@
   \/_____/   \/_____/     \/_/   \/_/\/_/   \/_____/   \/____/   \/_/ /_/   \/_____/ 
 ```
 
-### Download
-[Linux]()
-[MacOS]()
-[Windows]()
+### Distribution
+[Linux](placeholder)
+[OSX](placeholder)
+[Windows](placeholder)
 
 ### License
 This project is distributed under the GNU General Public License v3.0. This is free software. ["Free as in freedom, not free as in free beer".](https://en.wikipedia.org/wiki/Gratis_versus_libre#.22Free_beer.22_vs_.22free_speech.22_distinction)
