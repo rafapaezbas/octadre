@@ -1,8 +1,8 @@
 const utils = require('./utils');
 const easymidi = require('easymidi');
 
-var output = new easymidi.Output(utils.getOutputPort(utils.arg("--midi-output")));
-var clockInput = new easymidi.Input(utils.getInputPort(utils.arg("--midi-input")));
+var output = new easymidi.Output(easymidi.getOutputs()[0]);
+var clockInput = new easymidi.Input(easymidi.getInputs()[0]);
 var launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()))
 var input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 

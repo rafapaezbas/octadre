@@ -1,6 +1,6 @@
 const utils = require('./utils');
 const path = require('path');
-const configFile = path.join(path.dirname(__dirname),'config','config.conf');
+const configFile = path.join(path.dirname(__dirname),'src','config','config.conf');
 const configuration = utils.config(configFile);
 
 exports.TEMPO_BUTTON = configuration.getIntOrDefault("TEMPO_BUTTON",88);

@@ -1,12 +1,14 @@
 {
-  "name": "launchpad-sq",
+  "name": "octaedre",
   "version": "1.0.0",
-  "description": "",
+  "description": "Transform your Novation Launchpad into a midi sequencer.",
   "main": "src/main.js",
   "bin": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron . --random-seed 0 --midi-input 0 --midi-output 0"
+    "start": "electron . ",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "author": "",
   "license": "ISC",
@@ -19,17 +21,13 @@
   },
   "devDependencies": {
     "electron": "^11.2.3",
+    "electron-builder": "^22.9.1",
     "electron-rebuild": "^2.3.5"
   },
   "build": {
-    "extraResources": [
-      {
-        "from": "./config/",
-        "to": "config",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ]
+    "appId": "octaedre",
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }
