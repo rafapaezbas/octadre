@@ -65,7 +65,6 @@ deploy:
   file_glob: true
   file: dist/octaedre-1.0.0*
   skip_cleanup: true
-  draft: true
   on:
     tags: false
 
