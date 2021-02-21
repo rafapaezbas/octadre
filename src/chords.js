@@ -31,42 +31,42 @@ const chordsRow = [grades[0],grades[1],grades[2],grades[3],grades[4],grades[5],g
 
 
 exports.createChords = () => {
-    var chords = [];
-    const scale = scales[0];
-    const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
-    const offset = 11; //First button value
-    const height = 7;
-    const width = 7;
-    for(var i = 0; i < height; i++ ){
-        for(var j = 0; j < width; j++){
-            chords[(i * 10) + j + offset] = findInScale(chordsRow[j], scale, notes[i]);
-        }
-    }
-    return chords;
+	var chords = [];
+	const scale = scales[0];
+	const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
+	const offset = 11; //First button value
+	const height = 7;
+	const width = 7;
+	for(var i = 0; i < height; i++ ){
+		for(var j = 0; j < width; j++){
+			chords[(i * 10) + j + offset] = findInScale(chordsRow[j], scale, notes[i]);
+		}
+	}
+	return chords;
 };
 
 exports.filterByMode = (index,mode) => {
-    return modes[mode][index];
+	return modes[mode][index];
 };
 
 const findInScale = (chord,scale,root) => {
-    scale = scale.concat(scale); //Duplicate scale
-    const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
-    return openChord(chord.map(e => notes[e - 1]));
+	scale = scale.concat(scale); //Duplicate scale
+	const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
+	return openChord(chord.map(e => notes[e - 1]));
 };
 
 const openChord = (chord) => {
-    return {chord:chord, inversion: chord.map(randomTransponse), mode: 0};
+	return {chord:chord, inversion: chord.map(randomTransponse), mode: 0};
 };
 
 const randomTransponse = (note) => {
-    var rand = utils.random(100);
-    if(rand < 33){
-        return note + 12;
-    }
-    else if(rand > 33 && rand < 66){
-        return note - 12;
-    }else{
-        return note;
-    }
+	var rand = utils.random(100);
+	if(rand < 33){
+		return note + 12;
+	}
+	else if(rand > 33 && rand < 66){
+		return note - 12;
+	}else{
+		return note;
+	}
 };

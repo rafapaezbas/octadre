@@ -14,8 +14,7 @@ exports.toogleStep = (state,scenes) => {
 
 exports.toogleTriplet = (state,scenes) => {
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
-	if(state.pressedButtons.length == 2 && isBigGrid(state.pressedButtons[0]) && isBigGrid(state.pressedButtons[1])
-	   && buttonsAreContinousInGrid(state.pressedButtons) && stepsInSameTripletState(state.pressedButtons, currentTrack)){
+	if(state.pressedButtons.length == 2 && isBigGrid(state.pressedButtons[0]) && isBigGrid(state.pressedButtons[1]) && buttonsAreContinousInGrid(state.pressedButtons) && stepsInSameTripletState(state.pressedButtons, currentTrack)){
 		var step = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
 		state.lastPressedStep = step;
 		currentTrack.pattern[step].triplet ^= true;
@@ -23,7 +22,7 @@ exports.toogleTriplet = (state,scenes) => {
 		currentTrack.pattern[(step + 1) % cons.BIG_GRID.length].triplet ^= true;
 		currentTrack.pattern[(step + 1) % cons.BIG_GRID.length].active = false;
 	}
-}
+};
 
 exports.toogleNote = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && cons.INNER_GRID.indexOf(state.pressedButtons[0]) != -1 && state.workspace > 0){
@@ -70,20 +69,18 @@ exports.copyScene = (state,scenes) => {
 
 exports.copyTrack = (state,scenes) => {
 	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON && isMuteButton(state.pressedButtons[1])){
-		var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,
-						   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
+		var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4, cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
 		var bufferTrack = JSON.parse(JSON.stringify(scenes[state.currentScene].tracks[state.currentTrack]));
 		var targetTrack = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
 		bufferTrack.color = trackColors[targetTrack];
 		scenes[state.currentScene].tracks[targetTrack] = bufferTrack;
 		io.blinkButton(11,cons.COLOR_BLINK,0);
 	}
-}
+};
 
 
 exports.copyStep = (state,scenes) => {
-	if(state.pressedButtons.length == 3 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON
-	   && isBigGrid(state.pressedButtons[1]) && isBigGrid(state.pressedButtons[2])){
+	if(state.pressedButtons.length == 3 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON && isBigGrid(state.pressedButtons[1]) && isBigGrid(state.pressedButtons[2])){
 		var originStep = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
 		var targetStep = cons.BIG_GRID.indexOf(state.pressedButtons[2]);
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[targetStep] =
@@ -129,7 +126,7 @@ exports.shiftPatternLeft = (state,scenes) => {
 };
 
 exports.randomPattern = (state,scenes) => {
-	if(state.pressedButtons.length = 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && isArrowButton(state.pressedButtons[1])){
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && isArrowButton(state.pressedButtons[1])){
 		var trackLength = Math.floor(Math.random() * 16) + 1; //range 1-16
 		var randomPattern = utils.createRandomPattern(trackLength); //return string with binary representation of random pattern
 		scenes[state.currentScene].tracks[state.currentTrack].trackLength = trackLength;
@@ -231,14 +228,6 @@ const isMuteButton = (button) => {
 
 const isSceneButton = (button) => {
 	return cons.SCENE_BUTTONS.indexOf(button) != -1;
-};
-
-const isSceneCopy = (pressedButtons) => {
-	return pressedButtons.length == 2 && isSceneButton(pressedButtons[0]) && isSceneButton(pressedButtons[1]);
-};
-
-const isTrackChange = (pressedButtons) => {
-	return pressedButtons.length == 2 && pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(pressedButtons[1]);
 };
 
 const isArrowButton = (button) => {

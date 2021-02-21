@@ -3,23 +3,23 @@ const easymidi = require('easymidi');
 
 exports.getLaunchpadPort = (ports) => {
 	for(var i = 0; i < ports.length; i++){
-		if(ports[i].indexOf("Launchpad") != -1){
+		if(ports[i].indexOf('Launchpad') != -1){
 			return ports[i];
 		}
 	}
-	console.log("No MK2:Launchpad midi i/o found");
+	console.log('No MK2:Launchpad midi i/o found');
 };
 
 
 exports.getOutputPort = (port) => {
 	const ports = easymidi.getOutputs();
-	console.log("Midi output: " + ports[port]);
+	console.log('Midi output: ' + ports[port]);
 	return ports[port];
 };
 
 exports.getInputPort = (port) => {
 	const ports = easymidi.getInputs();
-	console.log("Midi input: " + ports[port]);
+	console.log('Midi input: ' + ports[port]);
 	return ports[port];
 };
 
@@ -61,7 +61,7 @@ exports.shiftPatternLeft = (arr) => {
 exports.createRandomPattern = (patternLength) => {
 	var max = 2 ** patternLength - 1;
 	var pattern = Math.floor(Math.random() * max).toString(2);
-	var completePattern = "0".repeat(patternLength - pattern.length) + pattern;
+	var completePattern = '0'.repeat(patternLength - pattern.length) + pattern;
 	return completePattern;
 };
 
@@ -83,7 +83,7 @@ exports.config = (path) => {
 		getArray : (key) => config[key].split(','),
 		getIntOrDefault : (key,defaultValue) => isNaN(parseInt(config[key])) ? defaultValue : parseInt(config[key]),
 		getArrayOrDefault : (key,length,defaultValue) => config[key].split(',').length != length ? defaultValue : config[key].split(',').map(e => parseInt(e,10)),
-	}
+	};
 };
 
 var initConfig = (path) => {
@@ -92,8 +92,8 @@ var initConfig = (path) => {
 	var config = [];
 	file.map(line => {
 		if(line[0] != '#' && line.length > 0){ // This means line is a comment or blank
-			var key = line.split("=")[0].trim();
-			var value = line.split("=")[1].trim();
+			var key = line.split('=')[0].trim();
+			var value = line.split('=')[1].trim();
 			config[key] = value;
 		}
 	});
@@ -105,15 +105,6 @@ exports.createArray = (length,fill) => {
 	arr.length = length;
 	arr.fill(fill);
 	return arr;
-};
-
-const arg = exports.arg = (name) => {
-	for(var i = 0; i < process.argv.length; i++){
-		if(process.argv[i] == name){
-			return process.argv[i+1];
-		}
-	}
-	return undefined;
 };
 
 //var random = randomGen.create(arg("--random-seed"));

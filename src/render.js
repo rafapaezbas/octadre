@@ -2,10 +2,10 @@ const utils = require('./utils');
 const cons = require('./constants');
 const io = require('./midi-io');
 
-const header = [ 240, 00, 32, 41, 2, 24, 10 ];
-const setAllHeader = [ 240, 00, 32, 41, 2, 24, 14 ];
-const flashHeader = [ 240, 00, 32, 41, 2, 24, 40 , 0 ];
-const byColumnHeader = [ 240, 00, 32, 41, 2, 24, 12 ];
+const header = [ 240, 0, 32, 41, 2, 24, 10 ];
+const setAllHeader = [ 240, 0, 32, 41, 2, 24, 14 ];
+const flashHeader = [ 240, 0, 32, 41, 2, 24, 40 , 0 ];
+const byColumnHeader = [ 240, 0, 32, 41, 2, 24, 12 ];
 
 exports.render = (scenes,state) => {
 
@@ -41,10 +41,10 @@ exports.lightCurrentStep = (state,scenes) => {
 		var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
 		io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
 	}
-}
+};
 
 const renderSeq = (scenes,state) => {
-	var sysex = []
+	var sysex = [];
 	var mutesMessage = generateMutesMessage(scenes,state);
 	var stepsMessage = generateStepsMessage(scenes,state);
 	var notesMessage = state.workspace > 0 ? generateNotesMessage(scenes,state) : [];
@@ -57,10 +57,10 @@ const renderSeq = (scenes,state) => {
 	io.launchpadOutput.send('sysex',message);
 	io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
 	return message;
-}
+};
 
 const renderChords = (scenes,state) => {
-	var sysex = []
+	var sysex = [];
 	var chordsByColumnMessage = sysex.concat(byColumnHeader).concat(generateColumnChordsMessage()).concat([247]);
 	var chordsMessage = sysex.concat(header).concat(generateChordsMessage(scenes, state)).concat([247]);
 	io.launchpadOutput.send('sysex',chordsByColumnMessage);
@@ -171,7 +171,7 @@ const resetStepMessage = (step,state,scenes) => {
 };
 
 const renderReset = () => {
-	var sysex = []
+	var sysex = [];
 	var color = 0; // Note-off
 	var message = sysex.concat(setAllHeader).concat(color).concat([247]);
 	io.launchpadOutput.send('sysex',message);

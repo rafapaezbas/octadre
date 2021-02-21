@@ -77,7 +77,7 @@ exports.setupController = () => {
 	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
 	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength,lib.copyStep, lib.toogleTriplet]);
 	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack, lib.copyTrack]);
-	controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode]
+	controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode];
 	cons.GRID.map(e => controller['chords'][e] = [lib.toogleChords]);
 	controller['chords'][cons.CHANGE_CHORD_MODE_BUTTON] = [lib.changeChordMode];
 };
@@ -166,8 +166,7 @@ const unpressedChord = (button) => {
 };
 
 const setupSceneTracks = () => {
-	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,
-					   cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
+	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
 	var tracks =  utils.createArray(8,{}).map((t,i) => {
 		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], length : 1, velocity: 100, triplet: false}));
 		return {pattern:pattern, trackLength:16, midiRoot:60, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
@@ -185,11 +184,11 @@ const playNote = (pressed, button) => {
 };
 
 const defaultSeqController = () => {
-	buttons = [];
+	var buttons = [];
 	for(var i = 0; i < 8; i++){
 		for (var j = 0; j < 8; j++){
 			buttons[11 + i + (j * 10)] = [lib.sendFreeMidi];
 		}
 	}
 	return buttons;
-}
+};

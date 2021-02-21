@@ -1,5 +1,4 @@
 const async = require('async');
-const cons = require('./constants');
 const chords = require('./chords');
 const render = require('./render');
 const io = require('./midi-io');
