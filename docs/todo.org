@@ -10,7 +10,7 @@
 ** DONE UI fonts
 ** DONE MPC mode
 ** TODO disable chord mode
-** TODO document build process
+** DONE document build process
 ** TODO MacOS compilation
 ** DONE Linux compilation
 ** TODO Windows compilation

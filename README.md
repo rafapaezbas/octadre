@@ -11,6 +11,21 @@
 [OSX](placeholder)
 [Windows](placeholder)
 
+### Build
+* Node version must be 10 or higher.
+* For Linux install libasound2 and libasound2-dev
+```
+apt-get install libasound2 libasound2-dev
+```
+* Run:
+```
+npm install -g node-gyp
+npm install
+npm install --save-dev electron-rebuild ./node_modules/.bin/electron-rebuild midi
+npm run-script dist
+```
+* Have a look a this [build logs](https://www.travis-ci.com/github/rafapaezbas/octaedre/), can be useful for building locally.
+
 ### License
 This project is distributed under the GNU General Public License v3.0. This is free software. ["Free as in freedom, not free as in free beer".](https://en.wikipedia.org/wiki/Gratis_versus_libre#.22Free_beer.22_vs_.22free_speech.22_distinction)
 
