@@ -73,6 +73,7 @@ exports.copyTrack = (state,scenes) => {
 		var bufferTrack = JSON.parse(JSON.stringify(scenes[state.currentScene].tracks[state.currentTrack]));
 		var targetTrack = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
 		bufferTrack.color = trackColors[targetTrack];
+		bufferTrack.channel = targetTrack;
 		scenes[state.currentScene].tracks[targetTrack] = bufferTrack;
 		io.blinkButton(11,cons.COLOR_BLINK,0);
 	}

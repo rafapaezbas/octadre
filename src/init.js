@@ -87,7 +87,12 @@ exports.render = () => {
 };
 
 exports.save = (path) => {
-	fs.writeFileSync(path, JSON.stringify({scenes: scenes, state: state}));
+	const bufferedState = {chords : state.chords} //Add only needed fields, IMPORTANT cannot stringify resetClockTimeout
+	fs.writeFile(path, JSON.stringify({scenes: scenes,state: bufferedState}), (err) => {
+		if(err){
+			console.log(err);
+		}
+	});
 };
 
 exports.load = (path) => {
