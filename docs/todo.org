@@ -2,13 +2,15 @@
 ** DONE Free midi
 ** DONE Notes play
 ** DONE copy track
-** TODO write README.md
+** DONE write README.md
 ** DONE logs in front
 ** DONE Change font
 ** DONE UI save and load functionality
 ** DONE UI colors
 ** DONE UI fonts
 ** DONE MPC mode
+** TODO disable chord mode
+** TODO document build process
 ** TODO MacOS compilation
 ** TODO Linux compilation
 ** TODO Windows compilation
