@@ -58,7 +58,6 @@ script:
     ./node_modules/.bin/electron-rebuild midi
     npm run-script dist
 
-#token  2f731027a42c48c57c6b8435095b857680e7be27
 deploy:
   provider: releases
   api_key: $GH_TOKEN
@@ -67,9 +66,6 @@ deploy:
   skip_cleanup: true
   on:
     tags: false
-    branches:
-      only:  
-        - prod
 
 
 before_cache:
@@ -77,6 +73,6 @@ before_cache:
 
 # only run this script on pull requests and merges into
 # the 'prod' branch
-#branches:
-#  only:
-#  - prod
+branches:
+  only:
+  - master
