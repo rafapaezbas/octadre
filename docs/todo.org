@@ -12,7 +12,7 @@
 ** TODO disable chord mode
 ** TODO document build process
 ** TODO MacOS compilation
-** TODO Linux compilation
+** DONE Linux compilation
 ** TODO Windows compilation
 ** DONE Electron architecture
 ** DONE chords mode configurable
