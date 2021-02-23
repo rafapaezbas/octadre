@@ -1,11 +1,11 @@
 @font-face {
     font-family: "ff";
-    src: url("gt.woff2") format("woff2");
+    src: url("../fonts/gt.woff2") format("woff2");
 }
 
 @font-face {
     font-family: "ff-black";
-    src: url("gt-black.woff2") format("woff2");
+    src: url("../fonts/gt-black.woff2") format("woff2");
 }
 
 :root {
