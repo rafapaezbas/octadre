@@ -9,6 +9,9 @@
 ** DONE UI colors
 ** DONE UI fonts
 ** DONE MPC mode
+** TODO single triplets
+** TODO doubled step
+** TODO fix selected step when changing pattern length
 ** TODO disable chord mode
 ** DONE document build process
 ** TODO MacOS compilation

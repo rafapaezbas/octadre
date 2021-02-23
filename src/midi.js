@@ -24,7 +24,7 @@ exports.resetClock = (state) => {
 };
 
 const queueMidiNotes = (state,scenes) => {
-	var scene = getPlayingScene(state);
+	var scene = getPlayingScene(state,scenes);
 	scenes[scene].tracks.map(t => {
 		var trackCurrentStep = (state.currentStep * t.tempoModifier);
 		var step = t.pattern[trackCurrentStep % t.trackLength];
@@ -92,15 +92,20 @@ const sendNoteOff = (state) => {
 	async.parallel(tasks,(error,results) => {});
 };
 
-const getPlayingScene = (state) => {
-	var shouldChange = state.clockTick % (6*16) == 0;
+const getPlayingScene = (state,scenes) => {
+	var shouldChange = state.clockTick % (6 * (16 / getSlowestTrackTempoModifier(state, scenes))) == 0;
 	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[state.currentSceneInChain++ % state.scenesChain.length];
 	return state.chainMode && shouldChange ? nextScene : state.currentScene;
 };
 
 const checkSceneChange = (state,scenes) => {
-	if(state.chainMode && state.clockTick % (6*16) == 0){
+	if(state.chainMode && state.clockTick % (6 * (16 /getSlowestTrackTempoModifier(state, scenes))) == 0){
 		state.currentScene = state.scenesChain[state.currentSceneInChain % state.scenesChain.length];
 		render.render(scenes,state);
 	}
+};
+
+const getSlowestTrackTempoModifier = (state, scenes) => {
+	const tempoModifiers = scenes[state.currentScene].tracks.map(t => t.tempoModifier)
+	return Math.min(...tempoModifiers);
 };
