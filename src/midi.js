@@ -94,7 +94,7 @@ const sendNoteOff = (state) => {
 
 const getPlayingScene = (state,scenes) => {
 	var shouldChange = state.clockTick % (6 * (16 / getSlowestTrackTempoModifier(state, scenes))) == 0;
-	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[state.currentSceneInChain++ % state.scenesChain.length];
+	var nextScene = !shouldChange ? state.scenesChain[state.currentSceneInChain % state.scenesChain.length] : state.scenesChain[++state.currentSceneInChain % state.scenesChain.length];
 	return state.chainMode && shouldChange ? nextScene : state.currentScene;
 };
 
