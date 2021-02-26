@@ -9,6 +9,7 @@ exports.toogleStep = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && isBigGrid(state.pressedButtons[0]) && currentTrack.trackLength > step && !stepIsInTriplet(step,currentTrack)){
 		state.lastPressedStep = step;
 		currentTrack.pattern[step].active ^= true;
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[step].doubleNote = false;
 	}
 };
 
@@ -21,6 +22,15 @@ exports.toogleTriplet = (state,scenes) => {
 		currentTrack.pattern[step].active = currentTrack.pattern[step].triplet;
 		currentTrack.pattern[(step + 1) % cons.BIG_GRID.length].triplet ^= true;
 		currentTrack.pattern[(step + 1) % cons.BIG_GRID.length].active = false;
+	}
+};
+
+exports.toogleDoubleNote = (state,scenes) => {
+	const step = cons.BIG_GRID.indexOf(state.pressedButtons[2]);
+	const isTriplet = step == -1 ? false : scenes[state.currentScene].tracks[state.currentTrack].pattern[step].triplet;
+	const isActive = step == -1 ? false : scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active;
+	if(state.pressedButtons.length == 3 && state.pressedButtons[0] == cons.SHIFT_BUTTON && state.pressedButtons[1] == cons.TEMPO_BUTTON &&  step != -1 && isActive && !isTriplet){
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[step].doubleNote = true;
 	}
 };
 

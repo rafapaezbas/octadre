@@ -9,6 +9,7 @@
 ** DONE UI colors
 ** DONE UI fonts
 ** DONE MPC mode
+** TODO remove colateral effects to init and midi-io
 ** TODO single triplets
 ** TODO doubled step
 ** TODO fix selected step when changing pattern length

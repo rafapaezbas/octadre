@@ -51,8 +51,9 @@ const renderSeq = (scenes,state) => {
 	var smallGridMessage = state.workspace > 1 ? generateSmallGridMessage(scenes,state) : [];
 	var scenesMessage = generateScenesMessage(scenes,state);
 	var tripletsMessage = generateTripletsMessage(scenes,state);
+	var doubleNotesMessage = generateDoubleNotesMessage(scenes,state);
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-	var message = sysex.concat(header).concat(stepsMessage).concat(tripletsMessage).concat(mutesMessage).concat(scenesMessage)
+	var message = sysex.concat(header).concat(stepsMessage).concat(tripletsMessage).concat(doubleNotesMessage).concat(mutesMessage).concat(scenesMessage)
 		.concat(smallGridMessage).concat(notesMessage).concat([247]);
 	io.launchpadOutput.send('sysex',message);
 	io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
@@ -84,6 +85,16 @@ const generateTripletsMessage = (scenes,state) => {
 		if(e.triplet){
 			acc.push(cons.BIG_GRID[i]);
 			acc.push(cons.COLOR_TRIPLET);
+		}
+		return acc;
+	},[]);
+};
+
+const generateDoubleNotesMessage = (scenes,state) => {
+	return scenes[state.currentScene].tracks[state.currentTrack].pattern.reduce((acc,e,i) => {
+		if(e.doubleNote){
+			acc.push(cons.BIG_GRID[i]);
+			acc.push(cons.COLOR_DOUBLE_NOTE);
 		}
 		return acc;
 	},[]);
@@ -158,7 +169,15 @@ const flashLastPressedStep = (scenes, state) => {
 	var sysex = [];
 	var stepButton = cons.BIG_GRID[state.lastPressedStep];
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
-	var color = currentTrack.pattern[state.lastPressedStep].triplet ? cons.COLOR_TRIPLET : currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_ACTIVE_STEP : currentTrack.color;
+	var color = undefined;
+		if(currentTrack.pattern[state.lastPressedStep].triplet){
+			color = cons.COLOR_TRIPLET;
+		}
+		else if(currentTrack.pattern[state.lastPressedStep].doubleNote){
+			color = cons.COLOR_DOUBLE_NOTE;
+		}else{
+			color = currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_ACTIVE_STEP : currentTrack.color;
+		}
 	return sysex.concat(flashHeader).concat([stepButton, color]).concat([247]);
 };
 
