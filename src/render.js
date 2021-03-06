@@ -143,7 +143,15 @@ const generateScenesMessage = (scenes,state) => {
 };
 
 const generateSmallGridMessage = (scenes,state) => {
-	return state.smallGridMode == 'length' ? generateLengthMessage(scenes,state) : generateVelocityMessage(scenes,state);
+	if(state.smallGridMode == 'length'){
+		return  generateLengthMessage(scenes,state)
+	}
+	else if(state.smallGridMode == 'velocity'){
+		return generateVelocityMessage(scenes,state);
+	}
+	else{
+		return generateOctaveMessage(scenes,state);
+	}
 };
 
 const generateLengthMessage = (scenes,state) => {
@@ -165,19 +173,28 @@ const generateVelocityMessage = (scenes, state) => {
 	},[]);
 };
 
+const generateOctaveMessage = (scenes, state) => {
+	var midiRoot = scenes[state.currentScene].tracks[state.currentTrack].midiRoot;
+	return cons.SMALL_GRID.reduce((acc,e, i) => {
+		acc.push(e);
+		i  == midiRoot / 12  ? acc.push(cons.COLOR_OCTAVE) : acc.push(0);
+		return acc;
+	},[]);
+};
+
 const flashLastPressedStep = (scenes, state) => {
 	var sysex = [];
 	var stepButton = cons.BIG_GRID[state.lastPressedStep];
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
 	var color = undefined;
-		if(currentTrack.pattern[state.lastPressedStep].triplet  || currentTrack.pattern[state.lastPressedStep].singleTriplet){
-			color = cons.COLOR_TRIPLET;
-		}
-		else if(currentTrack.pattern[state.lastPressedStep].doubleNote){
-			color = cons.COLOR_DOUBLE_NOTE;
-		}else{
-			color = currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_ACTIVE_STEP : currentTrack.color;
-		}
+	if(currentTrack.pattern[state.lastPressedStep].triplet  || currentTrack.pattern[state.lastPressedStep].singleTriplet){
+		color = cons.COLOR_TRIPLET;
+	}
+	else if(currentTrack.pattern[state.lastPressedStep].doubleNote){
+		color = cons.COLOR_DOUBLE_NOTE;
+	}else{
+		color = currentTrack.pattern[state.lastPressedStep].active ? cons.COLOR_ACTIVE_STEP : currentTrack.color;
+	}
 	return sysex.concat(flashHeader).concat([stepButton, color]).concat([247]);
 };
 

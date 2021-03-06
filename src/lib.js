@@ -188,6 +188,9 @@ exports.toogleSmallGridMode = (state,scenes) => {
 		state.smallGridMode = 'velocity';
 		break;
 	case 'velocity':
+		state.smallGridMode = 'octave';
+		break;
+	case 'octave':
 		state.smallGridMode = 'length';
 		break;
 	default:
@@ -223,6 +226,13 @@ exports.changeVelocity = (state,scenes) => {
 	if(state.smallGridMode == 'velocity' && state.pressedButtons.length == 1 && state.workspace > 1){
 		var button = state.pressedButtons[0];
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].velocity = calculateVelocity(button);
+	}
+};
+
+exports.changeOctave = (state,scenes) => {
+	if(state.smallGridMode == 'octave' && state.pressedButtons.length == 1 && state.workspace > 1){
+		var button = state.pressedButtons[0];
+		scenes[state.currentScene].tracks[state.currentTrack].midiRoot = 12 * cons.SMALL_GRID.indexOf(button);
 	}
 };
 

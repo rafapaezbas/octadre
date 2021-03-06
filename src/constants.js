@@ -33,6 +33,7 @@ exports.COLOR_ACTIVE_NOTE = configuration.getIntOrDefault('COLOR_ACTIVE_NOTE',58
 exports.COLOR_NON_ACTIVE_NOTE = configuration.getIntOrDefault('COLOR_NON_ACTIVE_NOTE',40);
 exports.COLOR_LENGTH = configuration.getIntOrDefault('COLOR_LENGTH',8);
 exports.COLOR_VELOCITY = configuration.getIntOrDefault('COLOR_VELOCITY',116);
+exports.COLOR_OCTAVE = configuration.getIntOrDefault('COLOR_OCTAVE',16);
 exports.COLOR_BLINK = configuration.getIntOrDefault('COLOR_BLINK',58);
 exports.COLOR_TRIPLET = configuration.getIntOrDefault('COLOR_TRIPLET',116);
 exports.COLOR_DOUBLE_NOTE = configuration.getIntOrDefault('COLOR_DOUBLE_NOTE',44);
