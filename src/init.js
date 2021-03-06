@@ -38,14 +38,11 @@ exports.setupClockInput = (port) => {
 	io.getClockInput().on('clock', () => {
 		state.clockTick++;
 		midi.resetClock(state);
-		if(state.clockTick % 6 == 0){
-			midi.nextStep(state,scenes);
-			state.currentStep++;
-			if(state.mode == 'seq' && state.showCursor) {
-				render.lightCurrentStep(state,scenes);
-			}
+		if(state.mode == 'metronome'){
+			playMetronome();
+		}else{
+			playSequencer();
 		}
-		midi.sendMidi(state);
 	});
 };
 
@@ -115,6 +112,15 @@ exports.setupLaunchpadInput = () => {
 		update(pressed, button);
 	});
 };
+exports.toogleMetronome = () => {
+	if(state.mode != 'metronome'){
+		state.mode = 'metronome';
+	}else{
+		state.mode = 'seq';
+	}
+	state.renderReset = true;
+	render.render(scenes,state);
+}
 
 const update = (pressed, button) => {
 	switch(state.mode){
@@ -197,4 +203,24 @@ const defaultSeqController = () => {
 		}
 	}
 	return buttons;
+};
+
+const playMetronome = () => {
+	if(state.clockTick % 24 == 0){
+		io.getOutput().send('noteon', {note: 60 ,velocity: 127,channel: 0});
+	}
+	if(state.clockTick % 24 == 3){
+		io.getOutput().send('noteoff', {note: 60 ,velocity: 127,channel: 0});
+	}
+};
+
+const playSequencer = () => {
+	if(state.clockTick % 6 == 0){
+		midi.nextStep(state,scenes);
+		state.currentStep++;
+		if(state.mode == 'seq' && state.showCursor) {
+			render.lightCurrentStep(state,scenes);
+		}
+	}
+	midi.sendMidi(state);
 };

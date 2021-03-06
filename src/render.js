@@ -21,6 +21,9 @@ exports.render = (scenes,state) => {
 	case 'chords':
 		renderChords(scenes,state);
 		break;
+	case 'metronome':
+		renderMetronome();
+		break;
 	default:
 		break;
 	}
@@ -213,4 +216,11 @@ const renderReset = () => {
 	var message = sysex.concat(setAllHeader).concat(color).concat([247]);
 	io.launchpadOutput.send('sysex',message);
 	return message;
+};
+
+const renderMetronome = () => {
+	var sysex = [];
+	var color = cons.COLOR_METRONOME;
+	var message = sysex.concat(header).concat([11,color,18,color,81,color,88,color]).concat([247]);
+	io.launchpadOutput.send('sysex',message);
 };

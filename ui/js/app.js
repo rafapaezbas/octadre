@@ -41,3 +41,7 @@ document.getElementById("load").addEventListener('click', async (e) => {
         init.load(file.filePaths[0]);
     }
 });
+
+document.getElementById("metronome").addEventListener('click', async (e) => {
+    init.toogleMetronome();
+});
