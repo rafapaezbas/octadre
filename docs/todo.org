@@ -12,7 +12,7 @@
 ** DONE remove colateral effects to init and midi-io
 ** DONE single triplets
 ** TODO quadruple triplets
-** TODO metronome
+** DONE metronome
 ** DONE doubled step
 ** DONE fix selected step when changing pattern length
 ** DONE fix toogle triplet when they are different

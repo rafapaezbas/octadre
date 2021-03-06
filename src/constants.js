@@ -37,7 +37,7 @@ exports.COLOR_OCTAVE = configuration.getIntOrDefault('COLOR_OCTAVE',16);
 exports.COLOR_BLINK = configuration.getIntOrDefault('COLOR_BLINK',58);
 exports.COLOR_TRIPLET = configuration.getIntOrDefault('COLOR_TRIPLET',116);
 exports.COLOR_DOUBLE_NOTE = configuration.getIntOrDefault('COLOR_DOUBLE_NOTE',44);
-exports.COLOR_METRONOME = configuration.getIntOrDefault('COLOR_METRONOME', 100);
+exports.COLOR_METRONOME = configuration.getIntOrDefault('COLOR_METRONOME', 40);
 
 exports.COLOR_TONIC = configuration.getIntOrDefault('COLOR_TONIC',29);
 exports.COLOR_SUBDOMINANT = configuration.getIntOrDefault('COLOR_SUBDOMINANT',81);
