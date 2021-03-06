@@ -21,6 +21,7 @@ exports.toogleTriplet = (state,scenes) => {
 	if(state.pressedButtons.length == 2
 	   && firstStep != -1
 	   && secondStep != -1
+	   && currentTrack.trackLength > secondStep
 	   && buttonsAreContinousInGrid(state.pressedButtons)
 	   && stepsInSameTripletState(state.pressedButtons, currentTrack)
 	   && stepsCanToogleTriplet(firstStep, secondStep, currentTrack)){
@@ -58,8 +59,10 @@ exports.toogleNote = (state,scenes) => {
 };
 
 exports.showNotes = (state,scenes) => {
-	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && isBigGrid(state.pressedButtons[1])){
-		state.lastPressedStep = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
+	var step = cons.BIG_GRID.indexOf(state.pressedButtons[1]);
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && step != -1
+	   && step < scenes[state.currentScene].tracks[state.currentTrack].trackLength){
+		state.lastPressedStep = step;
 	}
 };
 
@@ -133,8 +136,10 @@ exports.chainScenes = (state,scenes) => {
 };
 
 exports.changeTrackLength = (state,scenes) => {
-	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_2_BUTTON && isBigGrid(state.pressedButtons[1])){
-		scenes[state.currentScene].tracks[state.currentTrack].trackLength = cons.BIG_GRID.indexOf(state.pressedButtons[1]) + 1;
+	var step = cons.BIG_GRID.indexOf(state.pressedButtons[1])
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_2_BUTTON && step != -1){
+		scenes[state.currentScene].tracks[state.currentTrack].trackLength = step + 1;
+		state.lastPressedStep = step;
 	}
 };
 

@@ -82,7 +82,7 @@ const generateStepsMessage = (scenes,state) => {
 
 const generateTripletsMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern.reduce((acc,e,i) => {
-		if(e.triplet || e.singleTriplet){
+		if((e.triplet || e.singleTriplet) && i < scenes[state.currentScene].tracks[state.currentTrack].trackLength){
 			acc.push(cons.BIG_GRID[i]);
 			acc.push(cons.COLOR_TRIPLET);
 		}
