@@ -82,7 +82,7 @@ const generateStepsMessage = (scenes,state) => {
 
 const generateTripletsMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern.reduce((acc,e,i) => {
-		if(e.triplet){
+		if(e.triplet || e.singleTriplet){
 			acc.push(cons.BIG_GRID[i]);
 			acc.push(cons.COLOR_TRIPLET);
 		}
@@ -170,7 +170,7 @@ const flashLastPressedStep = (scenes, state) => {
 	var stepButton = cons.BIG_GRID[state.lastPressedStep];
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
 	var color = undefined;
-		if(currentTrack.pattern[state.lastPressedStep].triplet){
+		if(currentTrack.pattern[state.lastPressedStep].triplet  || currentTrack.pattern[state.lastPressedStep].singleTriplet){
 			color = cons.COLOR_TRIPLET;
 		}
 		else if(currentTrack.pattern[state.lastPressedStep].doubleNote){
@@ -184,7 +184,7 @@ const flashLastPressedStep = (scenes, state) => {
 const resetStepMessage = (step,state,scenes) => {
 	var trackColor = scenes[state.currentScene].tracks[state.currentTrack].color;
 	var isActive = scenes[state.currentScene].tracks[state.currentTrack].pattern[step].active;
-	var isTriplet =  scenes[state.currentScene].tracks[state.currentTrack].pattern[step].triplet;
+	var isTriplet =  scenes[state.currentScene].tracks[state.currentTrack].pattern[step].triplet || scenes[state.currentScene].tracks[state.currentTrack].pattern[step].singleTriplet;
 	var isDoubleNote =  scenes[state.currentScene].tracks[state.currentTrack].pattern[step].doubleNote;
 	var color = isTriplet ?  cons.COLOR_TRIPLET : isDoubleNote ? cons.COLOR_DOUBLE_NOTE : isActive ? cons.COLOR_ACTIVE_STEP : trackColor;
 	return [cons.BIG_GRID[step], color];
