@@ -14,7 +14,7 @@
 ** TODO quadruple triplets
 ** TODO metronome
 ** DONE doubled step
-** TODO fix selected step when changing pattern length
+** DONE fix selected step when changing pattern length
 ** DONE fix toogle triplet when they are different
 ** TODO disable chord mode
 ** DONE document build process
