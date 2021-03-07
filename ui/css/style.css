@@ -79,6 +79,10 @@ button {
     margin-left: 10px;
 }
 
+#midi-outputs{
+    margin-left: 10px;
+}
+
 #pattern{
     margin-top: 30px;
 }
