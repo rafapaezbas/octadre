@@ -190,8 +190,7 @@ const setupSceneTracks = () => {
 const playNote = (pressed, button) => {
 	if(state.pressedButtons[0] == cons.SHIFT_BUTTON && cons.INNER_GRID.indexOf(button) != -1){
 		var midiMessage = pressed ? 'noteon' : 'noteoff';
-		io.getOutput().send(midiMessage, {note: 60 + cons.INNER_GRID.indexOf(button) ,velocity: 127,channel: state.currentTrack});
-
+		io.getOutput().send(midiMessage, {note: scenes[state.currentScene].tracks[state.currentTrack].midiRoot + cons.INNER_GRID.indexOf(button) ,velocity: 127,channel: state.currentTrack});
 	}
 };
 
