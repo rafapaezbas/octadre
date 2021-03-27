@@ -21,7 +21,8 @@ apt-get install libasound2 libasound2-dev
 ```
 npm install -g node-gyp
 npm install
-npm install --save-dev electron-rebuild ./node_modules/.bin/electron-rebuild midi
+npm install --save-dev electron-rebuild 
+./node_modules/.bin/electron-rebuild midi
 npm run-script dist
 ```
 * Have a look a this [build logs](https://www.travis-ci.com/github/rafapaezbas/octaedre/), can be useful for building locally.

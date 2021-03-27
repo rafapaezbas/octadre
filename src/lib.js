@@ -222,10 +222,25 @@ exports.changeLength = (state,scenes) => {
 	}
 };
 
+exports.globalChangeLength = (state,scenes) => {
+	if(state.smallGridMode == 'length' && state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && state.workspace > 1){
+		var button = state.pressedButtons[1];
+		var currentLength = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].length;
+		scenes[state.currentScene].tracks[state.currentTrack].pattern.map(s => s.length = calculateLength(button,currentLength));
+	}
+};
+
 exports.changeVelocity = (state,scenes) => {
 	if(state.smallGridMode == 'velocity' && state.pressedButtons.length == 1 && state.workspace > 1){
 		var button = state.pressedButtons[0];
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].velocity = calculateVelocity(button);
+	}
+};
+
+exports.globalChangeVelocity = (state,scenes) => {
+	if(state.smallGridMode == 'velocity' && state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && state.workspace > 1){
+		var button = state.pressedButtons[1];
+		scenes[state.currentScene].tracks[state.currentTrack].pattern.map(s => s.velocity = calculateVelocity(button));
 	}
 };
 

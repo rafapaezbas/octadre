@@ -70,7 +70,7 @@ exports.setupController = () => {
 	controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];
 	controller['seq'][cons.CHANGE_WORKSPACE_BUTTON] = [lib.changeWorkspace];
 	cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
-	cons.SMALL_GRID.map(e => controller['seq'][e] = [lib.changeLength, lib.changeVelocity, lib.changeOctave]);
+	cons.SMALL_GRID.map(e => controller['seq'][e] = [lib.changeLength, lib.changeVelocity, lib.changeOctave,lib.globalChangeLength,lib.globalChangeVelocity]);
 	cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);
 	cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength,lib.copyStep, lib.toogleTriplet, lib.toogleDoubleNote, lib.toogleSingleTriplet]);
 	cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack, lib.copyTrack]);
@@ -205,12 +205,24 @@ const defaultSeqController = () => {
 };
 
 const playMetronome = () => {
-	if(state.clockTick % 24 == 0){
+
+	if(state.clockTick % 96 == 0){
+		io.getOutput().send('noteon', {note: 72 ,velocity: 127,channel: 0});
+	}
+	else if(state.clockTick % 24 == 0){
 		io.getOutput().send('noteon', {note: 60 ,velocity: 127,channel: 0});
 	}
-	if(state.clockTick % 24 == 3){
+
+
+	if(state.clockTick % 96 == 3){
+		io.getOutput().send('noteoff', {note: 72 ,velocity: 127,channel: 0});
+	}
+	else if(state.clockTick % 24 == 3){
 		io.getOutput().send('noteoff', {note: 60 ,velocity: 127,channel: 0});
 	}
+
+	render.render(scenes, state);
+
 };
 
 const playSequencer = () => {

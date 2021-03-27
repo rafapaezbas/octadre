@@ -11,16 +11,15 @@
 ** DONE MPC mode
 ** DONE remove colateral effects to init and midi-io
 ** DONE single triplets
-** TODO quadruple triplets
 ** DONE metronome
 ** DONE doubled step
 ** DONE fix selected step when changing pattern length
 ** DONE fix toogle triplet when they are different
-** TODO disable chord mode
+** DONE disable chord mode
 ** DONE document build process
 ** DONE MacOS compilation
 ** DONE Linux compilation
-** TODO Windows compilation
+** DONE Windows compilation
 ** DONE Electron architecture
 ** DONE chords mode configurable
 ** DONE Random pattern
@@ -66,6 +65,10 @@ VII 7-2-3
 Add scenes to stack seems to be expensive, try another way
 
 ** DONE Add shift to copy scene
+** DONE fix single triplet
+** DONE global octave/velocity/length change
+** DONE metronome blink
+** DONE metronome first tick higher octave
 * TODO v 2.0
 ** TODO icon for random chords
 ** TODO Chords scale change (8th row)

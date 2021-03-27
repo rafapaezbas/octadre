@@ -104,6 +104,7 @@ const playStep = (step,track,state,note) => {
 		state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 		state.midiNotesQueue.push({clockTick: state.clockTick + (8 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 	}else if(step.singleTriplet){
+		state.midiNotesQueue.push({clockTick: state.clockTick, length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 		state.midiNotesQueue.push({clockTick: state.clockTick + (2 / track.tempoModifier), length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 		state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 	}else if(step.doubleNote){
