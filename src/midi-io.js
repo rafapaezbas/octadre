@@ -1,13 +1,42 @@
 const utils = require('./utils');
 const easymidi = require('easymidi');
 
-var output = new easymidi.Output(easymidi.getOutputs()[0]);
-var clockInput = new easymidi.Input(easymidi.getInputs()[0]);
-var launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()));
-var input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
+var output;
+var clockInput;
+var launchpadOutput;
+var input;
 
 exports.launchpadOutput = launchpadOutput;
 exports.input = input;
+
+exports.setupIO = () => {
+
+	try{
+		output = new easymidi.Output(easymidi.getOutputs()[0]);
+	}catch(err){
+		return "No output midi channels detected."
+	}
+
+	try{
+		clockInput = new easymidi.Input(easymidi.getInputs()[0]);
+	}catch(err){
+		return "No input midi channels detected."
+	}
+
+	try{
+		launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()));
+	}catch(err){
+		return "No Launchpad output midi channel detected."
+	}
+
+	try{
+		input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
+	}catch(err){
+		return "No Launchpad input midi channel detected."
+	}
+
+	 return ""
+};
 
 exports.setOutput = (port) => {
 	output = new easymidi.Output(port);

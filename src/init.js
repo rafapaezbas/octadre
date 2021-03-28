@@ -112,6 +112,17 @@ exports.setupLaunchpadInput = () => {
 		update(pressed, button);
 	});
 };
+
+exports.setupIO = () => {
+	state.ioError = io.setupIO();
+	console.log("ioError: " + state.ioError);
+	return state.ioError;
+};
+
+exports.getIOError = () => {
+	return state.ioError;
+}
+
 exports.toogleMetronome = () => {
 	if(state.mode != 'metronome'){
 		state.mode = 'metronome';
