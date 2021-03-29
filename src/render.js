@@ -38,11 +38,11 @@ exports.lightCurrentStep = (state,scenes) => {
 		var sysex = [];
 		var message = sysex.concat(header).concat(resetStepMessage((prevStep) % trackLength,state, scenes))
 			.concat([cons.BIG_GRID[modCurrentStep % trackLength],cons.COLOR_CURSOR]).concat([247]);
-		io.launchpadOutput.send('sysex',message);
+		io.getLaunchpadOutput().send('sysex',message);
 	}
 	if(prevStep % trackLength == state.lastPressedStep){
 		var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-		io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
+		io.getLaunchpadOut().send('sysex',flashLastPressedStepMessage);
 	}
 };
 
@@ -58,8 +58,8 @@ const renderSeq = (scenes,state) => {
 	var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
 	var message = sysex.concat(header).concat(stepsMessage).concat(tripletsMessage).concat(doubleNotesMessage).concat(mutesMessage).concat(scenesMessage)
 		.concat(smallGridMessage).concat(notesMessage).concat([247]);
-	io.launchpadOutput.send('sysex',message);
-	io.launchpadOutput.send('sysex',flashLastPressedStepMessage);
+	io.getLaunchpadOutput().send('sysex',message);
+	io.getLaunchpadOutput().send('sysex',flashLastPressedStepMessage);
 	return message;
 };
 
@@ -67,8 +67,8 @@ const renderChords = (scenes,state) => {
 	var sysex = [];
 	var chordsByColumnMessage = sysex.concat(byColumnHeader).concat(generateColumnChordsMessage()).concat([247]);
 	var chordsMessage = sysex.concat(header).concat(generateChordsMessage(scenes, state)).concat([247]);
-	io.launchpadOutput.send('sysex',chordsByColumnMessage);
-	io.launchpadOutput.send('sysex',chordsMessage);
+	io.getLaunchpadOutput().send('sysex',chordsByColumnMessage);
+	io.getLaunchpadOutput().send('sysex',chordsMessage);
 };
 
 const generateStepsMessage = (scenes,state) => {
@@ -214,7 +214,7 @@ const renderReset = () => {
 	var sysex = [];
 	var color = 0; // Note-off
 	var message = sysex.concat(setAllHeader).concat(color).concat([247]);
-	io.launchpadOutput.send('sysex',message);
+	io.getLaunchpadOutput().send('sysex',message);
 	return message;
 };
 
@@ -250,5 +250,5 @@ const renderBigGrid = () => {
 		return acc;
 	},[]);
 	var message = sysex.concat(header).concat(grid).concat([247]);
-	io.launchpadOutput.send('sysex',message);
+	io.getLaunchpadOutput().send('sysex',message);
 }

@@ -6,33 +6,30 @@ var clockInput;
 var launchpadOutput;
 var input;
 
-exports.launchpadOutput = launchpadOutput;
-exports.input = input;
-
 exports.setupIO = () => {
 
 	try{
 		output = new easymidi.Output(easymidi.getOutputs()[0]);
 	}catch(err){
-		return "No output midi channels detected."
+		return "Error: No output midi channels found.";
 	}
 
 	try{
 		clockInput = new easymidi.Input(easymidi.getInputs()[0]);
 	}catch(err){
-		return "No input midi channels detected."
+		return "Error: No input midi channels found.";
 	}
 
 	try{
 		launchpadOutput = new easymidi.Output(utils.getLaunchpadPort(easymidi.getOutputs()));
 	}catch(err){
-		return "No Launchpad output midi channel detected."
+		return "Error: No Launchpad output midi channel found.";
 	}
 
 	try{
 		input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 	}catch(err){
-		return "No Launchpad input midi channel detected."
+		return "Error: No Launchpad input midi channel found.";
 	}
 
 	 return ""
@@ -52,6 +49,14 @@ exports.getClockInput = () => {
 
 exports.getOutput = () => {
 	return output;
+};
+
+exports.getInput = () => {
+	return input;
+};
+
+exports.getLaunchpadOutput = () => {
+	return launchpadOutput;
 };
 
 exports.resetClockInput = () => {

@@ -100,13 +100,13 @@ exports.load = (path) => {
 };
 
 exports.setupLaunchpadInput = () => {
-	io.input.on('noteon', (message) => {
+	io.getInput().on('noteon', (message) => {
 		var pressed = message.velocity > 0;
 		var button = message.note;
 		update(pressed, button);
 	});
 
-	io.input.on('cc', (message) => {
+	io.getInput().on('cc', (message) => {
 		var pressed = message.value > 0;
 		var button = message.controller;
 		update(pressed, button);
