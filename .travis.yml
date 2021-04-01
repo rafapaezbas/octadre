@@ -3,9 +3,6 @@ language: node_js
 node_js:
   - '11.6.0'
 
-# Always run two parallel builds: one on mac and one on linux
-# the linux build will use wine to be able to build windows and
-# linux apps
 matrix:
   include:
     - os: osx
@@ -15,12 +12,6 @@ matrix:
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
-
-    - os: linux
-      dist: xenial
-      sudo: required
-      services: docker
-      language: generic
 
 notifications:
   email: false
@@ -46,12 +37,6 @@ before_script:
 # on PRs and merges to master and prod run tests and build the app
 script:
   - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      apt-get update
-      sudo apt-get install libasound2 libasound2-dev
-      nvm install 11.6.0
-      nvm use nvm 11.6.0
-    fi
     npm install -g node-gyp
     npm install
     npm install --save-dev electron-rebuild
