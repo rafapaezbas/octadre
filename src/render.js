@@ -42,7 +42,7 @@ exports.lightCurrentStep = (state,scenes) => {
 	}
 	if(prevStep % trackLength == state.lastPressedStep){
 		var flashLastPressedStepMessage = flashLastPressedStep(scenes,state);
-		io.getLaunchpadOut().send('sysex',flashLastPressedStepMessage);
+		io.getLaunchpadOutput().send('sysex',flashLastPressedStepMessage);
 	}
 };
 
