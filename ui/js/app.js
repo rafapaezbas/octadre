@@ -3,6 +3,7 @@ const { BrowserWindow } = remote;
 const easymidi = remote.require('easymidi');
 const init = remote.require('../src/init');
 const io = remote.require('../src/midi-io');
+const network = remote.require('../src/network');
 
 const midiInputs = document.getElementById("midi-inputs");
 easymidi.getInputs().map(e => {
@@ -47,6 +48,37 @@ document.getElementById("load").addEventListener('click', async (e) => {
     }
 });
 
-document.getElementById("metronome").addEventListener('click', async (e) => {
+document.getElementById("metronome").addEventListener('click', (e) => {
     init.toogleMetronome();
 });
+
+document.getElementById("network").addEventListener('click', (e) => {
+    switchPannels();
+    if(!network.getNetwork().connected){
+        document.getElementById("log").innerHTML = "Click here to connect."
+        document.getElementById("log").classList.add("log-clickable");
+    }
+});
+
+document.getElementById("log").addEventListener('click', async (e) => {
+    if(!network.getNetwork().connected){
+        var server = document.getElementById("server-ip").value;
+        var pair = document.getElementById("pair-id").value;
+        var response;
+        document.getElementById("log").innerHTML = "Connecting...";
+        try{
+            response = await network.connect(server,pair);
+        }catch(err){
+            response = err;
+        }
+            document.getElementById("log").classList.remove("log-clickable");
+            document.getElementById("log").innerHTML = response;
+    }
+});
+
+const switchPannels = () => {
+    document.getElementById("panel1").classList.toggle("panel1-in");
+    document.getElementById("panel1").classList.toggle("panel1-out");
+    document.getElementById("panel2").classList.toggle("panel2-in");
+    document.getElementById("panel2").classList.toggle("panel2-out");
+};

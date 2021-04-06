@@ -21,7 +21,9 @@
 body {
     background-color: var(--main-color);
     color: var(--font-color);
-    border: 1px solid black;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 #logo{
@@ -61,6 +63,11 @@ select {
     background-color: white;
     color: black;
     border: 1px solid black;
+}
+
+input{
+    margin-bottom: 10px;
+    font-family: "ff";
 }
 
 .row{
@@ -111,9 +118,59 @@ button {
     cursor: pointer;
 }
 
+#network {
+    cursor: pointer;
+}
+
 #log {
     display: inline;
     float: right;
     margin-right: 20px;
     font-size: 15px;
+}
+
+.panel1-in {
+    position: absolute;
+    left: 40px;
+    top: 90px;
+    transition: 1s;
+}
+
+.panel1-out {
+    position: absolute;
+    left: -530px;
+    top: 90px;
+    transition: 1s;
+}
+
+.panel2-in {
+    position: absolute;
+    left: 40px;
+    top: 100px;
+    transition: 1s;
+}
+
+.panel2-out {
+    position: absolute;
+    left: 610px;
+    top: 100px;
+    transition: 1s;
+}
+
+#server-ip{
+    margin-left: 10px;
+    border:1px solid black;
+}
+
+#pair-id{
+    margin-left: 64px;
+    border:1px solid black;
+}
+
+.log-clickable{
+    cursor: pointer;
+}
+
+.log-clickable:hover{
+    text-decoration: underline;
 }

@@ -1,4 +1,4 @@
-* TODO v 1.0
+* DONE v 1.0
 ** DONE Free midi
 ** DONE Notes play
 ** DONE copy track
@@ -75,3 +75,12 @@ Add scenes to stack seems to be expensive, try another way
 ** TODO chords render
 ** TODO arpeggio
 ** TODO Chords inversion change
+* TODO Network
+** DONE Host doesnt exist
+** DONE Pair doesnt exist
+** TODO Pair disconnected
+** TODO Decouple controller from init
+** TODO Design communication protocol
+** DONE Make connection on log click
+** TODO Search icon for midi connections
+** TODO set background of icons grey depending on panel in view
