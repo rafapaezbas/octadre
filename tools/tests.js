@@ -3,8 +3,12 @@ const tests = [];
 
 const run = () => {
 	var failedTests = tests.filter(t => !t.test());
-	failedTests.length == 0 ? console.log("Success") : printFailedTests(failedTests);
-
+	if(failedTests.length == 0){
+		 console.log("Success");
+	}else{
+		printFailedTests(failedTests);
+		assert(false);
+	}
 }
 
 const addTest = (test,message) => {
