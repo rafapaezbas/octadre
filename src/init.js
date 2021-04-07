@@ -212,5 +212,3 @@ const playSequencer = () => {
 	}
 	midi.sendMidi(state);
 };
-
-console.log(controller['seq']);

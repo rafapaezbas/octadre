@@ -1,5 +1,6 @@
 const utils = require('./utils');
 const easymidi = require('easymidi');
+const cons = require('./constants')
 
 var output;
 var clockInput;
@@ -27,7 +28,8 @@ exports.setupIO = () => {
 	}
 
 	try{
-		input = new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
+		console.log(cons.TEST_MIDI_INPUT);
+		input = cons.TEST_MODE ? new easymidi.Input(cons.TEST_MIDI_INPUT) :  new easymidi.Input(utils.getLaunchpadPort(easymidi.getInputs()));
 	}catch(err){
 		return "Error: No Launchpad input midi channel found.";
 	}

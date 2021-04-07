@@ -55,3 +55,5 @@ exports.MPC_MODE = configuration.getIntOrDefault('MPC_MODE', 0);
 exports.GRID = utils.generateGrid();
 
 exports.CHORDS_MODE_ENABLED = configuration.getIntOrDefault('CHORDS_MODE_ENABLED', 0);
+exports.TEST_MODE = configuration.getIntOrDefault('TEST_MODE', 0);
+exports.TEST_MIDI_INPUT = configuration.getString('TEST_MIDI_INPUT', 0);
