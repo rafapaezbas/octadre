@@ -6,6 +6,8 @@ const cons = require('./constants');
 const chords = require('./chords');
 const controller = require('./controller');
 const fs = require('fs');
+const network = require('./network');
+const networkController = require('./network-controller');
 
 var scenes = [];
 var state =  {
@@ -80,6 +82,9 @@ exports.setupLaunchpadInput = () => {
 		var pressed = message.velocity > 0;
 		var button = message.note;
 		update(pressed, button);
+		if(network.getNetwork().connected){
+			network.send(state);
+		}
 	});
 
 	io.getInput().on('cc', (message) => {
@@ -107,6 +112,23 @@ exports.toogleMetronome = () => {
 	}
 	state.renderReset = true;
 	render.render(scenes,state);
+}
+
+exports.setupNetworkController = () => {
+	network.setEventCallback((remoteState) => {
+		console.log(remoteState);
+		switch(remoteState.mode){
+		case 'seq':
+			controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
+			break;
+		case 'chords':
+			// TODO
+			break;
+		default:
+			break;
+		}
+		render.render(scenes,state);
+	});
 }
 
 const update = (pressed, button) => {
@@ -149,7 +171,7 @@ const pressedChord = (button) => {
 	var chord = state.chords[button];
 	if(chord != undefined){
 		state.lastChordPressed = button;
-		var finalChord =chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
+		var finalChord = chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
 		finalChord.map(n => io.getOutput().send('noteon', {note:n, velocity:127, channel:state.currentTrack}));
 	}
 	if(controller['chords'][button] != undefined){

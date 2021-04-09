@@ -1,4 +1,5 @@
 const io = require('socket.io-client');
+var eventCallback = undefined;
 
 var network = {
     connected : false,
@@ -20,7 +21,7 @@ exports.connect = (server,pair) => {
         });
 
         network.socket.on('event', (msg) => {
-            console.log(msg);
+            eventCallback(msg);
         });
 
         network.socket.on('paired', (msg) => {
@@ -48,6 +49,29 @@ exports.connect = (server,pair) => {
     });
 };
 
+exports.send = (state) => {
+    console.log("Sending: " + stateTransformer(state));
+    network.socket.emit("event", stateTransformer(state));
+};
+
 exports.getNetwork = () => {
     return network;
+};
+
+exports.setEventCallback = (callback) => {
+    eventCallback = callback;
+};
+
+//This is the information sent over socket
+const stateTransformer = (state) => {
+    return {
+        pressedButtons:state.pressedButtons,
+        currentTrack:state.currentTrack,
+        currentScene:state.currentScene,
+        lastPressedStep:state.lastPressedStep,
+        lastChordPressed: state.lastChordPressed,
+        mode : state.mode,
+        smallGridMode : state.smallGridMode,
+        workspace : state.workspace,
+    };
 }
