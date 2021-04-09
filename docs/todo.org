@@ -79,8 +79,12 @@ Add scenes to stack seems to be expensive, try another way
 ** DONE Host doesnt exist
 ** DONE Pair doesnt exist
 ** TODO Pair disconnected
-** TODO Decouple controller from init
+** DONE Decouple controller from init
+** TODO Network controller
+** TODO Network controller tests
 ** TODO Design communication protocol
 ** DONE Make connection on log click
-** TODO Search icon for midi connections
-** TODO set background of icons grey depending on panel in view
+** DONE Search icon for midi connections
+** DONE Fix icons
+** DONE set background of icons grey depending on panel in view
+** DONE tests using launchpad input

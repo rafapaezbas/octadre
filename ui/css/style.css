@@ -119,6 +119,16 @@ button {
 }
 
 #network {
+    margin: 10px;
+    margin-left: 1px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+#midi {
+    margin: 10px;
+    margin-left: 1px;
+    margin-bottom: 5px;
     cursor: pointer;
 }
 
@@ -127,6 +137,11 @@ button {
     float: right;
     margin-right: 20px;
     font-size: 15px;
+}
+
+.icon-selected {
+    transition: 1s;
+    filter: opacity(25%);
 }
 
 .panel1-in {
