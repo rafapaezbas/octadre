@@ -2,42 +2,13 @@
 <html>
   <head>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Octaedre</title>
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
   </head>
   <body>
-    <img id="save" src="images/floppy-disk.png"></img>
-    <img id="load" src="images/load.png"></img>
-    <img id="metronome" src="images/metronome.png"></img>
-    <img id="midi" class="icon-selected" src="images/midi.png"></img>
-    <img id="network" src="images/network.png"></img>
-    <p id="log"></p>
-    <fieldset>
-      <legend>Octaedre</legend>
-      <div id="panel1" class="panel1-in">
-        <div class="row">
-          <label>Clock input</label>
-          <select id="midi-inputs"></select>
-        </div>
-        <div class="row">
-          <label>Midi output</label>
-          <select id="midi-outputs"></select>
-        </div>
-      </div>
-      <div id="panel2" class="panel2-out">
-        <div class="row">
-          <label>Network server</label>
-          <input id="server-ip" type="text" value="3.64.53.184">
-        </div>
-        <div class="row">
-          <label>Pair ID</label>
-          <input id="pair-id" type="text" value="">
-        </div>
-      </div>
-    </fieldset>
+    <div id="app">
+    </div>
   </body>
+  <script src="js/hyperapp.js"></script>
   <script src="js/app.js"></script>
 </html>

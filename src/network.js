@@ -44,7 +44,7 @@ exports.connect = (server,pair) => {
             }
         });
 
-        setTimeout(() => reject("Connection timeout."), 10000);
+        setTimeout(() => reject("Connection timeout."), 3000);
 
     });
 };

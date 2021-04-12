@@ -34,7 +34,7 @@ exports.setupIO = () => {
 		return "Error: No Launchpad input midi channel found.";
 	}
 
-	 return ""
+	return undefined;
 };
 
 exports.setOutput = (port) => {

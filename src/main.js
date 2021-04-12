@@ -3,7 +3,7 @@ const ui = require('./ui');
 
 var ioError = init.setupIO();
 
-if(ioError == ""){ // Check if io could be setup
+if(ioError == undefined){ // Check if io could be setup
     init.setupState();
     init.setupScenes();
     init.setupClockInput();

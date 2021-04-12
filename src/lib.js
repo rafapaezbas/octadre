@@ -4,7 +4,6 @@ const chords = require('./chords');
 const io = require('./midi-io');
 
 exports.toogleStep = (state,scenes) => {
-	console.log("got here!");
 	var currentTrack = scenes[state.currentScene].tracks[state.currentTrack];
 	var step = cons.BIG_GRID.indexOf(state.pressedButtons[0]);
 	if(state.pressedButtons.length == 1 && isBigGrid(state.pressedButtons[0]) && currentTrack.trackLength > step && !stepIsInTriplet(step,currentTrack)){

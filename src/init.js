@@ -96,7 +96,6 @@ exports.setupLaunchpadInput = () => {
 
 exports.setupIO = () => {
 	state.ioError = io.setupIO();
-	console.log("ioError: " + state.ioError);
 	return state.ioError;
 };
 
