@@ -107,8 +107,8 @@ const icons = [
     h("img", {src : "images/floppy-disk.png", id:"save", onclick: save}),
     h("img", {src : "images/load.png", id:"load", onclick: load}),
     h("img", {src : "images/metronome.png", id :"metronome"}),
-    h("img", {src : "images/midi.png", id:"midi", onclick: switchPanel("midi")}),
-    h("img", {src : "images/network.png", id:"network", onclick: switchPanel("network")})
+    //h("img", {src : "images/midi.png", id:"midi", onclick: switchPanel("midi")}),
+    //h("img", {src : "images/network.png", id:"network", onclick: switchPanel("network")})
 ];
 
 const log = (state) => h("p", {id: "log", class: isLogClickable(state) ? "log-clickable" : "", onclick: isLogClickable(state) ? connect : undefined}, text(logMessage(state)));
