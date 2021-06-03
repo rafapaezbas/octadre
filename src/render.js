@@ -65,9 +65,9 @@ const renderSeq = (scenes,state) => {
 
 const renderChords = (scenes,state) => {
 	var sysex = [];
-	var chordsByColumnMessage = sysex.concat(byColumnHeader).concat(generateColumnChordsMessage()).concat([247]);
+	var chordsGridMessage = sysex.concat(header).concat(generateChordsGridMessage()).concat([247]);
 	var chordsMessage = sysex.concat(header).concat(generateChordsMessage(scenes, state)).concat([247]);
-	io.getLaunchpadOutput().send('sysex',chordsByColumnMessage);
+	io.getLaunchpadOutput().send('sysex',chordsGridMessage);
 	io.getLaunchpadOutput().send('sysex',chordsMessage);
 };
 
@@ -119,14 +119,17 @@ const generateChordsMessage = (scenes,state) => {
 	},[]);
 };
 
-const generateColumnChordsMessage = () => {
+const generateChordsGridMessage = () => {
 	const chordColors = [cons.COLOR_TONIC,cons.COLOR_SUBDOMINANT,cons.COLOR_TONIC,cons.COLOR_SUBDOMINANT,cons.COLOR_DOMINANT,cons.COLOR_TONIC,cons.COLOR_DOMINANT];
-	return chordColors.reduce((acc,e,i) => {
-		acc.push(i);
-		acc.push(e);
-		return acc;
-	},[]);
-};
+	var message = [];
+	for(var i = 1; i < 8; i++){
+		for(var j = 1; j < 8; j++){
+			message.push((10 * j) + i);
+			message.push(chordColors[i - 1]);
+		}
+	}
+	return message;
+}
 
 const generateMutesMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks.reduce((acc,e,i) => {

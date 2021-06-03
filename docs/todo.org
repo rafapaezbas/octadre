@@ -70,11 +70,7 @@ Add scenes to stack seems to be expensive, try another way
 ** DONE metronome blink
 ** DONE metronome first tick higher octave
 * TODO v 2.0
-** TODO icon for random chords
-** TODO Chords scale change (8th row)
-** TODO chords render
-** TODO arpeggio
-** TODO Chords inversion change
+** TODO Chords change mode
 * TODO Network
 ** DONE Host doesnt exist
 ** DONE Pair doesnt exist
