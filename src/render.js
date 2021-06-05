@@ -67,8 +67,10 @@ const renderChords = (scenes,state) => {
 	var sysex = [];
 	var chordsGridMessage = sysex.concat(header).concat(generateChordsGridMessage()).concat([247]);
 	var chordsMessage = sysex.concat(header).concat(generateChordsMessage(scenes, state)).concat([247]);
+	var chordsPlayModeMessage = sysex.concat(header).concat(generateChordsPlayModeMessage(scenes, state)).concat([247]);
 	io.getLaunchpadOutput().send('sysex',chordsGridMessage);
 	io.getLaunchpadOutput().send('sysex',chordsMessage);
+	io.getLaunchpadOutput().send('sysex',chordsPlayModeMessage);
 };
 
 const generateStepsMessage = (scenes,state) => {
@@ -115,6 +117,15 @@ const generateChordsMessage = (scenes,state) => {
 	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords.reduce((acc,e,i) => {
 		acc.push(e);
 		acc.push(cons.COLOR_ACTIVE_CHORD);
+		return acc;
+	},[]);
+};
+
+const generateChordsPlayModeMessage = (scenes,state) => {
+	const currentStepChordPlayMode = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordPlayMode;
+	return cons.CHORD_PLAY_MODE_BUTTONS.reduce((acc,e,i) => {
+		acc.push(e);
+		acc.push(currentStepChordPlayMode == i ? cons.COLOR_ACTIVE_NOTE : 0);
 		return acc;
 	},[]);
 };

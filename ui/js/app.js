@@ -18,7 +18,7 @@ const save = (state, event) => {
 
 const load = (state, event) => {
     remote.dialog.showOpenDialog({properties:['openFile']}).then(file => {
-        if(file && file.filePath.length != 0){
+        if(file && file.filePaths.length != 0){
             init.load(file.filePaths[0]);
         }
     });
@@ -106,7 +106,7 @@ app({
 const icons = [
     h("img", {src : "images/floppy-disk.png", id:"save", onclick: save}),
     h("img", {src : "images/load.png", id:"load", onclick: load}),
-    h("img", {src : "images/metronome.png", id :"metronome"}),
+    //h("img", {src : "images/metronome.png", id :"metronome"}),
     //h("img", {src : "images/midi.png", id:"midi", onclick: switchPanel("midi")}),
     //h("img", {src : "images/network.png", id:"network", onclick: switchPanel("network")})
 ];

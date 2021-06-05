@@ -210,8 +210,16 @@ exports.toogleChords = (state,scenes) => {
 };
 
 exports.changeChordMode = (state,scenes) => {
-	state.chords[state.lastChordPressed].mode++;
-	state.chords[state.lastChordPressed].mode %= chords.modes.length;
+	if(state.chords[state.lastChordPressed] != undefined){
+		state.chords[state.lastChordPressed].mode++;
+		state.chords[state.lastChordPressed].mode %= chords.modes.length;
+	}
+};
+
+exports.changeChordPlayMode = (state,scenes) => {
+	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+	var chordPlayMode = cons.CHORD_PLAY_MODE_BUTTONS.indexOf(lastPressedButton);
+	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordPlayMode = chordPlayMode;
 };
 
 exports.changeLength = (state,scenes) => {

@@ -38,7 +38,7 @@ const queueMidiNotes = (state,scenes) => {
 const queueStep = (track,step,state) => {
 	step.notes.map((n,i) => {
 		if(n){
-			playStep(step,track,state,track.midiRoot + i);
+			playStep(step,track,state,track.midiRoot + i, state.clockTick);
 		}
 	});
 };
@@ -46,9 +46,62 @@ const queueStep = (track,step,state) => {
 const queueChord = (track,step,state) => {
 	step.chords.map(n => {
 		var chord = state.chords[n];
-		state.chords[n].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(e => {
-			playStep(step,track,state,e);
-		});
+		switch (step.chordPlayMode) {
+		case 0:
+			playChord(n,track,step,state,chord);
+			break;
+		case 1:
+			arpChord(n,track,step,state,chord);
+			break;
+		case 2:
+			arpDownChord(n,track,step,state,chord);
+			break;
+		case 3:
+			arpDownFastChord(n,track,step,state,chord);
+			break;
+		case 4:
+			arpFastChord(n,track,step,state,chord);
+			break;
+		case 5:
+			arpRandomChord(n,track,step,state,chord);
+			break;
+		}
+	});
+};
+
+const playChord = (stepChord,track,step,state,chord) => {
+	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(note => {
+		playStep(step,track,state,note, state.clockTick);
+	});
+};
+
+const arpChord = (stepChord,track,step,state,chord) => {
+	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
+		playStep(step,track,state,note, state.clockTick + i * (6 / track.tempoModifier));
+	});
+};
+
+const arpDownChord = (stepChord,track,step,state,chord) => {
+	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
+		playStep(step,track,state,note, state.clockTick + i * (6 / track.tempoModifier));
+	});
+};
+
+const arpFastChord = (stepChord,track,step,state,chord) => {
+	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
+		playStep(step,track,state,note, state.clockTick + i);
+	});
+};
+
+const arpDownFastChord = (stepChord,track,step,state,chord) => {
+	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
+		playStep(step,track,state,note, state.clockTick + i);
+	});
+};
+
+const arpRandomChord = (stepChord,track,step,state,chord) => {
+	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).sort(() => Math.random() > .5 ? 1 : -1).map((note,i) => {
+		playStep(step,track,state,note, state.clockTick + i * (6 / track.tempoModifier));
 	});
 };
 
@@ -98,19 +151,19 @@ const getSlowestTrackTempoModifier = (state, scenes) => {
 	return Math.min(...tempoModifiers);
 };
 
-const playStep = (step,track,state,note) => {
+const playStep = (step,track,state,note, clockTick) => {
 	if(step.triplet) {
-		state.midiNotesQueue.push({clockTick: state.clockTick, length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
-		state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
-		state.midiNotesQueue.push({clockTick: state.clockTick + (8 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick, length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick + (4 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick + (8 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 	}else if(step.singleTriplet){
-		state.midiNotesQueue.push({clockTick: state.clockTick, length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
-		state.midiNotesQueue.push({clockTick: state.clockTick + (2 / track.tempoModifier), length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
-		state.midiNotesQueue.push({clockTick: state.clockTick + (4 / track.tempoModifier), length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick, length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick + (2 / track.tempoModifier), length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick + (4 / track.tempoModifier), length: 2 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 	}else if(step.doubleNote){
-		state.midiNotesQueue.push({clockTick: state.clockTick, length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
-		state.midiNotesQueue.push({clockTick: state.clockTick + (3 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick, length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick + (3 / track.tempoModifier), length: 4 / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 	}else{
-		state.midiNotesQueue.push({clockTick: state.clockTick, length: step.length / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
+		state.midiNotesQueue.push({clockTick: clockTick, length: step.length / track.tempoModifier, note: note, channel: track.channel, velocity: step.velocity });
 	}
 }

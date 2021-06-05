@@ -75,6 +75,16 @@ exports.generateGrid = () => {
 	return grid;
 };
 
+exports.generateChordGrid = () => {
+	var chordGrid = [];
+	for(var i = 0; i < 7; i++){
+		for(var j = 0; j < 7; j++){
+			chordGrid.push(11 + (i * 10) + j);
+		}
+	}
+	return chordGrid;
+};
+
 exports.config = (path) => {
 	var config = initConfig(path);
 	return {
