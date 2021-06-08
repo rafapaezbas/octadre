@@ -71,37 +71,37 @@ const queueChord = (track,step,state) => {
 
 const playChord = (stepChord,track,step,state,chord) => {
 	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(note => {
-		playStep(step,track,state,note, state.clockTick);
+		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick);
 	});
 };
 
 const arpChord = (stepChord,track,step,state,chord) => {
 	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
-		playStep(step,track,state,note, state.clockTick + i * (6 / track.tempoModifier));
+		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i * (6 / track.tempoModifier));
 	});
 };
 
 const arpDownChord = (stepChord,track,step,state,chord) => {
 	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
-		playStep(step,track,state,note, state.clockTick + i * (6 / track.tempoModifier));
+		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i * (6 / track.tempoModifier));
 	});
 };
 
 const arpFastChord = (stepChord,track,step,state,chord) => {
 	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
-		playStep(step,track,state,note, state.clockTick + i);
+		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i);
 	});
 };
 
 const arpDownFastChord = (stepChord,track,step,state,chord) => {
 	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
-		playStep(step,track,state,note, state.clockTick + i);
+		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i);
 	});
 };
 
 const arpRandomChord = (stepChord,track,step,state,chord) => {
 	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).sort(() => Math.random() > .5 ? 1 : -1).map((note,i) => {
-		playStep(step,track,state,note, state.clockTick + i * (6 / track.tempoModifier));
+		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i * (6 / track.tempoModifier));
 	});
 };
 
