@@ -14,6 +14,8 @@ exports.DOWN_ARROW_BUTTON = configuration.getIntOrDefault('DOWN_ARROW_BUTTON', 1
 exports.MODE_BUTTON = configuration.getIntOrDefault('MODE_BUTTON', 111);
 exports.CHANGE_CHORD_MODE_BUTTON = configuration.getIntOrDefault('CHANGE_CHORD_MODE_BUTTON',88);
 exports.CHANGE_WORKSPACE_BUTTON = configuration.getIntOrDefault('CHANGE_WORKSPACE_BUTTON',108);
+exports.PAGE_0_BUTTON = configuration.getIntOrDefault('PAGE_0_BUTTON',109);
+exports.PAGE_1_BUTTON = configuration.getIntOrDefault('PAGE_1_BUTTON',110);
 
 
 exports.COLOR_TRACK_1 = configuration.getIntOrDefault('COLOR_TRACK_1',29);
@@ -24,6 +26,14 @@ exports.COLOR_TRACK_5 = configuration.getIntOrDefault('COLOR_TRACK_5',52);
 exports.COLOR_TRACK_6 = configuration.getIntOrDefault('COLOR_TRACK_6',117);
 exports.COLOR_TRACK_7 = configuration.getIntOrDefault('COLOR_TRACK_7',112);
 exports.COLOR_TRACK_8 = configuration.getIntOrDefault('COLOR_TRACK_8',44);
+exports.COLOR_TRACK_9 = configuration.getIntOrDefault('COLOR_TRACK_9',78);
+exports.COLOR_TRACK_10 = configuration.getIntOrDefault('COLOR_TRACK_10',109);
+exports.COLOR_TRACK_11 = configuration.getIntOrDefault('COLOR_TRACK_11',77);
+exports.COLOR_TRACK_12 = configuration.getIntOrDefault('COLOR_TRACK_12',36);
+exports.COLOR_TRACK_13 = configuration.getIntOrDefault('COLOR_TRACK_13',49);
+exports.COLOR_TRACK_14 = configuration.getIntOrDefault('COLOR_TRACK_14',24);
+exports.COLOR_TRACK_15 = configuration.getIntOrDefault('COLOR_TRACK_15',108);
+exports.COLOR_TRACK_16 = configuration.getIntOrDefault('COLOR_TRACK_16',40);
 
 exports.COLOR_CURSOR = configuration.getIntOrDefault('COLOR_CURSOR',10);
 exports.COLOR_ACTIVE_STEP = configuration.getIntOrDefault('COLOR_ACTIVE_STEP',3);

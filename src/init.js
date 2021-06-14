@@ -30,6 +30,7 @@ var state =  {
 	showCursor : true,
 	smallGridMode : 'length',
 	workspace : 2, // 0 : big_grid, 1 : brig_grid + notes, 2: big_grid + notes + small_grid
+	page: 0,
 };
 
 exports.setupClockInput = (port) => {
@@ -189,8 +190,8 @@ const unpressedChord = (button) => {
 };
 
 const setupSceneTracks = () => {
-	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
-	var tracks =  utils.createArray(8,{}).map((t,i) => {
+	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8,cons.COLOR_TRACK_9,cons.COLOR_TRACK_10,cons.COLOR_TRACK_11,cons.COLOR_TRACK_12,cons.COLOR_TRACK_13,cons.COLOR_TRACK_14,cons.COLOR_TRACK_15,cons.COLOR_TRACK_16];
+	var tracks =  utils.createArray(16,{}).map((t,i) => {
 		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes:[1,0,0,0,0,0,0,0,0,0,0,0,0], chords:[], chordPlayMode: 0, length : 1, velocity: 100, triplet: false, doubleNote: false, singleTriplet : false}));
 		return {pattern:pattern, trackLength:16, midiRoot:60, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
 	});

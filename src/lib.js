@@ -68,8 +68,17 @@ exports.showNotes = (state,scenes) => {
 
 exports.changeTrack = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && isMuteButton(state.pressedButtons[0])){
-		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[0]);
+		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[0]) + (state.page * 8);
 		state.currentTrack = track;
+	}
+};
+
+exports.changePage = (state,scenes) => {
+	var pageButtons = [cons.PAGE_0_BUTTON,cons.PAGE_1_BUTTON];
+	if(state.pressedButtons.length == 1 && pageButtons.indexOf(state.pressedButtons[0]) != -1){
+		var page = pageButtons.indexOf(state.pressedButtons[0]);
+		state.page = page;
+		state.currentTrack = (state.currentTrack % 8) + (page * 8);
 	}
 };
 

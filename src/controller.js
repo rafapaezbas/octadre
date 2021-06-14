@@ -26,6 +26,8 @@ controller['seq'][cons.UP_ARROW_BUTTON] = [lib.toogleSmallGridMode];
 controller['seq'][cons.DOWN_ARROW_BUTTON] = [lib.toogleSmallGridMode];
 controller['seq'][cons.MODE_BUTTON] = [lib.toogleMode];
 controller['seq'][cons.CHANGE_WORKSPACE_BUTTON] = [lib.changeWorkspace];
+controller['seq'][cons.PAGE_0_BUTTON] = [lib.changePage];
+controller['seq'][cons.PAGE_1_BUTTON] = [lib.changePage];
 cons.INNER_GRID.map(e => controller['seq'][e] = [lib.toogleNote]);
 cons.SMALL_GRID.map(e => controller['seq'][e] = [lib.changeLength, lib.changeVelocity, lib.changeOctave,lib.globalChangeLength,lib.globalChangeVelocity]);
 cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScene,lib.chainScenes]);

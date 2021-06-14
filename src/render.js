@@ -143,7 +143,8 @@ const generateChordsGridMessage = () => {
 }
 
 const generateMutesMessage = (scenes,state) => {
-	return scenes[state.currentScene].tracks.reduce((acc,e,i) => {
+	const tracks = scenes[state.currentScene].tracks.slice(state.page * 8,(state.page * 8) + 8);
+	return tracks.reduce((acc,e,i) => {
 		acc.push(cons.MUTE_BUTTONS[i]);
 		e.muted ? acc.push(0) : acc.push(e.color);
 		return acc;
