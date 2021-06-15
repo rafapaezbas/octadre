@@ -84,7 +84,7 @@ exports.changePage = (state,scenes) => {
 
 exports.toogleMute = (state,scenes) => {
 	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON && isMuteButton(state.pressedButtons[1])){
-		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
+		var track = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]) + (state.page * 8);
 		scenes[state.currentScene].tracks[track].muted ^= true;
 	}
 };
@@ -107,9 +107,9 @@ exports.copyScene = (state,scenes) => {
 
 exports.copyTrack = (state,scenes) => {
 	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_3_BUTTON && isMuteButton(state.pressedButtons[1])){
-		var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4, cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8];
+		var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4, cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8,cons.COLOR_TRACK_9,cons.COLOR_TRACK_10,cons.COLOR_TRACK_11,cons.COLOR_TRACK_12,cons.COLOR_TRACK_13,cons.COLOR_TRACK_14,cons.COLOR_TRACK_15,cons.COLOR_TRACK_16];
 		var bufferTrack = JSON.parse(JSON.stringify(scenes[state.currentScene].tracks[state.currentTrack]));
-		var targetTrack = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]);
+		var targetTrack = cons.MUTE_BUTTONS.indexOf(state.pressedButtons[1]) + (state.page * 8);
 		bufferTrack.color = trackColors[targetTrack];
 		bufferTrack.channel = targetTrack;
 		scenes[state.currentScene].tracks[targetTrack] = bufferTrack;
