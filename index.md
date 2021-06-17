@@ -6,7 +6,11 @@ This project is distributed under the GNU General Public License v3.0. This is f
 
 ### Documentation
 Octaedre has been design with approachability in our heads, we have tried to create the most intuitive/easy interface for music sequencing. We recommend to start using it without reading any documentation, just plug your Novation Launchpad, open Octaedre, configure the midi clock input and midi output, and try to create some simple rythms or melodies.
-Under this first layer of simplicity, Octaedre has also some advance features very worthy to know. Triplets, polyrythms or melody sequencing are all possible. Check the [Octaedre overview](https://raw.githubusercontent.com/rafapaezbas/octaedre/feature/web/assets/manual_min.png) and follow the documentation to discover all you can do with the sequencer.
+Under this first layer of simplicity, Octaedre has also some advance features very worthy to know. Triplets, polyrythms or melody sequencing are all possible.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/rafapaezbas/octaedre/feature/web/assets/manual_min.png" alt="Octaedre control scheme"/>
+</p>
 
 ### Setup
 Open the application and you will find two drop down menus. The one above sets the __midi clock input__ that Octaeder will receive. You can send the midi clock input from your daw or any other device able to send midi clock signal.
