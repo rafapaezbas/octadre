@@ -28,12 +28,15 @@ Convert two steps in a triplet by holding a __sequencer button__ and pressing th
 ### Copy
 To copy a step of the sequencer or a scene use the __copy__ button + the origin step/scene + the target step/scene. To copy a track just hold __copy__ + the target __track__ and the current track will be copied to the target.
 ### Midi parameters
+You can change the length, velocity and octave of the steps using the __control__ and the __control modifier__ buttons. Velocity and length will change individual steps, while octave will affect the whole the track.
 ### Modes
+Switch between sequencer and chords mode by pressing the __mode__ button.
 ### Chords
+Select the chord that will be trigger by the last pressed step on the sequencer mode.
 ### Arpeggios
+Once you have a chord selected, choose among different play modes with the __arperggios__ button.
 ### Free midi
-### Save and load
-### Extra
+Press __right shift__ and any of the __free midi buttons__ to send a midi control signal. Assing this signal to anything you want with your daw or external device.
 
 ### Contributing
 Do you have new and interesting ideas for Octaedre? Or maybe you found a bug? Or would you like to contribute in another way? Feel free to use https://github.com/rafapaezbas/octaedre/issues in order to communicate with us. We are looking forward to know how you would improve this project.
