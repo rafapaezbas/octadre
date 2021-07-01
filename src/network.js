@@ -1,13 +1,10 @@
 const hyperswarm = require('hyperswarm');
 const crypto = require('crypto');
 const {Writable, Readable} = require('readable-stream')
-var eventCallback = undefined;
 
 var network = {
     connected : false,
-    paired : false,
-    id : undefined,
-    socket : undefined,
+    cb : undefined
 }
 
 const rs = Readable({
@@ -18,9 +15,12 @@ const rs = Readable({
 
 const ws = Writable({
     write(chunk, encoding, callback){
-        console.log(chunk.toString())
-        eventCallback(JSON.parse(chunk))
-        callback()
+        try{
+            network.cb(JSON.parse(chunk))
+        }catch(err){
+            console.log(err);
+        }
+        callback();
     }
 });
 
@@ -62,7 +62,7 @@ exports.getNetwork = () => {
 };
 
 exports.setEventCallback = (callback) => {
-    eventCallback = callback;
+    network.cb = callback;
 };
 
 //This is the information sent over socket
