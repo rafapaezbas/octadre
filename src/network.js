@@ -1,4 +1,5 @@
-const io = require('socket.io-client');
+const hyperswarm = require('hyperswarm');
+const crypto = require('crypto');
 var eventCallback = undefined;
 
 var network = {
@@ -8,50 +9,34 @@ var network = {
     socket : undefined,
 }
 
+const swarm = hyperswarm({
+  announceLocalAddress: true
+})
 
-exports.connect = (server,pair) => {
+exports.connect = (key) => {
 
     return new Promise((resolve,reject) => {
 
-        network.socket = io('http://' + server + ':5000');
-
-        // Receive id after connetion
-        network.socket.on('id', (msg) => {
-            network.id = msg;
+        const hashedKey = crypto.createHash("sha256").update(key).digest();
+        swarm.join(hashedKey,{ announce: true,lookup: true }, () => {});
+        swarm.on("connection", (socket, info) => {
+            socket.write(hashedKey);
+            socket.on("data",(data) => {
+                if(data.toString() == hashedKey){
+                    network.socket = socket;
+                    network.connected = true;
+                    resolve("Connected");
+                }
+            });
         });
 
-        network.socket.on('event', (msg) => {
-            eventCallback(msg);
-        });
-
-        network.socket.on('paired', (msg) => {
-            network.paired = true;
-            resolve("Succesfull pairing: " + network.socket.id);
-        });
-
-        network.socket.on('not-paired', (msg) => {
-            network.paired = false;
-            reject("Pairing failed: " + msg);
-        });
-
-        // Socket connection established
-        network.socket.on('connect', () => {
-            network.connected = true;
-            if(pair == undefined || pair.length == 0){
-                resolve("Successful connection:" + network.socket.id);
-            }else{
-                network.socket.emit("pair", pair);
-            }
-        });
-
-        setTimeout(() => reject("Connection timeout."), 3000);
+        setTimeout(() => reject("Connection timeout."), 60000);
 
     });
 };
 
 exports.send = (state) => {
-    console.log("Sending: " + stateTransformer(state));
-    network.socket.emit("event", stateTransformer(state));
+    network.socket.write(JSON.stringify(stateTransformer(state)));
 };
 
 exports.getNetwork = () => {

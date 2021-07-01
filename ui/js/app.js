@@ -60,7 +60,7 @@ const connect = (state) => {
     return [
         {...state, connecting: true},
         [(dispatch, state) => {
-            network.connect(state.server, state.pair)
+            network.connect(state.pair)
                 .then(result => dispatch(() => ({...state, serverConnection: result, connecting: false, connected : true}), state))
                 .catch(err => dispatch(() => ({...state, connecting: false, serverError: err}), state));
         }, state]
@@ -107,8 +107,8 @@ const icons = [
     h("img", {src : "images/floppy-disk.png", id:"save", onclick: save}),
     h("img", {src : "images/load.png", id:"load", onclick: load}),
     //h("img", {src : "images/metronome.png", id :"metronome"}),
-    //h("img", {src : "images/midi.png", id:"midi", onclick: switchPanel("midi")}),
-    //h("img", {src : "images/network.png", id:"network", onclick: switchPanel("network")})
+    h("img", {src : "images/midi.png", id:"midi", onclick: switchPanel("midi")}),
+    h("img", {src : "images/network.png", id:"network", onclick: switchPanel("network")})
 ];
 
 const log = (state) => h("p", {id: "log", class: isLogClickable(state) ? "log-clickable" : "", onclick: isLogClickable(state) ? connect : undefined}, text(logMessage(state)));
