@@ -1,5 +1,6 @@
 const hyperswarm = require('hyperswarm');
 const crypto = require('crypto');
+const {Writable, Readable} = require('readable-stream')
 var eventCallback = undefined;
 
 var network = {
@@ -9,8 +10,23 @@ var network = {
     socket : undefined,
 }
 
+const rs = Readable({
+    read: (size) => {
+        return true;
+    }
+})
+
+const ws = Writable({
+    write(chunk, encoding, callback){
+        console.log(chunk.toString())
+        eventCallback(JSON.parse(chunk))
+        callback()
+    }
+});
+
+
 const swarm = hyperswarm({
-  announceLocalAddress: true
+    announceLocalAddress: true
 })
 
 exports.connect = (key) => {
@@ -18,12 +34,14 @@ exports.connect = (key) => {
     return new Promise((resolve,reject) => {
 
         const hashedKey = crypto.createHash("sha256").update(key).digest();
-        swarm.join(hashedKey,{ announce: true,lookup: true }, () => {});
+        const topic = crypto.createHash("sha256").update("octaedre_network").digest();
+
+        swarm.join(topic,{ announce: true,lookup: true }, () => {});
         swarm.on("connection", (socket, info) => {
             socket.write(hashedKey);
             socket.on("data",(data) => {
-                if(data.toString() == hashedKey){
-                    network.socket = socket;
+                if(data.toString() == hashedKey && !network.connected){
+                    rs.pipe(socket).pipe(ws);
                     network.connected = true;
                     resolve("Connected");
                 }
@@ -36,7 +54,7 @@ exports.connect = (key) => {
 };
 
 exports.send = (state) => {
-    network.socket.write(JSON.stringify(stateTransformer(state)));
+    rs.push(JSON.stringify(stateTransformer(state)));
 };
 
 exports.getNetwork = () => {
