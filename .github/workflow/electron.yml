@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
       with:
-        ref: electron
+        ref: feature/hyperswarm-network
     - uses: actions/setup-node@master
       with:
         node-version: 10.16
