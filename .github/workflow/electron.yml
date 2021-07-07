@@ -6,14 +6,14 @@ on:
   push:
     branches:
     # this will run on the electron branch
-      - feature/hyperswarm-network
+      - electron
 jobs:
   build_on_mac:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@master
       with:
-        ref: feature/hyperswarm-network
+        ref: electron
     - uses: actions/setup-node@master
       with:
         node-version: 10.16
