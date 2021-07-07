@@ -1,5 +1,7 @@
 # name of your github action
-name: CI# this will help you specify where to run 
+name: CI
+
+# this will help you specify where to run 
 on:
   push:
     branches:
