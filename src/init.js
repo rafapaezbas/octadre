@@ -38,13 +38,15 @@ exports.setupClockInput = (port) => {
 		io.setClockInput(port);
 	}
 	io.getClockInput().on('clock', () => {
-		state.clockTick++;
-		midi.resetClock(state);
-		if(state.mode == 'metronome'){
-			playMetronome();
-		}else{
-			playSequencer();
-		}
+		process.nextTick(() => { //better performance?
+			state.clockTick++;
+			midi.resetClock(state);
+			if(state.mode == 'metronome'){
+				playMetronome();
+			}else{
+				playSequencer();
+			}
+		});
 	});
 };
 
@@ -77,6 +79,7 @@ exports.load = (path) => {
 	state.chords = JSON.parse(file).state.chords;
 	render.render(scenes,state);
 };
+
 
 exports.setupLaunchpadInput = () => {
 	io.getInput().on('noteon', (message) => {
