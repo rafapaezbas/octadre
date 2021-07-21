@@ -86,7 +86,7 @@ exports.setupLaunchpadInput = () => {
 		var pressed = message.velocity > 0;
 		var button = message.note;
 		update(pressed, button);
-		if(network.getNetwork().connected){
+		if(network.getNetwork().connected && pressed){ //Doesnt make sense to send unpress events
 			network.send(state);
 		}
 	});
@@ -119,18 +119,19 @@ exports.toogleMetronome = () => {
 
 exports.setupNetworkController = () => {
 	network.setEventCallback((remoteState) => {
-		console.log(remoteState);
-		switch(remoteState.mode){
-		case 'seq':
-			controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
-			break;
-		case 'chords':
-			// TODO
-			break;
-		default:
-			break;
-		}
-		render.render(scenes,state);
+			switch(remoteState.mode){
+			case 'seq':
+				if(remoteState.pressedButtons.length > 0) {
+					controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
+				}
+				break;
+			case 'chords':
+				// TODO
+				break;
+			default:
+				break;
+			}
+			render.render(scenes,state);
 	});
 }
 
@@ -226,7 +227,6 @@ const playMetronome = () => {
 	}
 
 	render.render(scenes, state);
-
 };
 
 const playSequencer = () => {
