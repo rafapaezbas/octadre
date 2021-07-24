@@ -11,7 +11,6 @@
 ** DONE MPC mode
 ** DONE remove colateral effects to init and midi-io
 ** DONE single triplets
-** DONE metronome
 ** DONE doubled step
 ** DONE fix selected step when changing pattern length
 ** DONE fix toogle triplet when they are different
@@ -67,8 +66,6 @@ Add scenes to stack seems to be expensive, try another way
 ** DONE Add shift to copy scene
 ** DONE fix single triplet
 ** DONE global octave/velocity/length change
-** DONE metronome blink
-** DONE metronome first tick higher octave
 * TODO v 2.0
 ** TODO Chords change mode
 * TODO Network

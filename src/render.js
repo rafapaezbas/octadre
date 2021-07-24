@@ -21,9 +21,6 @@ exports.render = (scenes,state) => {
 	case 'chords':
 		renderChords(scenes,state);
 		break;
-	case 'metronome':
-		renderMetronome(state);
-		break;
 	default:
 		break;
 	}
@@ -231,30 +228,6 @@ const renderReset = () => {
 	var message = sysex.concat(setAllHeader).concat(color).concat([247]);
 	io.getLaunchpadOutput().send('sysex',message);
 	return message;
-};
-
-const renderMetronome = (state) => {
-	var tick = state.clockTick % 96;
-	switch(tick){
-	case 0:
-		renderBigGrid();
-		io.blinkButton(cons.BIG_GRID[0],cons.COLOR_ACTIVE_NOTE,cons.COLOR_ACTIVE_NOTE);
-		break;
-	case 24:
-		renderBigGrid();
-		io.blinkButton(cons.BIG_GRID[4],cons.COLOR_VELOCITY,cons.COLOR_TRACK_1);
-		break;
-	case 48:
-		renderBigGrid();
-		io.blinkButton(cons.BIG_GRID[8],cons.COLOR_NON_ACTIVE_NOTE,cons.COLOR_TRACK_1);
-		break;
-	case 72:
-		renderBigGrid();
-		io.blinkButton(cons.BIG_GRID[12],cons.COLOR_NON_ACTIVE_NOTE,cons.COLOR_TRACK_1);
-		break;
-	default:
-		break;
-	}
 };
 
 const renderBigGrid = () => {
