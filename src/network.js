@@ -1,4 +1,4 @@
-const hyperswarm = require('hyperswarm');
+const Hyperswarm = require('hyperswarm')
 const crypto = require('crypto');
 const {Writable, Readable} = require('readable-stream')
 
@@ -27,9 +27,8 @@ const ws = Writable({
 });
 
 
-const swarm = hyperswarm({
-    announceLocalAddress: true
-})
+const swarm = new Hyperswarm()
+
 
 exports.connect = (key) => {
 
