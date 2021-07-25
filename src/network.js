@@ -1,6 +1,6 @@
 const Hyperswarm = require('hyperswarm')
 const crypto = require('crypto');
-const {Writable, Readable} = require('readable-stream')
+const {Transform, Writable, Readable} = require('readable-stream')
 
 var network = {
     connected : false,
@@ -10,7 +10,8 @@ var network = {
 const rs = Readable({
     read: (size) => {
         return true;
-    }
+    },
+    objectMode : true
 })
 
 const ws = Writable({
@@ -18,7 +19,7 @@ const ws = Writable({
         try{
             var chunks = chunk.toString().split("|");
             chunks.pop(); //remove last empty element
-            chunks.map(c => network.cb(JSON.parse(c)));
+            chunks.map(c => network.cb(decode(JSON.parse(c))));
         }catch(err){
             console.log(err);
         }
@@ -26,6 +27,24 @@ const ws = Writable({
     },
 });
 
+const encoder = Transform({
+    transform(state,encoding,callback){
+        message = [];
+        const keys = ['pressedButtons','currentTrack', 'currentScene', 'lastPressedStep', 'lastChordPressed', 'mode', 'smallGridMode', 'workspace']
+        keys.map(k => message.push(state[k]))
+        // Because of arbitrary chunk size sent, | acts as a separator between different chunks, see Writable stream where chunks are splited by |
+        this.push(JSON.stringify(message) + '|')
+        callback(null)
+    },
+    objectMode : true
+})
+
+const decode = (message) => {
+    const keys = ['pressedButtons','currentTrack', 'currentScene', 'lastPressedStep', 'lastChordPressed', 'mode', 'smallGridMode', 'workspace']
+    const state = {};
+    keys.forEach((k,i) => state[k] = message[i]);
+    return state;
+};
 
 const swarm = new Hyperswarm()
 
@@ -38,8 +57,8 @@ exports.connect = (key) => {
 
         swarm.join(hashedKey,{ announce: true,lookup: true }, () => {});
         swarm.on("connection", (socket, info) => {
-            if(info.peer != undefined && !network.connected){
-                rs.pipe(socket).pipe(ws);
+            if(!network.connected){
+                rs.pipe(encoder).pipe(socket).pipe(ws);
                 network.connected = true;
                 resolve("Connected");
             }
@@ -51,8 +70,7 @@ exports.connect = (key) => {
 };
 
 exports.send = (state) => {
-    // Because of arbitrary chunk size sent, | acts as a separator between different chunks, see Writable stream where chunks are splited by |
-    rs.push(JSON.stringify(stateTransformer(state)) + "|");
+    rs.push(state);
 };
 
 exports.getNetwork = () => {
@@ -62,17 +80,3 @@ exports.getNetwork = () => {
 exports.setEventCallback = (callback) => {
     network.cb = callback;
 };
-
-//This is the information sent over socket
-const stateTransformer = (state) => {
-    return {
-        pressedButtons:state.pressedButtons,
-        currentTrack:state.currentTrack,
-        currentScene:state.currentScene,
-        lastPressedStep:state.lastPressedStep,
-        lastChordPressed: state.lastChordPressed,
-        mode : state.mode,
-        smallGridMode : state.smallGridMode,
-        workspace : state.workspace,
-    };
-}
