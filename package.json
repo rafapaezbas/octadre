@@ -5,28 +5,19 @@
   "main": "src/main.js",
   "bin": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron . ",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "check": "npx eslint src/"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@electron/remote": "^1.0.2",
     "async": "^3.2.0",
     "easymidi": "^2.0.1",
+    "midi-clock": "^0.0.1",
     "pkg": "^4.4.9",
     "random-seed": "^0.3.0",
     "socket.io-client": "^4.0.1"
   },
-  "devDependencies": {
-    "electron": "^11.2.3",
-    "electron-builder": "^22.9.1",
-    "electron-rebuild": "^2.3.5",
-    "eslint": "^7.20.0"
-  },
+  "devDependencies": {},
   "build": {
     "appId": "octaedre",
     "linux": {

@@ -1,5 +1,4 @@
 const init = require('./init');
-const ui = require('./ui');
 
 var ioError = init.setupIO();
 
@@ -12,4 +11,3 @@ if(ioError == undefined){ // Check if io could be setup
     init.render();
 }
 
-ui.setupUI();

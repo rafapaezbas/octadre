@@ -8,6 +8,12 @@ const controller = require('./controller');
 const fs = require('fs');
 const network = require('./network');
 const networkController = require('./network-controller');
+const MidiClock = require('midi-clock')
+
+const clock = MidiClock()
+clock.setTempo(70)
+clock.start()
+
 
 var scenes = [];
 var state =  {
@@ -32,6 +38,16 @@ var state =  {
 	workspace : 2, // 0 : big_grid, 1 : brig_grid + notes, 2: big_grid + notes + small_grid
 	page: 0,
 };
+
+clock.on('position', function(position){
+	state.clockTick++;
+	midi.resetClock(state);
+	if(state.mode == 'metronome'){
+		playMetronome();
+	}else{
+		playSequencer();
+	}
+});
 
 exports.setupClockInput = (port) => {
 	if(port != undefined){
@@ -118,14 +134,14 @@ exports.setupNetworkController = () => {
 	network.setEventCallback((remoteState) => {
 		console.log(remoteState);
 		switch(remoteState.mode){
-		case 'seq':
-			controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
-			break;
-		case 'chords':
-			// TODO
-			break;
-		default:
-			break;
+			case 'seq':
+				controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
+				break;
+			case 'chords':
+				// TODO
+				break;
+			default:
+				break;
 		}
 		render.render(scenes,state);
 	});
@@ -133,15 +149,15 @@ exports.setupNetworkController = () => {
 
 const update = (pressed, button) => {
 	switch(state.mode){
-	case 'seq':
-		updateSeqMode(pressed, button);
-		playNote(pressed,button);
-		break;
-	case 'chords':
-		updateChordMode(pressed, button);
-		break;
-	default:
-		break;
+		case 'seq':
+			updateSeqMode(pressed, button);
+			playNote(pressed,button);
+			break;
+		case 'chords':
+			updateChordMode(pressed, button);
+			break;
+		default:
+			break;
 	}
 };
 
