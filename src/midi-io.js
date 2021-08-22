@@ -82,6 +82,15 @@ exports.blinkButton = (button, firstColor, secondColor) => {
 	}, 100);
 };
 
+exports.scrollText = (text,color,loop = 0) => {
+	var sysex = [];
+	const header = [ 240, 0, 32, 41, 2, 24, 20 ];
+	const hexText = text.split('').map(e => e.charCodeAt(0));
+	const speed = 4;
+	var message = sysex.concat(header).concat(color).concat(loop).concat([speed]).concat(hexText).concat([247]);
+	launchpadOutput.send('sysex',message);
+};
+
 exports.sendMidiCC = (button) => {
 	output.send('cc', {controller: button, value: 127, channel:  0}); //Default value 127 and channel 0
 };

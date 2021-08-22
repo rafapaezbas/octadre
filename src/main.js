@@ -10,4 +10,3 @@ if(ioError == undefined){ // Check if io could be setup
     init.setupNetworkController();
     init.render();
 }
-

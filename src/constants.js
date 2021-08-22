@@ -16,6 +16,7 @@ exports.CHANGE_CHORD_MODE_BUTTON = configuration.getIntOrDefault('CHANGE_CHORD_M
 exports.CHANGE_WORKSPACE_BUTTON = configuration.getIntOrDefault('CHANGE_WORKSPACE_BUTTON',108);
 exports.PAGE_0_BUTTON = configuration.getIntOrDefault('PAGE_0_BUTTON',109);
 exports.PAGE_1_BUTTON = configuration.getIntOrDefault('PAGE_1_BUTTON',110);
+exports.SHOW_BPM_BUTTON = configuration.getIntOrDefault('SHOW_BPM_BUTTON',28);
 
 
 exports.COLOR_TRACK_1 = configuration.getIntOrDefault('COLOR_TRACK_1',29);

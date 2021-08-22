@@ -192,7 +192,7 @@ exports.toogleMode = (state,scenes) => {
 };
 
 exports.toogleSmallGridMode = (state,scenes) => {
-	if(state.pressedButtons.length == 1 && (state.pressedButtons[0] == cons.UP_ARROW_BUTTON || state.pressedButtons[0] == cons.UP_ARROW_BUTTON ){
+	if(state.pressedButtons.length == 1 && (state.pressedButtons[0] == cons.UP_ARROW_BUTTON || state.pressedButtons[0] == cons.UP_ARROW_BUTTON)){
 		switch(state.smallGridMode){
 		case 'length':
 			state.smallGridMode = 'velocity';
@@ -292,13 +292,17 @@ exports.changeBPM = (state, scenes) => {
 	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON){
 		if(state.pressedButtons[1] == cons.UP_ARROW_BUTTON){
 			state.bpm++;
-			state.clock.setTempo(state.bpm)
+			state.clock.setTempo(state.bpm);
 		}
 		if(state.pressedButtons[1] == cons.DOWN_ARROW_BUTTON){
 			state.bpm--;
-			state.clock.setTempo(state.bpm)
+			state.clock.setTempo(state.bpm);
 		}
 	}
+}
+
+exports.showBPM = (state,scenes) => {
+	io.scrollText(state.bpm.toString(),50, 0);
 }
 
 const resetSceneChain = (state) => {

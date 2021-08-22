@@ -42,11 +42,7 @@ state.clock.start()
 state.clock.on('position', function(position){
 	state.clockTick++;
 	midi.resetClock(state);
-	if(state.mode == 'metronome'){
-		playMetronome();
-	}else{
-		playSequencer();
-	}
+	playSequencer();
 });
 
 exports.setupClockInput = (port) => {
@@ -221,3 +217,5 @@ const playSequencer = () => {
 	}
 	midi.sendMidi(state);
 };
+
+
