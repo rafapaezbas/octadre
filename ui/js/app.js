@@ -60,7 +60,7 @@ const connect = (state) => {
     return [
         {...state, connecting: true},
         [(dispatch, state) => {
-            network.connect(state.server, state.pair)
+            network.connect(state.pair)
                 .then(result => dispatch(() => ({...state, serverConnection: result, connecting: false, connected : true}), state))
                 .catch(err => dispatch(() => ({...state, connecting: false, serverError: err}), state));
         }, state]
@@ -86,13 +86,12 @@ const logMessage = (state) =>  {
     return log;
 };
 
-const updateServer = (state,event) => ({...state, server: event.target.value})
 const updatePair = (state,event) => ({...state, pair: event.target.value})
 
 // Views ----------------------------------
 
 app({
-    init: { panel : "midi", connected: false, connecting: false, server: "3.64.53.184", pair: undefined, ioError: init.getIOError(), serverError: undefined, serverConnection: undefined },
+    init: { panel : "midi", connected: false, connecting: false, pair: undefined, ioError: init.getIOError(), serverError: undefined, serverConnection: undefined },
     view: state =>
         h("main", {}, [
             ...icons,
@@ -106,9 +105,8 @@ app({
 const icons = [
     h("img", {src : "images/floppy-disk.png", id:"save", onclick: save}),
     h("img", {src : "images/load.png", id:"load", onclick: load}),
-    //h("img", {src : "images/metronome.png", id :"metronome"}),
-    //h("img", {src : "images/midi.png", id:"midi", onclick: switchPanel("midi")}),
-    //h("img", {src : "images/network.png", id:"network", onclick: switchPanel("network")})
+    h("img", {src : "images/midi.png", id:"midi", onclick: switchPanel("midi")}),
+    h("img", {src : "images/network.png", id:"network", onclick: switchPanel("network")})
 ];
 
 const log = (state) => h("p", {id: "log", class: isLogClickable(state) ? "log-clickable" : "", onclick: isLogClickable(state) ? connect : undefined}, text(logMessage(state)));
@@ -136,10 +134,6 @@ const midiPanel = (state) => {
 
 const networkPanel = (state) => {
     return h("div", {id : "panel2" , class : state.panel == "network" ? "panel2-in": "panel2-out"}, [
-        h("div", {class : "row"}, [
-            h("label", {}, text("Network server")),
-            h("input", {id : "server-ip", type : "text", value: state.server, oninput : updateServer})
-        ]),
         h("div", {class : "row"}, [
             h("label", {}, text("Pair ID")),
             h("input", {id : "pair-id", type : "text", value: state.pair, oninput: updatePair})
