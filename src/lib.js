@@ -192,20 +192,22 @@ exports.toogleMode = (state,scenes) => {
 };
 
 exports.toogleSmallGridMode = (state,scenes) => {
-	switch(state.smallGridMode){
-	case 'length':
-		state.smallGridMode = 'velocity';
-		break;
-	case 'velocity':
-		state.smallGridMode = 'octave';
-		break;
-	case 'octave':
-		state.smallGridMode = 'length';
-		break;
-	default:
-		break;
+	if(state.pressedButtons.length == 1 && (state.pressedButtons[0] == cons.UP_ARROW_BUTTON || state.pressedButtons[0] == cons.UP_ARROW_BUTTON ){
+		switch(state.smallGridMode){
+		case 'length':
+			state.smallGridMode = 'velocity';
+			break;
+		case 'velocity':
+			state.smallGridMode = 'octave';
+			break;
+		case 'octave':
+			state.smallGridMode = 'length';
+			break;
+		default:
+			break;
+		}
+		state.renderReset = true;
 	}
-	state.renderReset = true;
 };
 
 exports.toogleChords = (state,scenes) => {
@@ -285,6 +287,19 @@ exports.sendFreeMidi = (state,scenes) =>  {
 		io.blinkButton(state.pressedButtons[1],cons.COLOR_BLINK,0);
 	}
 };
+
+exports.changeBPM = (state, scenes) => {
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.SHIFT_BUTTON){
+		if(state.pressedButtons[1] == cons.UP_ARROW_BUTTON){
+			state.bpm++;
+			state.clock.setTempo(state.bpm)
+		}
+		if(state.pressedButtons[1] == cons.DOWN_ARROW_BUTTON){
+			state.bpm--;
+			state.clock.setTempo(state.bpm)
+		}
+	}
+}
 
 const resetSceneChain = (state) => {
 	state.chainMode = false;

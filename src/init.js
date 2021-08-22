@@ -10,11 +10,6 @@ const network = require('./network');
 const networkController = require('./network-controller');
 const MidiClock = require('midi-clock')
 
-const clock = MidiClock()
-clock.setTempo(70)
-clock.start()
-
-
 var scenes = [];
 var state =  {
 	pressedButtons:[],
@@ -37,9 +32,14 @@ var state =  {
 	smallGridMode : 'length',
 	workspace : 2, // 0 : big_grid, 1 : brig_grid + notes, 2: big_grid + notes + small_grid
 	page: 0,
+	clock : MidiClock(),
+	bpm : 90,
 };
 
-clock.on('position', function(position){
+state.clock.setTempo(state.bpm)
+state.clock.start()
+
+state.clock.on('position', function(position){
 	state.clockTick++;
 	midi.resetClock(state);
 	if(state.mode == 'metronome'){
