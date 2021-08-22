@@ -110,7 +110,7 @@ const sendNoteOn = (state,scenes) => {
 	state.midiNotesQueue.map((e) => {
 		if(state.clockTick == e.clockTick) {
 			tasks.push((callback) => {
-				io.getOutput().send('noteon', {note: e.note ,velocity: e.velocity,channel: e.channel});
+				io.getOutput().send('noteon', {note: e.note ,velocity: Math.floor(e.velocity),channel: e.channel});
 				callback();
 			});
 		}

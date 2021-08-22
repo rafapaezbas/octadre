@@ -192,7 +192,7 @@ exports.toogleMode = (state,scenes) => {
 };
 
 exports.toogleSmallGridMode = (state,scenes) => {
-	if(state.pressedButtons.length == 1 && (state.pressedButtons[0] == cons.UP_ARROW_BUTTON || state.pressedButtons[0] == cons.UP_ARROW_BUTTON)){
+	if(state.pressedButtons.length == 1 && (state.pressedButtons[0] == cons.UP_ARROW_BUTTON || state.pressedButtons[0] == cons.DOWN_ARROW_BUTTON)){
 		switch(state.smallGridMode){
 		case 'length':
 			state.smallGridMode = 'velocity';
