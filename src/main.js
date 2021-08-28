@@ -7,6 +7,5 @@ if(ioError == undefined){ // Check if io could be setup
     init.setupScenes();
     init.setupClockInput();
     init.setupLaunchpadInput();
-    init.setupNetworkController();
     init.render();
 }

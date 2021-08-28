@@ -13,12 +13,7 @@
     "async": "^3.2.0",
     "easymidi": "^2.0.1",
     "midi-clock": "^0.0.1",
-    "hyperswarm": "^3.0.0-beta2",
-    "pkg": "^4.4.9",
-    "random-seed": "^0.3.0",
-    "readable-stream": "^3.6.0",
-    "socket.io-client": "^4.0.1",
-    "tape": "^5.2.2"
+    "random-seed": "^0.3.0"
   },
   "devDependencies": {},
   "build": {

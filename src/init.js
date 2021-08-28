@@ -6,8 +6,6 @@ const cons = require('./constants');
 const chords = require('./chords');
 const controller = require('./controller');
 const fs = require('fs');
-const network = require('./network');
-const networkController = require('./network-controller');
 const MidiClock = require('midi-clock')
 
 var scenes = [];
@@ -94,9 +92,6 @@ exports.setupLaunchpadInput = () => {
 		var pressed = message.velocity > 0;
 		var button = message.note;
 		update(pressed, button);
-		if(network.getNetwork().connected && pressed){ //Doesnt make sense to send unpress events
-			network.send(state);
-		}
 	});
 
 	io.getInput().on('cc', (message) => {
@@ -113,24 +108,6 @@ exports.setupIO = () => {
 
 exports.getIOError = () => {
 	return state.ioError;
-}
-
-exports.setupNetworkController = () => {
-	network.setEventCallback((remoteState) => {
-			switch(remoteState.mode){
-			case 'seq':
-				if(remoteState.pressedButtons.length > 0) {
-					controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
-				}
-				break;
-			case 'chords':
-				// TODO
-				break;
-			default:
-				break;
-			}
-			render.render(scenes,state);
-	});
 }
 
 const update = (pressed, button) => {
