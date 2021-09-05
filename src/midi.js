@@ -38,7 +38,7 @@ const queueMidiNotes = (state,scenes) => {
 const queueStep = (track,step,state) => {
 	step.notes.map((n,i) => {
 		if(n){
-			playStep(step,track,state,track.midiRoot + i, state.clockTick);
+			playStep(step,track,state, i, state.clockTick);
 		}
 	});
 };

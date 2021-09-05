@@ -54,7 +54,7 @@ exports.toogleSingleTriplet = (state,scenes) => {
 exports.toogleNote = (state,scenes) => {
 	if(state.pressedButtons.length == 1 && cons.INNER_GRID.indexOf(state.pressedButtons[0]) != -1 && state.workspace > 0){
 		var note = cons.INNER_GRID.indexOf(state.pressedButtons[0]);
-		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes[note] ^= true;
+		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes[(state.currentOctave * 12) + note] ^= true;
 	}
 };
 
@@ -264,7 +264,7 @@ exports.globalChangeVelocity = (state,scenes) => {
 exports.changeOctave = (state,scenes) => {
 	if(state.smallGridMode == 'octave' && state.pressedButtons.length == 1 && state.workspace > 1){
 		var button = state.pressedButtons[0];
-		scenes[state.currentScene].tracks[state.currentTrack].midiRoot = 12 * cons.SMALL_GRID.indexOf(button);
+		state.currentOctave = cons.SMALL_GRID.indexOf(button);
 	}
 };
 

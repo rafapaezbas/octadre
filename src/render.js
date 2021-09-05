@@ -103,7 +103,7 @@ const generateDoubleNotesMessage = (scenes,state) => {
 };
 
 const generateNotesMessage = (scenes,state) => {
-	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes.reduce((acc,e,i) => {
+	return scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes.slice(state.currentOctave * 12, (state.currentOctave * 12) + 12).reduce((acc,e,i) => {
 		acc.push(cons.INNER_GRID[i]);
 		e ? acc.push(cons.COLOR_ACTIVE_NOTE) : acc.push(cons.COLOR_NON_ACTIVE_NOTE);
 		return acc;
@@ -189,10 +189,9 @@ const generateVelocityMessage = (scenes, state) => {
 };
 
 const generateOctaveMessage = (scenes, state) => {
-	var midiRoot = scenes[state.currentScene].tracks[state.currentTrack].midiRoot;
 	return cons.SMALL_GRID.reduce((acc,e, i) => {
 		acc.push(e);
-		i  == midiRoot / 12  ? acc.push(cons.COLOR_OCTAVE) : acc.push(0);
+		i  == state.currentOctave ? acc.push(cons.COLOR_OCTAVE) : acc.push(0);
 		return acc;
 	},[]);
 };
