@@ -38,13 +38,11 @@ exports.setupClockInput = (port) => {
 		io.setClockInput(port);
 	}
 	io.getClockInput().on('clock', () => {
-		state.clockTick++;
-		midi.resetClock(state);
-		if(state.mode == 'metronome'){
-			playMetronome();
-		}else{
+		process.nextTick(() => { //better performance?
+			state.clockTick++;
+			midi.resetClock(state);
 			playSequencer();
-		}
+		});
 	});
 };
 
@@ -78,12 +76,13 @@ exports.load = (path) => {
 	render.render(scenes,state);
 };
 
+
 exports.setupLaunchpadInput = () => {
 	io.getInput().on('noteon', (message) => {
 		var pressed = message.velocity > 0;
 		var button = message.note;
 		update(pressed, button);
-		if(network.getNetwork().connected){
+		if(network.getNetwork().connected && pressed){ //Doesnt make sense to send unpress events
 			network.send(state);
 		}
 	});
@@ -104,30 +103,21 @@ exports.getIOError = () => {
 	return state.ioError;
 }
 
-exports.toogleMetronome = () => {
-	if(state.mode != 'metronome'){
-		state.mode = 'metronome';
-	}else{
-		state.mode = 'seq';
-	}
-	state.renderReset = true;
-	render.render(scenes,state);
-}
-
 exports.setupNetworkController = () => {
 	network.setEventCallback((remoteState) => {
-		console.log(remoteState);
-		switch(remoteState.mode){
-		case 'seq':
-			controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
-			break;
-		case 'chords':
-			// TODO
-			break;
-		default:
-			break;
-		}
-		render.render(scenes,state);
+			switch(remoteState.mode){
+			case 'seq':
+				if(remoteState.pressedButtons.length > 0) {
+					controller['seq'][remoteState.pressedButtons[remoteState.pressedButtons.length - 1]].map(f => f(remoteState,scenes));
+				}
+				break;
+			case 'chords':
+				// TODO
+				break;
+			default:
+				break;
+			}
+			render.render(scenes,state);
 	});
 }
 
@@ -203,27 +193,6 @@ const playNote = (pressed, button) => {
 		var midiMessage = pressed ? 'noteon' : 'noteoff';
 		io.getOutput().send(midiMessage, {note: scenes[state.currentScene].tracks[state.currentTrack].midiRoot + cons.INNER_GRID.indexOf(button) ,velocity: 127,channel: state.currentTrack});
 	}
-};
-
-const playMetronome = () => {
-
-	if(state.clockTick % 96 == 0){
-		io.getOutput().send('noteon', {note: 72 ,velocity: 127,channel: 0});
-	}
-	else if(state.clockTick % 24 == 0){
-		io.getOutput().send('noteon', {note: 60 ,velocity: 127,channel: 0});
-	}
-
-
-	if(state.clockTick % 96 == 3){
-		io.getOutput().send('noteoff', {note: 72 ,velocity: 127,channel: 0});
-	}
-	else if(state.clockTick % 24 == 3){
-		io.getOutput().send('noteoff', {note: 60 ,velocity: 127,channel: 0});
-	}
-
-	render.render(scenes, state);
-
 };
 
 const playSequencer = () => {

@@ -110,14 +110,6 @@ button {
     cursor: pointer;
 }
 
-#metronome {
-    margin: 10px;
-    margin-left: 1px;
-    margin-bottom: 5px;
-    width: 20px;
-    cursor: pointer;
-}
-
 #network {
     margin: 10px;
     margin-left: 1px;
@@ -170,11 +162,6 @@ button {
     left: 610px;
     top: 100px;
     transition: 1s;
-}
-
-#server-ip{
-    margin-left: 10px;
-    border:1px solid black;
 }
 
 #pair-id{
