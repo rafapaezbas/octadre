@@ -34,7 +34,7 @@ cons.SCENE_BUTTONS.map(e => controller['seq'][e] = [lib.changeScene,lib.copyScen
 cons.BIG_GRID.map(e => controller['seq'][e] = [lib.toogleStep,lib.showNotes,lib.changeTrackLength,lib.copyStep, lib.toogleTriplet, lib.toogleDoubleNote, lib.toogleSingleTriplet]);
 cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrack, lib.copyTrack]);
 controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode];
-cons.CHORDS_GRID.map(e => controller['chords'][e] = [lib.toogleChords]);
+cons.CHORDS_GRID.map(e => controller['chords'][e] = [lib.toogleChords, lib.copyChord]);
 controller['chords'][cons.CHANGE_CHORD_MODE_BUTTON] = [lib.changeChordMode];
 cons.CHORD_PLAY_MODE_BUTTONS.map(e => controller['chords'][e] = [lib.changeChordPlayMode]);
 

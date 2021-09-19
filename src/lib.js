@@ -209,12 +209,22 @@ exports.toogleSmallGridMode = (state,scenes) => {
 };
 
 exports.toogleChords = (state,scenes) => {
-	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
-	var stepChords = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords;
-	if(stepChords.indexOf(lastPressedButton) == -1){
-		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords.push(lastPressedButton);
-	}else{
-		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords = stepChords.filter(e => e != lastPressedButton);
+	if(state.pressedButtons.length == 1){
+		var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+		var stepChords = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords;
+		if(stepChords.indexOf(lastPressedButton) == -1){
+			scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords.push(lastPressedButton);
+		}else{
+			scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chords = stepChords.filter(e => e != lastPressedButton);
+		}
+	}
+};
+
+exports.copyChord = (state,scenes) => {
+	if(state.pressedButtons[0] == cons.TEMPO_BUTTON && state.pressedButtons.length == 2){
+		var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+		const chordInOctave = state.chords[lastPressedButton].chord.map(note => (note - chords.midiRoot()) + state.currentOctave * 12);
+		chordInOctave.map(note => scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes[note] = true);
 	}
 };
 

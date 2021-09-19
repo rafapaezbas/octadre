@@ -49,6 +49,10 @@ exports.filterByMode = (index,mode) => {
 	return modes[mode][index];
 };
 
+exports.midiRoot = () => {
+	return root;
+}
+
 const findInScale = (chord,scale,root) => {
 	scale = scale.concat(scale); //Duplicate scale
 	const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
