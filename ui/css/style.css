@@ -24,6 +24,7 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     white-space: nowrap;
+    border-top: 3px solid var(--font-color);
 }
 
 #logo{
@@ -31,8 +32,8 @@ body {
 }
 
 legend{
-    background: black;
-    color: white;
+    background: var(--font-color);
+    color: var(--main-color);
     padding-left: 10px;
     padding-right: 10px;
     font-family: "ff-black";
@@ -40,7 +41,7 @@ legend{
 
 fieldset {
     border: 0px;
-    border-top: 1px solid black;
+    border-top: 1px solid var(--font-color);
     margin: 20px;
     margin-top: 10px;
 }
@@ -52,17 +53,17 @@ label {
 select, option {
     display: inline;
     margin-top: 10px;
-    background-color: black;
-    color: white;
+    background-color: var(--font-color);
+    color: var(--main-color);
     line-height: 1.3;
     font-family: "ff";
     width: 350px;
 }
 
 select {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
+    background-color: var(--main-color);
+    color: var(--font-color);
+    border: 1px solid var(--font-color);
 }
 
 input{
@@ -76,8 +77,8 @@ input{
 
 button {
     border-radius: .5em;
-    background-color: black;
-    color: white;
+    background-color: var(--font-color);
+    color: var(--margin-bottom);
     display: inline;
     line-height: 1.3;
 }
@@ -166,7 +167,7 @@ button {
 
 #pair-id{
     margin-left: 64px;
-    border:1px solid black;
+    border:1px solid var(--font-color);
 }
 
 .log-clickable{
