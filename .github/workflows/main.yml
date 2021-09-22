@@ -24,6 +24,7 @@ jobs:
                if [ "$RUNNER_OS" == "Linux" ]; then
                     sudo apt-get install libasound2 libasound2-dev
                fi
+               npm install -g node-gyp@latest
         shell: bash
 
 
