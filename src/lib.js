@@ -241,6 +241,12 @@ exports.changeChordPlayMode = (state,scenes) => {
 	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordPlayMode = chordPlayMode;
 };
 
+exports.changeChordScale = (state,scenes) => {
+	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+	var chordScale = cons.CHORD_SCALE_BUTTONS.indexOf(lastPressedButton);
+	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale = chordScale;
+};
+
 exports.changeLength = (state,scenes) => {
 	if(state.smallGridMode == 'length' && state.pressedButtons.length == 1 && state.workspace > 1){
 		var button = state.pressedButtons[0];
