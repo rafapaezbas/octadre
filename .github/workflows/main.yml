@@ -31,4 +31,4 @@ jobs:
         uses: samuelmeuli/action-electron-builder@v1
         with:
           github_token: ${{ secrets.electron_builder_secret }}
-          release: ${{ startsWith(github.ref, 'master') }}
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
