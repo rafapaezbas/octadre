@@ -9,7 +9,8 @@
     "start": "electron . ",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "check": "npx eslint src/"
+    "check": "npx eslint src/",
+    "postinstall": "electron-builder install-app-deps"
   },
   "author": "",
   "license": "ISC",
