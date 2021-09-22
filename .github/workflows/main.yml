@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -19,8 +19,13 @@ jobs:
         with:
           node-version: 11.6.0
 
-          # - name: Install Node.js, NPM and Yarn
-          # run: actions/setup-node@v1
+       - name: Install Ubuntu deps
+         run:   |
+                if [ "$RUNNER_OS" == "Linux" ]; then
+                     apt-get install libasound2 libasound2-dev
+                fi
+         shell: bash
+
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
