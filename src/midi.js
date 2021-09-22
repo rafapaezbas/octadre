@@ -45,7 +45,7 @@ const queueStep = (track,step,state) => {
 
 const queueChord = (track,step,state) => {
 	step.chords.map(n => {
-		var chord = state.chords[n];
+		var chord = state.chords[step.chordScale][n];
 		switch (step.chordPlayMode) {
 		case 0:
 			playChord(n,track,step,state,chord);
@@ -70,37 +70,37 @@ const queueChord = (track,step,state) => {
 };
 
 const playChord = (stepChord,track,step,state,chord) => {
-	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(note => {
+	state.chords[step.chordScale][stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map(note => {
 		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick);
 	});
 };
 
 const arpChord = (stepChord,track,step,state,chord) => {
-	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
+	state.chords[step.chordScale][stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
 		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i * (6 / track.tempoModifier));
 	});
 };
 
 const arpDownChord = (stepChord,track,step,state,chord) => {
-	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
+	state.chords[step.chordScale][stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
 		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i * (6 / track.tempoModifier));
 	});
 };
 
 const arpFastChord = (stepChord,track,step,state,chord) => {
-	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
+	state.chords[step.chordScale][stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).map((note,i) => {
 		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i);
 	});
 };
 
 const arpDownFastChord = (stepChord,track,step,state,chord) => {
-	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
+	state.chords[step.chordScale][stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).reverse().map((note,i) => {
 		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i);
 	});
 };
 
 const arpRandomChord = (stepChord,track,step,state,chord) => {
-	state.chords[stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).sort(() => Math.random() > .5 ? 1 : -1).map((note,i) => {
+	state.chords[step.chordScale][stepChord].inversion.filter((e,i) => chords.filterByMode(i,chord.mode)).sort(() => Math.random() > .5 ? 1 : -1).map((note,i) => {
 		playStep(step,track,state,note + (track.midiRoot - 60), state.clockTick + i * (6 / track.tempoModifier));
 	});
 };

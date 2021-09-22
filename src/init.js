@@ -25,7 +25,7 @@ var state =  {
 	clockResolution : 6, //Number of ticks per step
 	resetClockTimeout : undefined,
 	midiNotesQueue:[],
-	chords: [],
+	chords: undefined,
 	mode : 'seq',
 	renderReset : true,
 	showCursor : true,
@@ -159,7 +159,8 @@ const updateChordMode = (pressed, button) => {
 
 const pressedChord = (button) => {
 	state.pressedButtons.push(button);
-	var chord = state.chords[button];
+	const scale = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale
+	var chord = state.chords[scale][button];
 	if(chord != undefined){
 		state.lastChordPressed = button;
 		var finalChord = chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
@@ -172,9 +173,10 @@ const pressedChord = (button) => {
 };
 
 const unpressedChord = (button) => {
-	var chord = state.chords[button];
+	const scale = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale
+	var chord = state.chords[scale][button];
 	var octaveModifier = scenes[state.currentScene].tracks[state.currentTrack].midiRoot - 60;
-	if(state.chords[button] != undefined){
+	if(chord != undefined){
 		chord.inversion.map(n => io.getOutput().send('noteoff', {note:n + octaveModifier, velocity:127, channel:state.currentTrack}));
 	}
 	state.pressedButtons = state.pressedButtons.filter(b => b != button);
