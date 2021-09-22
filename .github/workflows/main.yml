@@ -22,7 +22,7 @@ jobs:
       - name: Install Ubuntu deps
         run:   |
                if [ "$RUNNER_OS" == "Linux" ]; then
-                    apt-get install libasound2 libasound2-dev
+                    sudo apt-get install libasound2 libasound2-dev
                fi
         shell: bash
 
