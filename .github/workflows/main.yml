@@ -17,14 +17,13 @@ jobs:
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
-          node-version: 11.6.0
+          node-version: 14.17.16
 
       - name: Install Ubuntu deps
         run:   |
                if [ "$RUNNER_OS" == "Linux" ]; then
                     sudo apt-get install libasound2 libasound2-dev
                fi
-               npm install -g node-gyp@latest
         shell: bash
 
 
