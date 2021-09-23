@@ -5,9 +5,10 @@ const root = 60;
 const scales = [];
 scales[0] = [1,0,1,0,1,1,0,1,0,1,0,1]; // Major scale
 scales[1] = [1,0,1,1,0,1,0,1,1,0,1,0]; // Minor scale
-scales[2] = [1,0,0,1,0,1,1,1,0,0,1,0]; // Blues scale
-scales[3] = [1,0,1,1,0,0,1,1,0,1,0,1]; // Made-up scale
-scales[4] = [1,0,1,0,1,1,1,0,1,0,1,0]; // Minor scale
+scales[2] = [1,0,1,1,0,1,0,1,1,0,0,1]; // Harmonic Minor scale
+scales[3] = [1,0,1,1,0,1,0,1,0,1,0,1]; // Melodic Minor scale
+scales[4] = [1,0,1,0,1,1,0,1,1,0,0,1]; // Harmonic major scale
+scales[5] = [1,0,1,0,1,1,0,1,1,0,1,0]; // Melodic major scale
 
 const grades = [];
 grades[0] = [1,3,5,7,9];
