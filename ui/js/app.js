@@ -86,12 +86,20 @@ const logMessage = (state) =>  {
     return log;
 };
 
-const updatePair = (state,event) => ({...state, pair: event.target.value})
+const updateMidiInputs = (state) => ({...state, midiInputs: midiPorts(easymidi.getInputs())});
+
+const updateMidiOutputs = (state) => ({...state, midiOutputs: midiPorts(easymidi.getOutputs())});
+
+const updatePair = (state,event) => ({...state, pair: event.target.value});
+
+const midiPorts = (inputs) => {
+    return inputs.map(e => h("option",{}, text(e)));
+};
 
 // Views ----------------------------------
 
 app({
-    init: { panel : "midi", connected: false, connecting: false, pair: undefined, ioError: init.getIOError(), serverError: undefined, serverConnection: undefined },
+    init: { panel : "midi", connected: false, connecting: false, pair: undefined, ioError: init.getIOError(), serverError: undefined, serverConnection: undefined, midiInputs: midiPorts(easymidi.getInputs()), midiOutputs: midiPorts(easymidi.getOutputs()) },
     view: state =>
         h("main", {}, [
             ...icons,
@@ -123,11 +131,11 @@ const midiPanel = (state) => {
     return h("div", {id : "panel1",class : state.panel == "midi" ? "panel1-in": "panel1-out"} ,[
         h("div", {class : "row"}, [
             h("label", {}, text("Clock Input")),
-            h("select", {id : "midi-inputs", onchange : setupClockInput}, midiPorts(easymidi.getInputs()))
+            h("select", {id : "midi-inputs", onchange : setupClockInput, onmouseenter: updateMidiInputs}, state.midiInputs)
         ]),
         h("div", {class : "row"}, [
             h("label", {}, text("Midi output")),
-            h("select", {id : "midi-outputs", onchange: setupOutput}, midiPorts(easymidi.getOutputs()))
+            h("select", {id : "midi-outputs", onchange: setupOutput, onmouseenter: updateMidiOutputs}, state.midiOutputs)
         ]),
     ]);
 };
@@ -139,8 +147,4 @@ const networkPanel = (state) => {
             h("input", {id : "pair-id", type : "text", value: state.pair, oninput: updatePair})
         ]),
     ]);
-};
-
-const midiPorts = (inputs) => {
-    return inputs.map(e => h("option",{}, text(e)));
 };
