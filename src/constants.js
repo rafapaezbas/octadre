@@ -59,6 +59,8 @@ exports.INNER_GRID = configuration.getArrayOrDefault('INNER_GRID',12,[24,33,42,5
 exports.SMALL_GRID = configuration.getArrayOrDefault('SMALL_GRID',8,[34,43,53,64,65,56,46,35]);
 exports.CHORD_PLAY_MODE_BUTTONS = configuration.getArrayOrDefault('CHORD_PLAY_MODE_BUTTONS',7,[81,82,83,84,85,86,87]);
 
+exports.CHORD_SCALE_BUTTONS = configuration.getArrayOrDefault('CHORD_SCALE_BUTTONS',7,[18,28,38,48,58,68,78]);
+
 exports.SCENE_STACK_LIMIT = configuration.getIntOrDefault('SCENE_STACK_LIMIT',5);
 
 exports.MPC_MODE = configuration.getIntOrDefault('MPC_MODE', 0);

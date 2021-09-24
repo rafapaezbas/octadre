@@ -223,15 +223,17 @@ exports.toogleChords = (state,scenes) => {
 exports.copyChord = (state,scenes) => {
 	if(state.pressedButtons[0] == cons.TEMPO_BUTTON && state.pressedButtons.length == 2){
 		var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
-		const chordInOctave = state.chords[lastPressedButton].chord.map(note => (note - chords.midiRoot()) + state.currentOctave * 12);
+		const scale = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale
+		const chordInOctave = state.chords[scale][lastPressedButton].chord.map(note => (note - chords.midiRoot()) + state.currentOctave * 12);
 		chordInOctave.map(note => scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes[note] = true);
 	}
 };
 
 exports.changeChordMode = (state,scenes) => {
 	if(state.chords[state.lastChordPressed] != undefined){
-		state.chords[state.lastChordPressed].mode++;
-		state.chords[state.lastChordPressed].mode %= chords.modes.length;
+		const scale = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale
+		state.chords[scale][state.lastChordPressed].mode++;
+		state.chords[scale][state.lastChordPressed].mode %= chords.modes.length;
 	}
 };
 
@@ -239,6 +241,12 @@ exports.changeChordPlayMode = (state,scenes) => {
 	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
 	var chordPlayMode = cons.CHORD_PLAY_MODE_BUTTONS.indexOf(lastPressedButton);
 	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordPlayMode = chordPlayMode;
+};
+
+exports.changeChordScale = (state,scenes) => {
+	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+	var chordScale = cons.CHORD_SCALE_BUTTONS.indexOf(lastPressedButton);
+	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale = chordScale;
 };
 
 exports.changeLength = (state,scenes) => {

@@ -25,7 +25,7 @@ var state =  {
 	clockResolution : 6, //Number of ticks per step
 	resetClockTimeout : undefined,
 	midiNotesQueue:[],
-	chords: [],
+	chords: undefined,
 	mode : 'seq',
 	renderReset : true,
 	showCursor : true,
@@ -159,7 +159,8 @@ const updateChordMode = (pressed, button) => {
 
 const pressedChord = (button) => {
 	state.pressedButtons.push(button);
-	var chord = state.chords[button];
+	const scale = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale
+	var chord = state.chords[scale][button];
 	if(chord != undefined){
 		state.lastChordPressed = button;
 		var finalChord = chord.inversion.filter((e,i) => chords.filterByMode(i,chord.mode));
@@ -172,9 +173,10 @@ const pressedChord = (button) => {
 };
 
 const unpressedChord = (button) => {
-	var chord = state.chords[button];
+	const scale = scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale
+	var chord = state.chords[scale][button];
 	var octaveModifier = scenes[state.currentScene].tracks[state.currentTrack].midiRoot - 60;
-	if(state.chords[button] != undefined){
+	if(chord != undefined){
 		chord.inversion.map(n => io.getOutput().send('noteoff', {note:n + octaveModifier, velocity:127, channel:state.currentTrack}));
 	}
 	state.pressedButtons = state.pressedButtons.filter(b => b != button);
@@ -183,7 +185,7 @@ const unpressedChord = (button) => {
 const setupSceneTracks = () => {
 	var trackColors = [cons.COLOR_TRACK_1,cons.COLOR_TRACK_2,cons.COLOR_TRACK_3,cons.COLOR_TRACK_4,cons.COLOR_TRACK_5,cons.COLOR_TRACK_6,cons.COLOR_TRACK_7,cons.COLOR_TRACK_8,cons.COLOR_TRACK_9,cons.COLOR_TRACK_10,cons.COLOR_TRACK_11,cons.COLOR_TRACK_12,cons.COLOR_TRACK_13,cons.COLOR_TRACK_14,cons.COLOR_TRACK_15,cons.COLOR_TRACK_16];
 	var tracks =  utils.createArray(16,{}).map((t,i) => {
-		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes: utils.createArray(96, false),chords:[], chordPlayMode: 0, length : 1, velocity: 100, triplet: false, doubleNote: false, singleTriplet : false, octave: 0}));
+		const pattern = utils.createArray(16,{}).map(p => ({active:false, notes: utils.createArray(96, false),chords:[], chordPlayMode: 0, chordScale: 0, length : 1, velocity: 100, triplet: false, doubleNote: false, singleTriplet : false, octave: 0}));
 		return {pattern:pattern, trackLength:16, midiRoot:60, color: trackColors[i], muted: false, tempoModifier: 1, channel: i};
 	});
 	return {tracks: tracks};

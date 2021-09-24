@@ -5,9 +5,10 @@ const root = 60;
 const scales = [];
 scales[0] = [1,0,1,0,1,1,0,1,0,1,0,1]; // Major scale
 scales[1] = [1,0,1,1,0,1,0,1,1,0,1,0]; // Minor scale
-scales[2] = [1,0,0,1,0,1,1,1,0,0,1,0]; // Blues scale
-scales[3] = [1,0,1,1,0,0,1,1,0,1,0,1]; // Made-up scale
-scales[4] = [1,0,1,0,1,1,1,0,1,0,1,0]; // Minor scale
+scales[2] = [1,0,1,0,1,1,0,1,1,0,0,1]; // Harmonic major scale
+scales[3] = [1,0,1,1,0,1,0,1,1,0,0,1]; // Harmonic minor scale
+scales[4] = [1,0,1,0,1,1,0,1,1,0,1,0]; // Melodic major scale
+scales[5] = [1,0,1,1,0,1,0,1,0,1,0,1]; // Melodic minor scale
 
 const grades = [];
 grades[0] = [1,3,5,7,9];
@@ -32,14 +33,17 @@ const chordsRow = [grades[0],grades[1],grades[2],grades[3],grades[4],grades[5],g
 
 exports.createChords = () => {
 	var chords = [];
-	const scale = scales[0];
-	const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
-	const offset = 11; //First button value
-	const height = 7;
-	const width = 7;
-	for(var i = 0; i < height; i++ ){
-		for(var j = 0; j < width; j++){
-			chords[(i * 10) + j + offset] = findInScale(chordsRow[j], scale, notes[i]);
+	for(var i = 0; i < scales.length; i++){
+		chords[i] = []
+		const scale = scales[i];
+		const notes = scale.map((e,i) => (e * root) + (e * i)).filter(e => e != 0);
+		const offset = 11; //First button value
+		const height = 7;
+		const width = 7;
+		for(var j = 0; j < height; j++ ){
+			for(var k = 0; k < width; k++){
+				chords[i][(j * 10) + k + offset] = findInScale(chordsRow[k], scale, notes[j]);
+			}
 		}
 	}
 	return chords;
