@@ -36,7 +36,7 @@ cons.MUTE_BUTTONS.map(e => controller['seq'][e] = [lib.toogleMute,lib.changeTrac
 controller['chords'][cons.MODE_BUTTON] = [lib.toogleMode];
 cons.CHORDS_GRID.map(e => controller['chords'][e] = [lib.toogleChords, lib.copyChord]);
 controller['chords'][cons.CHANGE_CHORD_MODE_BUTTON] = [lib.changeChordMode];
-cons.CHORD_PLAY_MODE_BUTTONS.map(e => controller['chords'][e] = [lib.changeChordPlayMode]);
-cons.CHORD_SCALE_BUTTONS.map(e => controller['chords'][e] = [lib.changeChordScale]);
+cons.CHORD_PLAY_MODE_BUTTONS.map(e => controller['chords'][e] = [lib.changeChordPlayMode, lib.changeGlobalChordPlayMode]);
+cons.CHORD_SCALE_BUTTONS.map(e => controller['chords'][e] = [lib.changeChordScale, lib.changeGlobalChordScale]);
 
 module.exports = controller;

@@ -92,6 +92,8 @@ const updateMidiOutputs = (state) => ({...state, midiOutputs: midiPorts(easymidi
 
 const updatePair = (state,event) => ({...state, pair: event.target.value});
 
+// Helpers ---------------------------------
+
 const midiPorts = (inputs) => {
     return inputs.map(e => h("option",{}, text(e)));
 };

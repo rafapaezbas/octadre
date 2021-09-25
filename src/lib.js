@@ -243,10 +243,26 @@ exports.changeChordPlayMode = (state,scenes) => {
 	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordPlayMode = chordPlayMode;
 };
 
+exports.changeGlobalChordPlayMode = (state,scenes) => {
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.TEMPO_BUTTON){
+		var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+		var chordPlayMode = cons.CHORD_PLAY_MODE_BUTTONS.indexOf(lastPressedButton);
+		scenes[state.currentScene].tracks[state.currentTrack].pattern.map(step => step.chordPlayMode = chordPlayMode)
+	}
+};
+
 exports.changeChordScale = (state,scenes) => {
 	var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
 	var chordScale = cons.CHORD_SCALE_BUTTONS.indexOf(lastPressedButton);
 	scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].chordScale = chordScale;
+};
+
+exports.changeGlobalChordScale = (state,scenes) => {
+	if(state.pressedButtons.length == 2 && state.pressedButtons[0] == cons.TEMPO_BUTTON){
+		var lastPressedButton = state.pressedButtons[state.pressedButtons.length - 1];
+		var chordScale = cons.CHORD_SCALE_BUTTONS.indexOf(lastPressedButton);
+		scenes[state.currentScene].tracks[state.currentTrack].pattern.map(step => step.chordScale = chordScale)
+	}
 };
 
 exports.changeLength = (state,scenes) => {

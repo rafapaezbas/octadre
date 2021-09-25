@@ -17,7 +17,7 @@ var state =  {
 	currentScene:0,
 	currentOctave: 4,
 	lastPressedStep:0,
-	lastChordPressed: 0,
+	lastChordPressed: undefined,
 	scenesChain:[],
 	currentSceneInChain:-1,
 	chainMode:false,
