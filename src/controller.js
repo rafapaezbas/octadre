@@ -39,4 +39,9 @@ controller['chords'][cons.CHANGE_CHORD_MODE_BUTTON] = [lib.changeChordMode];
 cons.CHORD_PLAY_MODE_BUTTONS.map(e => controller['chords'][e] = [lib.changeChordPlayMode, lib.changeGlobalChordPlayMode]);
 cons.CHORD_SCALE_BUTTONS.map(e => controller['chords'][e] = [lib.changeChordScale, lib.changeGlobalChordScale]);
 
+controller['chords'][cons.RIGHT_ARROW_BUTTON] = [lib.shiftChordsRight];
+controller['chords'][cons.LEFT_ARROW_BUTTON] = [lib.shiftChordsLeft];
+controller['chords'][cons.UP_ARROW_BUTTON] = [lib.shiftChordsUp];
+controller['chords'][cons.DOWN_ARROW_BUTTON] = [lib.shiftChordsDown];
+
 module.exports = controller;

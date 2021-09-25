@@ -64,6 +64,6 @@ exports.MPC_MODE =  0
 exports.GRID = utils.generateGrid();
 exports.CHORDS_GRID = utils.generateChordGrid();
 
-exports.CHORDS_MODE_ENABLED =  0
+exports.CHORDS_MODE_ENABLED =  1
 exports.TEST_MODE =  0
 exports.TEST_MIDI_INPUT =  0

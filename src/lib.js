@@ -320,6 +320,48 @@ exports.sendFreeMidi = (state,scenes) =>  {
 	}
 };
 
+exports.shiftChordsRight = (state,scenes) =>  {
+	scenes[state.currentScene].tracks[state.currentTrack].pattern.forEach(step => {
+		const shiftedChords = step.chords.map(chord => {
+			if(chord == 77) return 11;
+			if((chord - 7) % 10 == 0) return chord + 4;
+			return chord + 1
+		});
+		step.chords = shiftedChords
+	});
+};
+
+exports.shiftChordsLeft = (state,scenes) =>  {
+	scenes[state.currentScene].tracks[state.currentTrack].pattern.forEach(step => {
+		const shiftedChords = step.chords.map(chord => {
+			if(chord == 11) return 77;
+			if((chord - 1) % 10 == 0) return chord - 4;
+			return chord - 1
+		});
+		step.chords = shiftedChords
+	});
+};
+
+exports.shiftChordsUp = (state,scenes) =>  {
+	scenes[state.currentScene].tracks[state.currentTrack].pattern.forEach(step => {
+		const shiftedChords = step.chords.map(chord => {
+			if(chord >=  71) return chord - 60;
+			return chord + 10
+		});
+		step.chords = shiftedChords
+	});
+};
+
+exports.shiftChordsDown = (state,scenes) =>  {
+	scenes[state.currentScene].tracks[state.currentTrack].pattern.forEach(step => {
+		const shiftedChords = step.chords.map(chord => {
+			if(chord <=  17) return chord + 60;
+			return chord - 10
+		});
+		step.chords = shiftedChords
+	});
+};
+
 const resetSceneChain = (state) => {
 	state.chainMode = false;
 	state.currentSceneInChain = 0;
