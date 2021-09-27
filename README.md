@@ -1,5 +1,5 @@
 ```
- ______     ______     ______   ______     ______     _____     ______     ______ 
+ ______     ______     ______   ______     ______     _____     ______ 
 /\  __ \   /\  ___\   /\__  _\ /\  __ \   /\  __-.  /\  == \   /\  ___\ 
 \ \ \/\ \  \ \ \____  \/_/\ \/ \ \  __ \  \ \ \/\ \ \ \  __<   \ \  __\ 
  \ \_____\  \ \_____\    \ \_\  \ \_\ \_\  \ \____-  \ \_\ \_\  \ \_____\ 
@@ -32,7 +32,7 @@ This project is distributed under the GNU General Public License v3.0. This is f
 
 ### Documentation
 Octadre has been design with approachability in our heads, we have tried to create the most intuitive/easy interface for music sequencing. We recommend to start using it without reading any documentation, just plug your Novation Launchpad, open Octadre, configure the midi clock input and midi output, press some buttons and see the magic happen!
-Under this first layer, Octadre has also some advance features very worthy to know. Triplets, polyrythms or melody sequencing are all possible. [Check the documentation.](https://rafapaezbas.github.io/octaedre/)
+Under this first layer, Octadre has also some advance features very worthy to know. Triplets, polyrythms or melody sequencing are all possible. [Check the documentation.](https://rafapaezbas.github.io/octadre/)
 
 ### Contributing
-Do you have new and interesting ideas for Octadre? Or maybe you found a bug? Or would you like to contribute in another way? Feel free to use https://github.com/rafapaezbas/octaedre/issues in order to communicate with us. We are looking forward to know how you would improve this project.
+Do you have new and interesting ideas for Octadre? Or maybe you found a bug? Or would you like to contribute in another way? Feel free to use https://github.com/rafapaezbas/octadre/issues in order to communicate with us. We are looking forward to know how you would improve this project.
