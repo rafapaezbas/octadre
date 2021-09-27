@@ -1,5 +1,5 @@
 {
-  "name": "octaedre",
+  "name": "octadre",
   "version": "1.0.0",
   "description": "Transform your Novation Launchpad into a midi sequencer.",
   "main": "src/main.js",
@@ -32,7 +32,7 @@
     "eslint": "^7.20.0"
   },
   "build": {
-    "appId": "octaedre",
+    "appId": "octadre",
     "linux": {
       "target": "AppImage"
     }

@@ -6,7 +6,7 @@ The tests have no assertions, meaning that the person running the tests have to 
 
 ## How to launch this tests?
 
-1. Before starting Octaedre, first make sure that the configuration has TEST_MODE value set to 1.
+1. Before starting Octadre, first make sure that the configuration has TEST_MODE value set to 1.
 2. Run the application
 
 ```

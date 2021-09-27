@@ -123,7 +123,7 @@ const log = (state) => h("p", {id: "log", class: isLogClickable(state) ? "log-cl
 
 const fieldset = (state) => {
     return h("fieldset", {}, [
-        h("legend", {}, text("Octaedre")),
+        h("legend", {}, text("Octadre")),
         midiPanel(state),
         networkPanel(state)
     ]);
