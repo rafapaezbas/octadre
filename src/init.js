@@ -56,7 +56,6 @@ exports.setupScenes = () => {
 	return scenes;
 };
 
-
 exports.render = () => {
 	render.render(scenes, state);
 };
@@ -196,7 +195,7 @@ const setupSceneTracks = () => {
 };
 
 const playNote = (pressed, button) => {
-	if(state.pressedButtons[0] == cons.SHIFT_BUTTON && cons.INNER_GRID.indexOf(button) != -1){
+	if(state.pressedButtons.length <= 1 && cons.INNER_GRID.indexOf(button) != -1){
 		var midiMessage = pressed ? 'noteon' : 'noteoff';
 		io.getOutput().send(midiMessage, {note: state.currentOctave * 12 + cons.INNER_GRID.indexOf(button) ,velocity: 127,channel: state.currentTrack});
 	}

@@ -52,8 +52,8 @@ exports.toogleSingleTriplet = (state,scenes) => {
 };
 
 exports.toogleNote = (state,scenes) => {
-	if(state.pressedButtons.length == 1 && cons.INNER_GRID.indexOf(state.pressedButtons[0]) != -1 && state.workspace > 0){
-		var note = cons.INNER_GRID.indexOf(state.pressedButtons[0]);
+	if( state.pressedButtons[0] == cons.SHIFT_BUTTON && cons.INNER_GRID.indexOf(state.pressedButtons[1]) != -1 && state.workspace > 0){
+		var note = cons.INNER_GRID.indexOf(state.pressedButtons[1]);
 		scenes[state.currentScene].tracks[state.currentTrack].pattern[state.lastPressedStep].notes[(state.currentOctave * 12) + note] ^= true;
 	}
 };
