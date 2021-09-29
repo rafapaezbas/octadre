@@ -1,6 +1,6 @@
 {
   "name": "octadre",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Transform your Novation Launchpad into a midi sequencer.",
   "main": "src/main.js",
   "bin": "main.js",
